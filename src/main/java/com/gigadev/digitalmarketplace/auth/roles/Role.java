@@ -28,10 +28,10 @@ public class Role {
 	@Enumerated(EnumType.STRING)
 	@Column(length = 20)
 	private ERole roleName;
-
+	
 	public Role(ERole roleName) {
 		super();
-		this.roleName = roleName;
+		this.roleName = roleName;		
 	}	
 	
 }

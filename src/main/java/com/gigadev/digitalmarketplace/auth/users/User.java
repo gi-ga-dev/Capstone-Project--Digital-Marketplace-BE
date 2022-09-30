@@ -9,6 +9,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -34,20 +36,28 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
+	
+	@NotBlank
+	@Size(max = 100)
+	private String fullName;
+	
+	@NotBlank
+	@Size(max = 50)
+	private String email;
 
 	@NotBlank
-	@Size(max = 20)
+	@Size(max = 50)
 	private String username;
 
 	@NotBlank
-	@Size(max = 120)
+	@Size(max = 120) // il token e' molto lungo
 	private String password;
 
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles = new HashSet<Role>();
 	
-	public User(@NotBlank @Size(max = 20) String username, @NotBlank @Size(max = 120) String password) {
+	public User(@NotBlank @Size(max = 50) String username, @NotBlank @Size(max = 120) String password) {
 		super();
 		this.username = username;
 		this.password = password;

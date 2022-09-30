@@ -27,11 +27,6 @@ public class RoleController {
 		return ResponseEntity.ok(roleServ.searchAllRoles());
 	}
 	
-	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
-	@PostMapping
-	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<Role> create(@RequestBody Role role) {
-		return ResponseEntity.ok(roleServ.create(role));
-	}
 	
+		
 }

@@ -2,6 +2,7 @@ package com.gigadev.digitalmarketplace.auth.roles;
 
 import java.util.List;
 
+import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,5 +22,5 @@ public class RoleService {
 	public Role create(Role role) {
 		return roleRepo.save(role);
 	}
-
+	
 }
