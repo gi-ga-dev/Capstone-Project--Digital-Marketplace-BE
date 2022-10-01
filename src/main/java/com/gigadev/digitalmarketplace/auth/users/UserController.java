@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -20,21 +21,22 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
+@CrossOrigin(origins="*")
 @RequestMapping("/users")
 public class UserController {
 	
 	@Autowired UserService userService;
 		
-	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
+	//@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
 	@PostMapping("/admin")
-	@PreAuthorize("hasRole('ADMIN')")
+	//@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<User> createAdmin(@RequestBody UserDto admin) {			
 		return ResponseEntity.ok(userService.saveAdmin(admin));
 	}
 	
-	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
+	//@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
 	@PostMapping("/user")
-	@PreAuthorize("hasRole('ADMIN')")
+	//@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<User> createUser(@RequestBody UserDto user) {
 		return ResponseEntity.ok(userService.saveUser(user));
 	}

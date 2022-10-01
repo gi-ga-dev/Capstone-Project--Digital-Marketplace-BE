@@ -37,12 +37,13 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 			throws ServletException, IOException {
 		try {
 			String jwt = parseJwt(request);
+			
 			log.debug("[doFilterInternal] jwt "+jwt);
 			if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
 				String username = jwtUtils.getUserNameFromJwtToken(jwt);
 
 				UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-				log.debug("[doFilterInternal] token valido");
+				log.info("[doFilterInternal] token valido");
 				userDetails.getAuthorities()
 				.stream()
 				.forEach(g->log.debug("[doFilterInternal] "+g.getAuthority()) );
