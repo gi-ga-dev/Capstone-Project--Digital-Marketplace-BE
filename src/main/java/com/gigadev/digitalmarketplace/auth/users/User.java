@@ -52,7 +52,7 @@ public class User {
 
 	@NotBlank
 	@Size(max = 50)
-	private String username;
+	private String userName;
 
 	@NotBlank
 	@Size(max = 120) // il token e' molto lungo
@@ -65,9 +65,9 @@ public class User {
 //	@OneToMany
 //	private Set<AbstractProduct> products = new HashSet<AbstractProduct>();
 	
-	public User(@NotBlank @Size(max = 50) String username, @NotBlank @Size(max = 120) String password) {
+	public User(@NotBlank @Size(max = 50) String userName, @NotBlank @Size(max = 120) String password) {
 		super();
-		this.username = username;
+		this.userName = userName;
 		this.password = password;
 	}
 	

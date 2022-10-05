@@ -38,7 +38,7 @@ public class UserService {
 								.firstName(user.getFirstName())
 								.lastName(user.getLastName())
 								.email(user.getEmail())
-								.userName(user.getUsername())				
+								.userName(user.getUserName())				
 								// restituisce il ruolo (nella lista ruoli dell'user) come stringa
 								.role( user.getRoles().stream().findFirst().get().getRoleName().name() )
 								.build()   
@@ -48,7 +48,7 @@ public class UserService {
 	public UserResponse getBasicUsersInfo(String userName) {
 		// Restituisce le prop. Username e Ruolo di tutti gli User
 		// questo metodo viene utilizzato da JwtUtils per il metodo generateJwtToken()
-		User user = userRepository.findByUsername(userName).get();				
+		User user = userRepository.findByUserName(userName).get();				
 		return UserResponse
 		.builder()
 		.userName(userName)
@@ -64,27 +64,27 @@ public class UserService {
 	}	
 	
 	public User saveAdmin(UserDto admin) {			
-		if(userRepository.existsByUsername(admin.getUsername())) {
+		if(userRepository.existsByUserName(admin.getUserName())) {
 			throw new EntityExistsException("User already exist...");
 		} else {
 			doBeforeSave(admin);		
 			User finalUser = new User();						
 			BeanUtils.copyProperties(admin, finalUser);		
 			finalUser.addRole(adminRole);	
-			log.info("--> Inserting new admin: " + admin.getUsername());
+			log.info("--> Inserting new admin: " + admin.getUserName());
 			return userRepository.save(finalUser);						
 		} 		
 	}
 		
 	public User saveUser(UserDto user) {		
-		if(userRepository.existsByUsername(user.getUsername())) {
+		if(userRepository.existsByUserName(user.getUserName())) {
 			throw new EntityExistsException("User already exist...");
 		} else {
 			doBeforeSave(user);		
 			User finalUser = new User();
 			BeanUtils.copyProperties(user, finalUser);		
 			finalUser.addRole(userRole);	
-			log.info("--> Inserting new user: " + user.getUsername());
+			log.info("--> Inserting new user: " + user.getUserName());
 			return userRepository.save(finalUser);			
 		}
 	}
@@ -111,7 +111,7 @@ public class UserService {
 			doBeforeSave(user);
 			User finalUser = userRepository.findById(id).get();
 			BeanUtils.copyProperties(user, finalUser);
-			log.info("--> Updating user: " + user.getUsername());			
+			log.info("--> Updating user: " + user.getUserName());			
 			return userRepository.save(finalUser);
 		}
 	}
