@@ -9,7 +9,7 @@ public class UserConfiguration {
 		
 	@Bean("newUser")	
 	public UserDto newUser() {
-		UserDto user = new UserDto("gino fettuccino", "gino.fett@gmail.com", "gino", "12345");
+		UserDto user = new UserDto("gino", "fettuccino", "gino.fett@gmail.com", "gino", "12345");
 		return user;
 	}
 	

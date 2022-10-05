@@ -27,16 +27,14 @@ public class UserController {
 	
 	@Autowired UserService userService;
 		
-	//@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
+	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
 	@PostMapping("/admin")
-	//@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<User> createAdmin(@RequestBody UserDto admin) {			
 		return ResponseEntity.ok(userService.saveAdmin(admin));
-	}
+	}	
 	
-	//@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
 	@PostMapping("/user")
-	//@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<User> createUser(@RequestBody UserDto user) {
 		return ResponseEntity.ok(userService.saveUser(user));
 	}
@@ -46,6 +44,13 @@ public class UserController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<List<User>> findAllUsers() {
 		return ResponseEntity.ok(userService.searchAllUsers());
+	}
+	
+	@Operation(summary = "Get all users info", security = @SecurityRequirement(name = "bearer-authentication"))
+	@GetMapping("/getAllInfo")
+	@PreAuthorize("isAuthenticated()")
+	public ResponseEntity<List<UserResponse>> findAllUsersInfo() {
+		return ResponseEntity.ok(userService.getAllUsersInfo());
 	}
 	
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))

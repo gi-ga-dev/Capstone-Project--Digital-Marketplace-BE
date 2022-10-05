@@ -28,26 +28,34 @@ public class UserService {
 	@Autowired @Qualifier("admin") Role adminRole;
 	@Autowired @Qualifier("user") Role userRole;
 	
-	public List<UserResponse> getAllUsersBasicInformations() {
+	public List<UserResponse> getAllUsersInfo() {
+		// Restituisce tutte le prop. di tutti gli User
 		return userRepository.findAll()
 				.stream()
 				.map( user ->  UserResponse
 								.builder()
-								.userName(  user.getUsername()  )
+								.id(user.getId())
+								.firstName(user.getFirstName())
+								.lastName(user.getLastName())
+								.email(user.getEmail())
+								.userName(user.getUsername())				
+								// restituisce il ruolo (nella lista ruoli dell'user) come stringa
 								.role( user.getRoles().stream().findFirst().get().getRoleName().name() )
 								.build()   
 				).collect(Collectors.toList());
 	}
 	
-	public UserResponse getUserBasicInformations(String userName) {
-		User user = userRepository.findByUsername(userName).get();
-				
+	public UserResponse getBasicUsersInfo(String userName) {
+		// Restituisce le prop. Username e Ruolo di tutti gli User
+		// questo metodo viene utilizzato da JwtUtils per il metodo generateJwtToken()
+		User user = userRepository.findByUsername(userName).get();				
 		return UserResponse
 		.builder()
 		.userName(userName)
-		.role( user.getRoles().stream().findFirst().get().getRoleName().name()).build();
-		
+		.role( user.getRoles().stream().findFirst().get().getRoleName().name()).build();		
 	}
+	
+	//========================================================================
 			
 	public void doBeforeSave(UserDto savedUser) {
 		// Encoding della password prima di salvare utente nel db

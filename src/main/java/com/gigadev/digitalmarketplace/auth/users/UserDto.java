@@ -10,8 +10,9 @@ import lombok.NoArgsConstructor;
 public class UserDto {
 	
 	// dati che devono matchare (in order sequenziale per via del costruttore) 
-	// con i campi di input nel form register del front-end
-	private String fullName;
+	// con i campi di input nel form register del front-end, che saranno inviati nel db
+	private String firstName;
+	private String lastName;
 	private String email;
 	private String username;
 	private String password;

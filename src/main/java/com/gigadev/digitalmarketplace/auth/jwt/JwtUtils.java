@@ -38,7 +38,7 @@ public class JwtUtils {
 		UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
 		log.info(userPrincipal.getUsername() + " - logged in");
 		
-		UserResponse userResponse = userService.getUserBasicInformations(userPrincipal.getUsername());
+		UserResponse userResponse = userService.getBasicUsersInfo(userPrincipal.getUsername());
 		
 		Map<String, Object> claims = new HashMap<>();
 		claims.put("role", userResponse.getRole());

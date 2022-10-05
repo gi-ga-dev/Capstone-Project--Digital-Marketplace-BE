@@ -29,6 +29,7 @@ public class UserRunner implements ApplicationRunner {
 	public void run(ApplicationArguments args) throws Exception {
 		log.info("--> Application Started Successfully!!!");
 		
+		// creazione all'avvio di due ruoli persistenti
 		roleServ.create(adminRole);
 		roleServ.create(userRole);
 		userServ.saveAdmin(user);
