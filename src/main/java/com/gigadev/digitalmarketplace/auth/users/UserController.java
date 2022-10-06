@@ -48,7 +48,7 @@ public class UserController {
 	
 	@Operation(summary = "Get all users info", security = @SecurityRequirement(name = "bearer-authentication"))
 	@GetMapping("/getAllInfo")
-	@PreAuthorize("isAuthenticated()")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<List<UserResponse>> findAllUsersInfo() {
 		return ResponseEntity.ok(userService.getAllUsersInfo());
 	}
@@ -61,9 +61,9 @@ public class UserController {
 	}
 	
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
-	@PatchMapping
-	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<User> update(@RequestBody UserDto user, Long id) {
+	@PatchMapping("/{id}")
+	@PreAuthorize("isAuthenticated()")
+	public ResponseEntity<User> update(@RequestBody UserDto user, @PathVariable Long id) {
 		return ResponseEntity.ok(userService.update(user, id));
 	}
 	

@@ -41,6 +41,7 @@ public class UserService {
 								.userName(user.getUserName())				
 								// restituisce il ruolo (nella lista ruoli dell'user) come stringa
 								.role( user.getRoles().stream().findFirst().get().getRoleName().name() )
+								.password(user.getPassword())
 								.build()   
 				).collect(Collectors.toList());
 	}
