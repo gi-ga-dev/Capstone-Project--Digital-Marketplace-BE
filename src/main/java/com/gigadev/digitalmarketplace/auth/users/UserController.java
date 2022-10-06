@@ -26,6 +26,8 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 public class UserController {
 	
 	@Autowired UserService userService;
+	
+	// ============== POST ==============
 		
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
 	@PostMapping("/admin")
@@ -39,13 +41,8 @@ public class UserController {
 		return ResponseEntity.ok(userService.saveUser(user));
 	}
 	
-	@Operation(summary = "Get all users", security = @SecurityRequirement(name = "bearer-authentication"))
-	@GetMapping
-	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<List<User>> findAllUsers() {
-		return ResponseEntity.ok(userService.searchAllUsers());
-	}
-	
+	// ============== GET ==============
+		
 	@Operation(summary = "Get all users info", security = @SecurityRequirement(name = "bearer-authentication"))
 	@GetMapping("/getAllInfo")
 	@PreAuthorize("hasRole('ADMIN')")
@@ -53,23 +50,34 @@ public class UserController {
 		return ResponseEntity.ok(userService.getAllUsersInfo());
 	}
 	
-	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
+	@Operation(summary = "Get single user info", security = @SecurityRequirement(name = "bearer-authentication"))
 	@GetMapping("/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<User> findById(@PathVariable Long id) {
-		return ResponseEntity.ok(userService.read(id));
+	@PreAuthorize("isAuthenticated()")
+	public ResponseEntity<UserResponse> findUserInfo(@PathVariable Long id) {
+		return ResponseEntity.ok(userService.getUserInfo(id));
+	}
+		
+	// ============== PUT/PATCH ==============
+	
+	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
+	@PatchMapping("/updateProfileInfo/{id}")
+	@PreAuthorize("isAuthenticated()")
+	public ResponseEntity<User> updateProfileInfo(@RequestBody UserProfileDto user, @PathVariable Long id) {
+		return ResponseEntity.ok(userService.updateProfileInfo(user, id));
 	}
 	
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
-	@PatchMapping("/{id}")
+	@PatchMapping("/updateCredentials/{id}")
 	@PreAuthorize("isAuthenticated()")
-	public ResponseEntity<User> update(@RequestBody UserDto user, @PathVariable Long id) {
-		return ResponseEntity.ok(userService.update(user, id));
+	public ResponseEntity<User> updateCredentials(@RequestBody UserCredentialsDto user, @PathVariable Long id) {
+		return ResponseEntity.ok(userService.updateCredentials(user, id));
 	}
+	
+	// ============== DELETE ==============
 	
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
 	@DeleteMapping("/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("isAuthenticated()")
 	public ResponseEntity<String> deleteById(@PathVariable Long id) {
 		userService.delete(id);
 		return ResponseEntity.ok("Delete successfull");

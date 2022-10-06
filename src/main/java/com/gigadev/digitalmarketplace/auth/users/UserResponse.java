@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserResponse {
+	// Ottengo il get nel front-end di tutti gli Utenti e le loro proprieta'
 	private Long id;
 	private String firstName;
 	private String lastName;	

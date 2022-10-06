@@ -46,6 +46,22 @@ public class UserService {
 				).collect(Collectors.toList());
 	}
 	
+	public UserResponse getUserInfo(Long id) {
+		// Restituisce tutte le prop. di un singolo User
+		User user = userRepository.findById(id).get();
+		return UserResponse
+		.builder()
+		.userName(user.getUserName())
+		.id(id)
+		.firstName(user.getFirstName())
+		.lastName(user.getLastName())
+		.email(user.getEmail())
+		.userName(user.getUserName())				
+		.role( user.getRoles().stream().findFirst().get().getRoleName().name() )
+		.password(user.getPassword())
+		.build();	
+	}
+	
 	public UserResponse getBasicUsersInfo(String userName) {
 		// Restituisce le prop. Username e Ruolo di tutti gli User
 		// questo metodo viene utilizzato da JwtUtils per il metodo generateJwtToken()
@@ -59,10 +75,18 @@ public class UserService {
 	//========================================================================
 			
 	public void doBeforeSave(UserDto savedUser) {
-		// Encoding della password prima di salvare utente nel db
+		// Encoding password prima di salvare nel db utente con [dati completi] 
 		String encodedPass = encoder.encode(savedUser.getPassword());
 		savedUser.setPassword(encodedPass);
 	}	
+	
+	public void doBeforeSaveCredentials(UserCredentialsDto savedUser) {
+		// Encoding password prima di salvare nel db utente con [solo credenziali] 
+		String encodedPass = encoder.encode(savedUser.getPassword());
+		savedUser.setPassword(encodedPass);
+	}
+	
+	//========================================================================
 	
 	public User saveAdmin(UserDto admin) {			
 		if(userRepository.existsByUserName(admin.getUserName())) {
@@ -90,6 +114,8 @@ public class UserService {
 		}
 	}
 	
+	// ==================== METODI NON IN USO =======================
+	
 	public List<User> searchAllUsers() {
 		if(userRepository.findAll() == null) {
 			throw new EntityNotFoundException("No results found...");
@@ -102,20 +128,30 @@ public class UserService {
 		} else return userRepository.findById(id).get();
 	}
 	
-	// --- NOTA: --- questo metodo necessita di modificare tutti i campi
-	// si potrebbero creare dei metodi che modificano singoli campi
-	public User update(UserDto user, Long id) {	
+	// ===============================================================
 		
+	public User updateProfileInfo(UserProfileDto user, Long id) {			
 		if(!userRepository.existsById(id)) {
 			throw new EntityNotFoundException("User does not exist...");
-		} else { 
-			doBeforeSave(user);
+		} else { 			
+			User finalUser = userRepository.findById(id).get();
+			BeanUtils.copyProperties(user, finalUser);
+			log.info("--> Updating user: " + user.getFirstName());			
+			return userRepository.save(finalUser);
+		}
+	}
+	
+	public User updateCredentials(UserCredentialsDto user, Long id) {			
+		if(!userRepository.existsById(id)) {
+			throw new EntityNotFoundException("User does not exist...");
+		} else {
+			doBeforeSaveCredentials(user);
 			User finalUser = userRepository.findById(id).get();
 			BeanUtils.copyProperties(user, finalUser);
 			log.info("--> Updating user: " + user.getUserName());			
 			return userRepository.save(finalUser);
 		}
-	}
+	}	
 	
 	public void delete(Long id) {
 		if(!userRepository.existsById(id)) {
