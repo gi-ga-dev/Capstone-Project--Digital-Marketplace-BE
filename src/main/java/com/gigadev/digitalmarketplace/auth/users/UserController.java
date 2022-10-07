@@ -46,14 +46,14 @@ public class UserController {
 	@Operation(summary = "Get all users info", security = @SecurityRequirement(name = "bearer-authentication"))
 	@GetMapping("/getAllInfo")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<List<UserResponse>> findAllUsersInfo() {
+	public ResponseEntity<List<UserDtoGetResponse>> findAllUsersInfo() {
 		return ResponseEntity.ok(userService.getAllUsersInfo());
 	}
 	
 	@Operation(summary = "Get single user info", security = @SecurityRequirement(name = "bearer-authentication"))
 	@GetMapping("/{id}")
 	@PreAuthorize("isAuthenticated()")
-	public ResponseEntity<UserResponse> findUserInfo(@PathVariable Long id) {
+	public ResponseEntity<UserDtoGetResponse> findUserInfo(@PathVariable Long id) {
 		return ResponseEntity.ok(userService.getUserInfo(id));
 	}
 		
@@ -62,14 +62,14 @@ public class UserController {
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
 	@PatchMapping("/updateProfileInfo/{id}")
 	@PreAuthorize("isAuthenticated()")
-	public ResponseEntity<User> updateProfileInfo(@RequestBody UserProfileDto user, @PathVariable Long id) {
+	public ResponseEntity<User> updateProfileInfo(@RequestBody UserDtoProfile user, @PathVariable Long id) {
 		return ResponseEntity.ok(userService.updateProfileInfo(user, id));
 	}
 	
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
 	@PatchMapping("/updateCredentials/{id}")
 	@PreAuthorize("isAuthenticated()")
-	public ResponseEntity<User> updateCredentials(@RequestBody UserCredentialsDto user, @PathVariable Long id) {
+	public ResponseEntity<User> updateCredentials(@RequestBody UserDtoCredentials user, @PathVariable Long id) {
 			return ResponseEntity.ok(userService.updateCredentials(user, id));
 	}
 	

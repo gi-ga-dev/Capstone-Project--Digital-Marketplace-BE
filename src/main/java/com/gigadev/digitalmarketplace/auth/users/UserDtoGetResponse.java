@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserResponse {
+public class UserDtoGetResponse {
 	// Ottengo il get nel front-end di tutti gli Utenti e le loro proprieta'
 	private Long id;
 	private String firstName;

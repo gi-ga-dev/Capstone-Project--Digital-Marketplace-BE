@@ -1,5 +1,7 @@
 package com.gigadev.digitalmarketplace.auth.users;
 
+import javax.validation.constraints.NotBlank;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,10 +9,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserProfileDto {
-	// Campi modifica Informazioni Utente (Profile page -> Modal)
-	private String firstName;
-	private String lastName;
-	private String email;
+public class UserDtoCredentials {
+	// Campi modifica Credenziali (Profile page -> Modal)
+	private String userName;
+	private String password;
 
 }

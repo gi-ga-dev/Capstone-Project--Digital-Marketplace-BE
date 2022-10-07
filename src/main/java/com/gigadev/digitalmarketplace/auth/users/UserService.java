@@ -28,11 +28,11 @@ public class UserService {
 	@Autowired @Qualifier("admin") Role adminRole;
 	@Autowired @Qualifier("user") Role userRole;
 	
-	public List<UserResponse> getAllUsersInfo() {
+	public List<UserDtoGetResponse> getAllUsersInfo() {
 		// Restituisce tutte le prop. di tutti gli User
 		return userRepository.findAll()
 				.stream()
-				.map( user ->  UserResponse
+				.map( user ->  UserDtoGetResponse
 								.builder()
 								.id(user.getId())
 								.firstName(user.getFirstName())
@@ -46,10 +46,10 @@ public class UserService {
 				).collect(Collectors.toList());
 	}
 	
-	public UserResponse getUserInfo(Long id) {
+	public UserDtoGetResponse getUserInfo(Long id) {
 		// Restituisce tutte le prop. di un singolo User
 		User user = userRepository.findById(id).get();
-		return UserResponse
+		return UserDtoGetResponse
 		.builder()
 		.userName(user.getUserName())
 		.id(id)
@@ -62,11 +62,11 @@ public class UserService {
 		.build();	
 	}
 	
-	public UserResponse getBasicUsersInfo(String userName) {
+	public UserDtoGetResponse getBasicUsersInfo(String userName) {
 		// Restituisce le prop. Username e Ruolo di tutti gli User
 		// questo metodo viene utilizzato da JwtUtils per il metodo generateJwtToken()
 		User user = userRepository.findByUserName(userName).get();				
-		return UserResponse
+		return UserDtoGetResponse
 		.builder()
 		.userName(userName)
 		.role( user.getRoles().stream().findFirst().get().getRoleName().name()).build();		
@@ -80,7 +80,7 @@ public class UserService {
 		savedUser.setPassword(encodedPass);
 	}	
 	
-	public void doBeforeSaveCredentials(UserCredentialsDto savedUser) {
+	public void doBeforeSaveCredentials(UserDtoCredentials savedUser) {
 		// Encoding password prima di salvare nel db utente con [solo credenziali] 
 		String encodedPass = encoder.encode(savedUser.getPassword());
 		savedUser.setPassword(encodedPass);
@@ -130,7 +130,8 @@ public class UserService {
 	
 	// ===============================================================
 		
-	public User updateProfileInfo(UserProfileDto user, Long id) {			
+	public User updateProfileInfo(UserDtoProfile user, Long id) {
+		// restituisco solo l'obj con i primi 3 parametri del profilo
 		if(!userRepository.existsById(id)) {
 			throw new EntityNotFoundException("User does not exist...");
 		} else { 			
@@ -141,7 +142,8 @@ public class UserService {
 		}
 	}
 	
-	public User updateCredentials(UserCredentialsDto user, Long id) {			
+	public User updateCredentials(UserDtoCredentials user, Long id) {	
+		// restituisco solo l'obj con i 2 parametri credenziali
 		if(!userRepository.existsById(id)) {
 			throw new EntityNotFoundException("User does not exist...");
 		} else {	

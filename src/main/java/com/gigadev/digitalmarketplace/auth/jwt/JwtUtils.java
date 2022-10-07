@@ -10,7 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import com.gigadev.digitalmarketplace.auth.users.UserDetailsImpl;
-import com.gigadev.digitalmarketplace.auth.users.UserResponse;
+import com.gigadev.digitalmarketplace.auth.users.UserDtoGetResponse;
 import com.gigadev.digitalmarketplace.auth.users.UserService;
 
 import io.jsonwebtoken.ExpiredJwtException;
@@ -38,7 +38,7 @@ public class JwtUtils {
 		UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
 		log.info(userPrincipal.getUsername() + " - logged in");
 		
-		UserResponse userResponse = userService.getBasicUsersInfo(userPrincipal.getUsername());
+		UserDtoGetResponse userResponse = userService.getBasicUsersInfo(userPrincipal.getUsername());
 		
 		Map<String, Object> claims = new HashMap<>();
 		claims.put("role", userResponse.getRole());
