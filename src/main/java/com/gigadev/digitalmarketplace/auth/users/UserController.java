@@ -70,7 +70,7 @@ public class UserController {
 	@PatchMapping("/updateCredentials/{id}")
 	@PreAuthorize("isAuthenticated()")
 	public ResponseEntity<User> updateCredentials(@RequestBody UserCredentialsDto user, @PathVariable Long id) {
-		return ResponseEntity.ok(userService.updateCredentials(user, id));
+			return ResponseEntity.ok(userService.updateCredentials(user, id));
 	}
 	
 	// ============== DELETE ==============

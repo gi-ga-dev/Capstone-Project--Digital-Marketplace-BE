@@ -11,9 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserCredentialsDto {
 	// Campi modifica Credenziali (Profile page -> Modal)
-	@NotBlank
 	private String userName;
-	@NotBlank
 	private String password;
 
 }

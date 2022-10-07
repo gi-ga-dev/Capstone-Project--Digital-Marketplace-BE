@@ -144,13 +144,19 @@ public class UserService {
 	public User updateCredentials(UserCredentialsDto user, Long id) {			
 		if(!userRepository.existsById(id)) {
 			throw new EntityNotFoundException("User does not exist...");
-		} else {
-			doBeforeSaveCredentials(user);
-			User finalUser = userRepository.findById(id).get();
-			BeanUtils.copyProperties(user, finalUser);
-			log.info("--> Updating user: " + user.getUserName());			
-			return userRepository.save(finalUser);
-		}
+		} else {	
+			// Al momento del patch se il campo password e' vuoto il sistema genera un token lo stesso
+			// se la password prima di essere trasformata in token (60 char) e' 0 lancia eccezione
+			if(user.getPassword().length() == 0) {
+				throw new EntityNotFoundException("Password field is blank!!!");
+			} else {						
+				doBeforeSaveCredentials(user);
+				User finalUser = userRepository.findById(id).get();
+				BeanUtils.copyProperties(user, finalUser);
+				log.info("--> Updating user: " + user.getUserName());	
+				return userRepository.save(finalUser);
+			} 
+		}						
 	}	
 	
 	public void delete(Long id) {
