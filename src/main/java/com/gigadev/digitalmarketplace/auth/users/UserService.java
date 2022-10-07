@@ -40,8 +40,7 @@ public class UserService {
 								.email(user.getEmail())
 								.userName(user.getUserName())				
 								// restituisce il ruolo (nella lista ruoli dell'user) come stringa
-								.role( user.getRoles().stream().findFirst().get().getRoleName().name() )
-								.password(user.getPassword())
+								.role( user.getRoles().stream().findFirst().get().getRoleName().name() )								
 								.build()   
 				).collect(Collectors.toList());
 	}
@@ -57,8 +56,7 @@ public class UserService {
 		.lastName(user.getLastName())
 		.email(user.getEmail())
 		.userName(user.getUserName())				
-		.role( user.getRoles().stream().findFirst().get().getRoleName().name() )
-		.password(user.getPassword())
+		.role( user.getRoles().stream().findFirst().get().getRoleName().name() )		
 		.build();	
 	}
 	
@@ -74,7 +72,7 @@ public class UserService {
 	
 	//========================================================================
 			
-	public void doBeforeSave(UserDto savedUser) {
+	public void doBeforeSave(UserDtoRegister savedUser) {
 		// Encoding password prima di salvare nel db utente con [dati completi] 
 		String encodedPass = encoder.encode(savedUser.getPassword());
 		savedUser.setPassword(encodedPass);
@@ -88,7 +86,7 @@ public class UserService {
 	
 	//========================================================================
 	
-	public User saveAdmin(UserDto admin) {			
+	public User saveAdmin(UserDtoRegister admin) {			
 		if(userRepository.existsByUserName(admin.getUserName())) {
 			throw new EntityExistsException("User already exist...");
 		} else {
@@ -101,7 +99,7 @@ public class UserService {
 		} 		
 	}
 		
-	public User saveUser(UserDto user) {		
+	public User saveUser(UserDtoRegister user) {		
 		if(userRepository.existsByUserName(user.getUserName())) {
 			throw new EntityExistsException("User already exist...");
 		} else {

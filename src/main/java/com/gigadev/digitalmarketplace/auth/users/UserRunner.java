@@ -21,7 +21,7 @@ public class UserRunner implements ApplicationRunner {
 	
 	@Autowired UserService userServ;
 	@Autowired RoleService roleServ;
-	@Autowired @Qualifier("newUser") UserDto user;	
+	@Autowired @Qualifier("newUser") UserDtoRegister user;	
 	@Autowired @Qualifier("admin") Role adminRole;
 	@Autowired @Qualifier("user") Role userRole;
 	

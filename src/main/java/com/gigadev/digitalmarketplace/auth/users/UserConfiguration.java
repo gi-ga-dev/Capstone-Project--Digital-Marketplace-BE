@@ -8,8 +8,8 @@ import org.springframework.context.annotation.Scope;
 public class UserConfiguration {
 		
 	@Bean("newUser")	
-	public UserDto newUser() {
-		UserDto user = new UserDto("gino", "fettuccino", "gino.fett@gmail.com", "gino", "12345");
+	public UserDtoRegister newUser() {
+		UserDtoRegister user = new UserDtoRegister("gino", "fettuccino", "gino.fett@gmail.com", "gino", "12345");
 		return user;
 	}
 	

@@ -19,6 +19,5 @@ public class UserDtoGetResponse {
 	private String email;	
 	private String userName;		
 	private String role;
-	private String password;
 	
 }

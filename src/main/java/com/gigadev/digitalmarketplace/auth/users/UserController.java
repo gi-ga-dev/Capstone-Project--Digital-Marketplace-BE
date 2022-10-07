@@ -29,55 +29,55 @@ public class UserController {
 	
 	// ============== POST ==============
 		
-	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
 	@PostMapping("/admin")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<User> createAdmin(@RequestBody UserDto admin) {			
+	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
+	public ResponseEntity<User> createAdmin(@RequestBody UserDtoRegister admin) {			
 		return ResponseEntity.ok(userService.saveAdmin(admin));
 	}	
 	
 	@PostMapping("/user")
-	public ResponseEntity<User> createUser(@RequestBody UserDto user) {
+	public ResponseEntity<User> createUser(@RequestBody UserDtoRegister user) {
 		return ResponseEntity.ok(userService.saveUser(user));
 	}
 	
 	// ============== GET ==============
 		
-	@Operation(summary = "Get all users info", security = @SecurityRequirement(name = "bearer-authentication"))
 	@GetMapping("/getAllInfo")
 	@PreAuthorize("hasRole('ADMIN')")
+	@Operation(summary = "Get all users info", security = @SecurityRequirement(name = "bearer-authentication"))
 	public ResponseEntity<List<UserDtoGetResponse>> findAllUsersInfo() {
 		return ResponseEntity.ok(userService.getAllUsersInfo());
 	}
-	
-	@Operation(summary = "Get single user info", security = @SecurityRequirement(name = "bearer-authentication"))
+		
 	@GetMapping("/{id}")
 	@PreAuthorize("isAuthenticated()")
+	@Operation(summary = "Get single user info", security = @SecurityRequirement(name = "bearer-authentication"))
 	public ResponseEntity<UserDtoGetResponse> findUserInfo(@PathVariable Long id) {
 		return ResponseEntity.ok(userService.getUserInfo(id));
 	}
 		
 	// ============== PUT/PATCH ==============
-	
-	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
+		
 	@PatchMapping("/updateProfileInfo/{id}")
 	@PreAuthorize("isAuthenticated()")
+	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
 	public ResponseEntity<User> updateProfileInfo(@RequestBody UserDtoProfile user, @PathVariable Long id) {
 		return ResponseEntity.ok(userService.updateProfileInfo(user, id));
 	}
-	
-	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
+		
 	@PatchMapping("/updateCredentials/{id}")
 	@PreAuthorize("isAuthenticated()")
+	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
 	public ResponseEntity<User> updateCredentials(@RequestBody UserDtoCredentials user, @PathVariable Long id) {
 			return ResponseEntity.ok(userService.updateCredentials(user, id));
 	}
 	
 	// ============== DELETE ==============
-	
-	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
+		
 	@DeleteMapping("/{id}")
 	@PreAuthorize("isAuthenticated()")
+	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
 	public ResponseEntity<String> deleteById(@PathVariable Long id) {
 		userService.delete(id);
 		return ResponseEntity.ok("Delete successfull");

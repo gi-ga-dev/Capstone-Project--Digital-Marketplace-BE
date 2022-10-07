@@ -19,10 +19,10 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 public class RoleController {
 	
 	@Autowired RoleService roleServ;
-	
-	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
+		
 	@GetMapping
 	@PreAuthorize("hasRole('ADMIN')")
+	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
 	public ResponseEntity<List<Role>> findAllRoles() {
 		return ResponseEntity.ok(roleServ.searchAllRoles());
 	}
