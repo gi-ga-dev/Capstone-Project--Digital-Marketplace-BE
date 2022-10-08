@@ -25,7 +25,4 @@ public class ProductMusic extends AbstractProduct {
 	private String album;
 	private String duration;
 	
-	@ManyToOne
-	private User user;
-
 }

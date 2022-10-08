@@ -55,10 +55,11 @@ public class User {
 	private LocalDate subStart; // giorno di partenza
 	private LocalDate subEnd;   // = subStart + plusDays(n)
 	private LocalDate subActualUsage;	
-
-	// il table user_roles conterra' i dati associati di user_id e role_id
+	
+	// @ManyToMany e' necessaria in modo da creare molti utenti con i ruoli istanziati nel runner
+	// questo JoinTable definisce solo i nomi del table/columns dell'associazione user/role
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+	@JoinTable(name = "users_roles_assoc", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles = new HashSet<Role>();
 	
 	@OneToMany

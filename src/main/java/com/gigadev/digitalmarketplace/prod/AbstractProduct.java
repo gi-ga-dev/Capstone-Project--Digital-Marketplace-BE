@@ -38,7 +38,4 @@ public abstract class AbstractProduct {
 	private Double ratings;
 	private Long reviews;
 
-	@ManyToOne
-	private User user;
-
 }

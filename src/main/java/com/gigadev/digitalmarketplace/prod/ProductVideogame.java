@@ -41,8 +41,5 @@ public class ProductVideogame extends AbstractProduct {
 	private String recCPU;
 	private String recGPU;
 	private String recDirectX;
-	
-	@ManyToOne
-	private User user;
-	
+		
 }

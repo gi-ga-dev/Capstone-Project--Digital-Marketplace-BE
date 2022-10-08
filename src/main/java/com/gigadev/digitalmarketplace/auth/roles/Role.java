@@ -7,7 +7,10 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.gigadev.digitalmarketplace.auth.users.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,11 +18,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Table(name="roles")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Table(name="roles")
 public class Role {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +31,7 @@ public class Role {
 	@Enumerated(EnumType.STRING)
 	@Column(length = 20)
 	private ERole roleName;
-	
+			
 	public Role(ERole roleName) {
 		super();
 		this.roleName = roleName;		
