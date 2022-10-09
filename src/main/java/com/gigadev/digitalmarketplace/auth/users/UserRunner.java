@@ -5,10 +5,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
-
 import com.gigadev.digitalmarketplace.auth.roles.Role;
-import com.gigadev.digitalmarketplace.auth.roles.RoleService;
-
+import com.gigadev.digitalmarketplace.auth.roles.RoleRepository;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,19 +18,19 @@ import lombok.extern.slf4j.Slf4j;
 public class UserRunner implements ApplicationRunner {
 	
 	@Autowired UserService userServ;
-	@Autowired RoleService roleServ;
-	@Autowired @Qualifier("newUser") UserDtoRegister user;	
-	@Autowired @Qualifier("admin") Role adminRole;
-	@Autowired @Qualifier("user") Role userRole;
+	@Autowired RoleRepository roleRepo;
+	@Autowired @Qualifier("systemAdmin") UserDtoRegister admin;	
+	@Autowired @Qualifier("roleAdmin") Role roleAdmin;
+	@Autowired @Qualifier("roleUser") Role roleUser;
 	
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
 		log.info("--> Application Started Successfully!!!");
 		
-		// creazione all'avvio di due ruoli persistenti
-		roleServ.create(adminRole);
-		roleServ.create(userRole);		
-		userServ.saveAdmin(user);
+		// all'avvio creazione 2 ruoli ed 1 admin di sistema persistenti
+		roleRepo.save(roleAdmin);
+		roleRepo.save(roleUser);		
+		userServ.saveUser(admin, roleAdmin);
 		
 	}
 

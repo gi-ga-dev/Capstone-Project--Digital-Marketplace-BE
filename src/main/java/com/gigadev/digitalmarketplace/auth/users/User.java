@@ -80,13 +80,7 @@ public class User {
 	@OneToMany
 	@JoinColumn(name = "user_id")
 	private Set<ProductBook> bookList = new HashSet<ProductBook>();
-	
-	public User(@NotBlank @Size(max = 50) String userName, @NotBlank @Size(max = 120) String password) {
-		super();
-		this.userName = userName;
-		this.password = password;
-	}
-	
+		
 	public void addRole(Role role) {
 		roles.add(role);
 	}
@@ -105,17 +99,6 @@ public class User {
 	
 	public void addBook(ProductBook book) {
 		bookList.add(book);
-	}
-	
-
-	
-	public void checkSubscription(User user) {			
-		Integer subEnd = user.getSubEnd().getDayOfYear();
-		Integer subStart = user.getSubStart().getDayOfYear();
-		user.setSubRemaining(subEnd - subStart);		
-		if(user.getSubRemaining() <= 0) {
-			user.setIsSubscribed(false);
-		}		
 	}
 
 }

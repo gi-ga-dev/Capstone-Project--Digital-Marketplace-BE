@@ -7,13 +7,13 @@ import org.springframework.context.annotation.Scope;
 @Configuration
 public class RoleConfiguration {
 	
-	@Bean("admin")
-	public Role newAdmin() {
+	@Bean("roleAdmin")
+	public Role roleAdmin() {
 		return new Role(ERole.ROLE_ADMIN);
 	}
 	
-	@Bean("user")
-	public Role newUser() {
+	@Bean("roleUser")
+	public Role roleUser() {
 		return new Role(ERole.ROLE_USER);
 	}
 

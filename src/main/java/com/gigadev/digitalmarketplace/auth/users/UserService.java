@@ -26,8 +26,6 @@ public class UserService {
 	
 	@Autowired UserRepository userRepository;
 	@Autowired PasswordEncoder encoder;
-	@Autowired @Qualifier("admin") Role adminRole;
-	@Autowired @Qualifier("user") Role userRole;
 	
 	// ============== GET ==============
 	
@@ -42,7 +40,7 @@ public class UserService {
 			.email(user.getEmail())
 			.userName(user.getUserName())				
 			// restituisce il ruolo (nella lista ruoli dell'user) come stringa
-			.role( user.getRoles().stream().findFirst().get().getRoleName().name() )								
+			.role( user.getRoles().stream().findFirst().get().getRoleName().name().replace("ROLE_", "") )								
 			.accountBalance(user.getAccountBalance())			
 			.isSubscribed(user.getIsSubscribed())			
 			.subStart(user.getSubStart())			
@@ -68,7 +66,7 @@ public class UserService {
 		.lastName(user.getLastName())
 		.email(user.getEmail())
 		.userName(user.getUserName())				
-		.role( user.getRoles().stream().findFirst().get().getRoleName().name() )
+		.role( user.getRoles().stream().findFirst().get().getRoleName().name().replace("ROLE_", "") )
 		.accountBalance(user.getAccountBalance())			
 		.isSubscribed(user.getIsSubscribed())			
 		.subStart(user.getSubStart())			
@@ -89,11 +87,11 @@ public class UserService {
 		return UserDtoGetResponse
 		.builder()
 		.userName(userName)
-		.role( user.getRoles().stream().findFirst().get().getRoleName().name()).build();		
+		.role( user.getRoles().stream().findFirst().get().getRoleName().name().replace("ROLE_", "")).build();		
 	}
 	
 	// ============== doBeforeSave ==============
-			
+				
 	public void doBeforeSaveUser(UserDtoRegister savedUser) {
 		// Encoding password prima di salvare nel db utente con [dati completi] 
 		String encodedPass = encoder.encode(savedUser.getPassword());
@@ -115,52 +113,34 @@ public class UserService {
 			user.setSubStart(LocalDate.now());
 			user.setSubEnd(LocalDate.now().plusDays(subDays));
 			user.setSubTotalTime(subDays); // 30-180-365 days			
-			log.info("--> User: " + user.getUserName() + " has subscribed!");
+			log.info("--> User: " + user.getUserName() + " has subscribed for: " + user.getSubTotalTime());
 		} else throw new EntityNotFoundException("--> Account balance is insufficient, or user is already subscribed!");
 	}
 	
-	// ============== POST ==============
-	
-	public User saveAdmin(UserDtoRegister admin) {			
-		if(userRepository.existsByUserName(admin.getUserName())) {
-			throw new EntityExistsException("User already exist...");
-		} else {
-			doBeforeSaveUser(admin);		
-			User finalUser = new User();						
-			BeanUtils.copyProperties(admin, finalUser);		
-			finalUser.addRole(adminRole);	
-			log.info("--> Inserting new admin: " + finalUser.getUserName());
-			return userRepository.save(finalUser);						
-		} 		
+	public void checkSubscription(User user) {			
+		Integer subEnd = user.getSubEnd().getDayOfYear();
+		Integer subStart = user.getSubStart().getDayOfYear();
+		user.setSubRemaining(subEnd - subStart);		
+		if(user.getSubRemaining() <= 0) {
+			user.setIsSubscribed(false);
+		}		
 	}
-		
-	public User saveUser(UserDtoRegister user) {		
+	
+	// ============== POST ==============
+			
+	public User saveUser(UserDtoRegister user, Role role) {		
 		if(userRepository.existsByUserName(user.getUserName())) {
 			throw new EntityExistsException("User already exist...");
 		} else {
 			doBeforeSaveUser(user);		
 			User finalUser = new User();
 			BeanUtils.copyProperties(user, finalUser);		
-			finalUser.addRole(userRole);	
+			finalUser.addRole(role);	
 			log.info("--> Inserting new user: " + finalUser.getUserName());
 			return userRepository.save(finalUser);			
 		}
-	}
-	
-	// ==================== METODI NON IN USO =======================
-	
-	public List<User> searchAllUsers() {
-		if(userRepository.findAll() == null) {
-			throw new EntityNotFoundException("No results found...");
-		} else return (List<User>) userRepository.findAll();
-	}
-	
-	public User read(Long id) {
-		if(!userRepository.existsById(id)) {
-			throw new EntityNotFoundException("User does not exist...");
-		} else return userRepository.findById(id).get();
-	}
-	
+	}	
+		
 	// ============== PUT/PATCH ==============
 		
 	public User updateProfileInfo(UserDtoProfile user, Long id) {
