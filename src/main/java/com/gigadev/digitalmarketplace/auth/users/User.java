@@ -30,6 +30,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Entity
 @Table(name = "users")
@@ -37,6 +38,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Slf4j
 public class User {
 
 	@Id	
@@ -50,11 +52,12 @@ public class User {
 	@NotBlank @Size(max = 90) private String password; // lunghezza token 60 char.
 	
 	@Builder.Default private Integer qntPurchased = 0;
-	@Builder.Default private Double accountBalance = 0.00;
+	@Builder.Default private Double accountBalance = 100.00;
 	@Builder.Default private Boolean isSubscribed = false;
-	private LocalDate subStart; // giorno di partenza
-	private LocalDate subEnd;   // = subStart + plusDays(n)
-	private LocalDate subActualUsage;	
+	private LocalDate subStart;
+	private LocalDate subEnd;  
+	private Integer subTotalTime;
+	private Integer subRemaining;	
 	
 	// @ManyToMany e' necessaria in modo da creare molti utenti con i ruoli istanziati nel runner
 	// questo JoinTable definisce solo i nomi del table/columns dell'associazione user/role
@@ -102,6 +105,17 @@ public class User {
 	
 	public void addBook(ProductBook book) {
 		bookList.add(book);
+	}
+	
+
+	
+	public void checkSubscription(User user) {			
+		Integer subEnd = user.getSubEnd().getDayOfYear();
+		Integer subStart = user.getSubStart().getDayOfYear();
+		user.setSubRemaining(subEnd - subStart);		
+		if(user.getSubRemaining() <= 0) {
+			user.setIsSubscribed(false);
+		}		
 	}
 
 }

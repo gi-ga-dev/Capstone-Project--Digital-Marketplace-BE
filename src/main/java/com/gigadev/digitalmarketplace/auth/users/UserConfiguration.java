@@ -11,7 +11,5 @@ public class UserConfiguration {
 	public UserDtoRegister newUser() {
 		UserDtoRegister user = new UserDtoRegister("gino", "fettuccino", "gino.fett@gmail.com", "gino", "12345");
 		return user;
-	}
-	
-
+	}	
 }

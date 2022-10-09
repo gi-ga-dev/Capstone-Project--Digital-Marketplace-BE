@@ -25,7 +25,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 @RequestMapping("/users")
 public class UserController {
 	
-	@Autowired UserService userService;
+	@Autowired UserService userService;	
 	
 	// ============== POST ==============
 		
@@ -72,6 +72,30 @@ public class UserController {
 	public ResponseEntity<User> updateCredentials(@RequestBody UserDtoCredentials user, @PathVariable Long id) {
 			return ResponseEntity.ok(userService.updateCredentials(user, id));
 	}
+	
+	// >>>Polimorfismo<<<
+	// Per un PATCH senza scrittura nei campi di input (FE) omettere il @RequestBody, il metodo verra' lanciato
+	
+	@PatchMapping("/subscribeMonthly/{id}")
+	@PreAuthorize("isAuthenticated()")
+	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
+	public ResponseEntity<User> subscribeMonthly(@PathVariable Long id) {
+			return ResponseEntity.ok(userService.beginSubscription(id, 4.90, 30));
+	}
+	
+	@PatchMapping("/subscribeSemestral/{id}")
+	@PreAuthorize("isAuthenticated()")
+	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
+	public ResponseEntity<User> subscribeSemestral(@PathVariable Long id) {
+			return ResponseEntity.ok(userService.beginSubscription(id, 24.90, 180));
+	}
+	
+	@PatchMapping("/subscribeAnnual/{id}")
+	@PreAuthorize("isAuthenticated()")
+	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
+	public ResponseEntity<User> subscribeAnnual(@PathVariable Long id) {
+			return ResponseEntity.ok(userService.beginSubscription(id, 44.90, 365));
+	}	
 	
 	// ============== DELETE ==============
 		

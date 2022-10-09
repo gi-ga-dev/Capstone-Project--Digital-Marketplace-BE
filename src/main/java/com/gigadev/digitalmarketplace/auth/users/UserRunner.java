@@ -31,8 +31,9 @@ public class UserRunner implements ApplicationRunner {
 		
 		// creazione all'avvio di due ruoli persistenti
 		roleServ.create(adminRole);
-		roleServ.create(userRole);
+		roleServ.create(userRole);		
 		userServ.saveAdmin(user);
+		
 	}
 
 	

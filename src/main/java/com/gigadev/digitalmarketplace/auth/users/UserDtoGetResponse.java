@@ -1,6 +1,14 @@
 package com.gigadev.digitalmarketplace.auth.users;
 
+import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import com.gigadev.digitalmarketplace.prod.AbstractProduct;
+import com.gigadev.digitalmarketplace.prod.ProductBook;
+import com.gigadev.digitalmarketplace.prod.ProductMusic;
+import com.gigadev.digitalmarketplace.prod.ProductVideogame;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,5 +27,15 @@ public class UserDtoGetResponse {
 	private String email;	
 	private String userName;		
 	private String role;
-	
+	private Double accountBalance;
+	private Boolean isSubscribed;
+	private LocalDate subStart;
+	private LocalDate subEnd;  
+	private Integer subTotalTime;
+	private Integer subRemaining;
+	private Set<AbstractProduct> purchaseHistory;
+	private Set<ProductVideogame> videogamesList;
+	private Set<ProductMusic> musicList;
+	private Set<ProductBook> bookList;
+
 }
