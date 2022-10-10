@@ -80,7 +80,7 @@ public class User {
 	@OneToMany
 	@JoinColumn(name = "user_id")
 	private Set<ProductBook> bookList = new HashSet<ProductBook>();
-		
+			
 	public void addRole(Role role) {
 		roles.add(role);
 	}

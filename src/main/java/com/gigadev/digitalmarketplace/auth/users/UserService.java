@@ -186,6 +186,17 @@ public class UserService {
 			return userRepository.save(finalUser);
 		}
 	}
+	
+	public User addBalance(Long id, Double balance) {
+		if(!userRepository.existsById(id)) {
+			throw new EntityNotFoundException("User does not exist...");
+		} else { 
+			User finalUser = userRepository.findById(id).get();
+			finalUser.setAccountBalance(finalUser.getAccountBalance() +  balance);
+			log.info("--> Updating subscription info for user: " + finalUser.getUserName());			
+			return userRepository.save(finalUser);
+		}
+	}
 		
 	// ============== DELETE ==============
 	

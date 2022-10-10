@@ -102,6 +102,29 @@ public class UserController {
 			return ResponseEntity.ok(userService.beginSubscription(id, 44.90, 365));
 	}	
 	
+	// --------------------------------------
+	
+	@PatchMapping("/addFiveDollars/{id}")
+	@PreAuthorize("isAuthenticated()")
+	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
+	public ResponseEntity<User> addFiveDollars(@PathVariable Long id) {
+		return ResponseEntity.ok(userService.addBalance(id, 5.00));
+	}
+	
+	@PatchMapping("/addTwentyFiveDollars/{id}")
+	@PreAuthorize("isAuthenticated()")
+	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
+	public ResponseEntity<User> addTwentyFiveDollars(@PathVariable Long id) {
+		return ResponseEntity.ok(userService.addBalance(id, 25.00));
+	}
+	
+	@PatchMapping("/addFiftyDollars/{id}")
+	@PreAuthorize("isAuthenticated()")
+	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
+	public ResponseEntity<User> addFiftyDollars(@PathVariable Long id) {
+		return ResponseEntity.ok(userService.addBalance(id, 50.00));
+	}
+	
 	// ============== DELETE ==============
 		
 	@DeleteMapping("/{id}")
