@@ -64,14 +64,14 @@ public class UserController {
 		
 	// ============== PUT/PATCH ==============
 		
-	@PatchMapping("/updateProfileInfo/{id}")
+	@PatchMapping("/{id}/updateProfileInfo")
 	@PreAuthorize("isAuthenticated()")
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
 	public ResponseEntity<User> updateProfileInfo(@RequestBody UserDtoProfile user, @PathVariable Long id) {
 		return ResponseEntity.ok(userService.updateProfileInfo(user, id));
 	}
 		
-	@PatchMapping("/updateCredentials/{id}")
+	@PatchMapping("/{id}/updateCredentials")
 	@PreAuthorize("isAuthenticated()")
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
 	public ResponseEntity<User> updateCredentials(@RequestBody UserDtoCredentials user, @PathVariable Long id) {
@@ -79,24 +79,23 @@ public class UserController {
 	}
 	
 	// >>>Polimorfismo<<<
-	// Per un PATCH senza scrittura nei campi di input (FE) omettere il @RequestBody, il metodo verra' lanciato
+	// Per un PATCH senza scrittura nei campi di input (FE) omettere il @RequestBody, il metodo verra' lanciato	
 	
-	@PatchMapping("/subscribeMonthly/{id}")
-	@PreAuthorize("isAuthenticated()")
+	// Omettere @PreAuthorize altrimenti da errore di authentication
+	// il componente modal non verra' comunque caricato perche' non si e' fornito un id.
+	@PatchMapping("/{id}/subscribeMonthly")
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
 	public ResponseEntity<User> subscribeMonthly(@PathVariable Long id) {
 			return ResponseEntity.ok(userService.beginSubscription(id, 4.90, 30));
 	}
 	
-	@PatchMapping("/subscribeSemestral/{id}")
-	@PreAuthorize("isAuthenticated()")
+	@PatchMapping("/{id}/subscribeSemestral")
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
 	public ResponseEntity<User> subscribeSemestral(@PathVariable Long id) {
 			return ResponseEntity.ok(userService.beginSubscription(id, 24.90, 180));
 	}
 	
-	@PatchMapping("/subscribeAnnual/{id}")
-	@PreAuthorize("isAuthenticated()")
+	@PatchMapping("/{id}/subscribeAnnual")
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
 	public ResponseEntity<User> subscribeAnnual(@PathVariable Long id) {
 			return ResponseEntity.ok(userService.beginSubscription(id, 44.90, 365));
@@ -104,22 +103,19 @@ public class UserController {
 	
 	// --------------------------------------
 	
-	@PatchMapping("/addFiveDollars/{id}")
-	@PreAuthorize("isAuthenticated()")
+	@PatchMapping("/{id}/addFiveDollars")
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
 	public ResponseEntity<User> addFiveDollars(@PathVariable Long id) {
 		return ResponseEntity.ok(userService.addBalance(id, 5.00));
 	}
 	
-	@PatchMapping("/addTwentyFiveDollars/{id}")
-	@PreAuthorize("isAuthenticated()")
+	@PatchMapping("/{id}/addTwentyFiveDollars")
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
 	public ResponseEntity<User> addTwentyFiveDollars(@PathVariable Long id) {
 		return ResponseEntity.ok(userService.addBalance(id, 25.00));
 	}
 	
-	@PatchMapping("/addFiftyDollars/{id}")
-	@PreAuthorize("isAuthenticated()")
+	@PatchMapping("/{id}/addFiftyDollars")
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
 	public ResponseEntity<User> addFiftyDollars(@PathVariable Long id) {
 		return ResponseEntity.ok(userService.addBalance(id, 50.00));

@@ -113,8 +113,8 @@ public class UserService {
 			user.setSubStart(LocalDate.now());
 			user.setSubEnd(LocalDate.now().plusDays(subDays));
 			user.setSubTotalTime(subDays); // 30-180-365 days			
-			log.info("--> User: " + user.getUserName() + " has subscribed for: " + user.getSubTotalTime());
-		} else throw new EntityNotFoundException("--> Account balance is insufficient, or user is already subscribed!");
+			log.info("--> SUB UPDATE -  User: " + user.getUserName() + " has subscribed for: " + user.getSubTotalTime());
+		} else throw new EntityNotFoundException("--> ERROR - Account balance is insufficient, or user is already subscribed!");
 	}
 	
 	public void checkSubscription(User user) {			
@@ -136,7 +136,7 @@ public class UserService {
 			User finalUser = new User();
 			BeanUtils.copyProperties(user, finalUser);		
 			finalUser.addRole(role);	
-			log.info("--> Inserting new user: " + finalUser.getUserName());
+			log.info("--> SAVE USER - Inserting new user: " + finalUser.getUserName());
 			return userRepository.save(finalUser);			
 		}
 	}	
@@ -150,7 +150,7 @@ public class UserService {
 		} else { 			
 			User finalUser = userRepository.findById(id).get();
 			BeanUtils.copyProperties(user, finalUser);
-			log.info("--> Updating profile info for user: " + finalUser.getUserName());			
+			log.info("--> PROFILE INFO UPDATE - for user: " + finalUser.getUserName());			
 			return userRepository.save(finalUser);
 		}
 	}
@@ -168,7 +168,7 @@ public class UserService {
 				doBeforeSaveCredentials(user);
 				User finalUser = userRepository.findById(id).get();
 				BeanUtils.copyProperties(user, finalUser);
-				log.info("--> Updating credentials for user: " + finalUser.getUserName());	
+				log.info("--> CREDENTIALS UPDATE - for user: " + finalUser.getUserName());	
 				return userRepository.save(finalUser);
 			} 
 		}						
@@ -181,8 +181,7 @@ public class UserService {
 		} else { 	
 			User finalUser = userRepository.findById(id).get();	
 			// se si avverano le condizioni del metodo patcha i dati di finalUser e viene restituito
-			doBeforeSubscribe(finalUser, subCost, subDays);
-			log.info("--> Updating subscription info for user: " + finalUser.getUserName());			
+			doBeforeSubscribe(finalUser, subCost, subDays);			
 			return userRepository.save(finalUser);
 		}
 	}
@@ -193,7 +192,7 @@ public class UserService {
 		} else { 
 			User finalUser = userRepository.findById(id).get();
 			finalUser.setAccountBalance(finalUser.getAccountBalance() +  balance);
-			log.info("--> Updating subscription info for user: " + finalUser.getUserName());			
+			log.info("--> BALANCE UPDATE - User: " + finalUser.getUserName() + " Account Balance: " + finalUser.getAccountBalance() + "$");
 			return userRepository.save(finalUser);
 		}
 	}
@@ -205,7 +204,7 @@ public class UserService {
 			throw new EntityNotFoundException("User not found...");
 		} else {			
 			userRepository.deleteById(id);
-			log.info("--> Delete successfull...");
+			log.info("--> DELETE - successfull...");
 		}
 	}
 	

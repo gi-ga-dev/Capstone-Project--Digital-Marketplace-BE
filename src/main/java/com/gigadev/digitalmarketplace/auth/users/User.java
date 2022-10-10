@@ -52,7 +52,7 @@ public class User {
 	@NotBlank @Size(max = 90) private String password; // lunghezza token 60 char.
 	
 	@Builder.Default private Integer qntPurchased = 0;
-	@Builder.Default private Double accountBalance = 100.00;
+	@Builder.Default private Double accountBalance = 0.00;
 	@Builder.Default private Boolean isSubscribed = false;
 	private LocalDate subStart;
 	private LocalDate subEnd;  
