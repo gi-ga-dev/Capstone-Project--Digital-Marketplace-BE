@@ -35,5 +35,5 @@ public class ProductVideogame extends AbstractProduct {
 	private Integer minResolution;
 	private Integer maxResolution;
 	private Integer requiredSpace;
-		
+	
 }

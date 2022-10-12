@@ -30,6 +30,20 @@ public class ProductController {
 		return ResponseEntity.ok(productServ.saveVideogame(dto));
 	}
 	
+	@PostMapping("/music/saveMusic")
+	@PreAuthorize("hasRole('ADMIN')")
+	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
+	public ResponseEntity<AbstractProduct> saveMusic(@RequestBody ProductDtoMusic dto) {
+		return ResponseEntity.ok(productServ.saveMusic(dto));
+	}
+	
+	@PostMapping("/books/saveBook")
+	@PreAuthorize("hasRole('ADMIN')")
+	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
+	public ResponseEntity<AbstractProduct> saveBook(@RequestBody ProductDtoBook dto) {
+		return ResponseEntity.ok(productServ.saveBook(dto));
+	}
+	
 	// ============== PATCH/PUT ==============
 	
 	// ============== DELETE ==============

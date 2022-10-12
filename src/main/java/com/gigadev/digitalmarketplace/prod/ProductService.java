@@ -26,7 +26,29 @@ public class ProductService {
 			log.info("--> SAVE VIDEOGAME - Inserting new videogame: " + finalVideogame.getTitle());
 			return productRepo.save(finalVideogame);			
 		}
-	}	
+	}
+	
+	public AbstractProduct saveMusic(ProductDtoMusic music) {			
+		if(productRepo.existsByTitle(music.getTitle())) {
+			throw new EntityExistsException("Music already exist...");
+		} else {	
+			ProductMusic finalMusic = new ProductMusic();
+			BeanUtils.copyProperties(music, finalMusic);						
+			log.info("--> SAVE MUSIC - Inserting new music: " + finalMusic.getTitle());
+			return productRepo.save(finalMusic);			
+		}
+	}
+	
+	public AbstractProduct saveBook(ProductDtoBook book) {			
+		if(productRepo.existsByTitle(book.getTitle())) {
+			throw new EntityExistsException("Book already exist...");
+		} else {	
+			ProductBook finalBook = new ProductBook();
+			BeanUtils.copyProperties(book, finalBook);						
+			log.info("--> SAVE BOOK - Inserting new book: " + finalBook.getTitle());
+			return productRepo.save(finalBook);			
+		}
+	}
 	
 	// ============== PATCH/PUT ==============
 	
