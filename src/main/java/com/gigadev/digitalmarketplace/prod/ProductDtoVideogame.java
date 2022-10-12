@@ -13,7 +13,6 @@ public class ProductDtoVideogame {
 	
 	// AbstractProduct
 	private Double priceInitial;
-	private Double priceActual;
 	private String title;	
 	private String description;
 	private String platform;
@@ -34,5 +33,7 @@ public class ProductDtoVideogame {
 	private Integer minResolution;
 	private Integer maxResolution;
 	private Integer requiredSpace;
+	
+	
 
 }

@@ -13,7 +13,6 @@ public class ProductDtoBook {
 	
 	// AbstractProduct
 	private Double priceInitial;
-	private Double priceActual;
 	private String title;	
 	private String description;
 	private String platform;

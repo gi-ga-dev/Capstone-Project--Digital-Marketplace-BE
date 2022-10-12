@@ -21,7 +21,7 @@ public abstract class AbstractProduct {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;	
 	private Double priceInitial;
-	private Double priceActual;
+	private Double priceDiscounted;
 	private Double discount;
 	private String title;	
 	private String description;

@@ -1,7 +1,8 @@
 package com.gigadev.digitalmarketplace.prod;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import javax.persistence.EntityExistsException;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,10 +12,29 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ProductService {
 	
-	@Autowired ProductRepository productRepo;
+	@Autowired AbstractProductRepo productRepo;
+	@Autowired ProductVideogameRepo videogameRepo;
+	@Autowired ProductMusicRepo musicRepo;
+	@Autowired ProductBookRepo bookRepo;	
 	
 	// ============== GET ==============
 	
+	public List<AbstractProduct> getAllProducts() {
+		return productRepo.findAll();
+	}
+	
+	public List<ProductVideogame> getAllVideogames() {
+		return videogameRepo.findAll();				
+	}
+	
+	public List<ProductMusic> getAllMusic() {
+		return musicRepo.findAll();				
+	}
+	
+	public List<ProductBook> getAllBooks() {
+		return bookRepo.findAll();				
+	}
+		
 	// ============== POST ==============
 	
 	public AbstractProduct saveVideogame(ProductDtoVideogame videogame) {			
