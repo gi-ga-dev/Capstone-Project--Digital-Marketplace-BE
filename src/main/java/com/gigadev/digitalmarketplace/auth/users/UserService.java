@@ -47,10 +47,10 @@ public class UserService {
 			.subEnd(user.getSubEnd())
 			.subTotalTime(user.getSubTotalTime())
 			.subRemaining(user.getSubRemaining())
-			.purchaseHistory(user.getPurchaseHistory())
-			.videogamesList(user.getVideogamesList())
-			.musicList(user.getMusicList())
-			.bookList(user.getBookList())
+//			.purchaseHistory(user.getPurchaseHistory())
+//			.purchasedVg(user.getPurchasedVg())
+//			.purchasedMusic(user.getPurchasedMusic())
+//			.purchasedBook(user.getPurchasedBook())
 			.build()   
 		).collect(Collectors.toList());
 	}
@@ -73,10 +73,10 @@ public class UserService {
 		.subEnd(user.getSubEnd())
 		.subTotalTime(user.getSubTotalTime())
 		.subRemaining(user.getSubRemaining())
-		.purchaseHistory(user.getPurchaseHistory())
-		.videogamesList(user.getVideogamesList())
-		.musicList(user.getMusicList())
-		.bookList(user.getBookList())
+//		.purchaseHistory(user.getPurchaseHistory())
+//		.purchasedVg(user.getPurchasedVg())
+//		.purchasedMusic(user.getPurchasedMusic())
+//		.purchasedBook(user.getPurchasedBook())
 		.build();	
 	}
 	

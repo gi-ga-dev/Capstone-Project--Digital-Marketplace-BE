@@ -15,6 +15,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
@@ -60,45 +61,46 @@ public class User {
 	private Integer subRemaining;	
 	
 	// @ManyToMany e' necessaria in modo da creare molti utenti con i ruoli istanziati nel runner
-	// questo JoinTable definisce solo i nomi del table/columns dell'associazione user/role
+	// JoinTable definisce solo i nomi del table/columns dell'associazione user/role
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "users_roles_assoc", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles = new HashSet<Role>();
 	
-	@OneToMany
-	@JoinColumn(name = "user_id")
-	private Set<AbstractProduct> purchaseHistory = new HashSet<AbstractProduct>(); // tutte le tipol. di prodotti
+//	@ManyToOne
+//	@JoinColumn(name = "user_id")
+//	private Set<AbstractProduct> purchaseHistory = new HashSet<AbstractProduct>(); // tutte le tipol. di prodotti
 	
-	@OneToMany
-	@JoinColumn(name = "user_id")
-	private Set<ProductVideogame> videogamesList = new HashSet<ProductVideogame>();
+//	@ManyToOne
+//	@JoinColumn(name = "user_id")
+//	private Set<ProductVideogame> purchasedVg = new HashSet<ProductVideogame>();
 	
-	@OneToMany
-	@JoinColumn(name = "user_id")
-	private Set<ProductMusic> musicList = new HashSet<ProductMusic>();
+//	@ManyToOne
+//	@JoinColumn(name = "user_id")
+//	private Set<ProductMusic> purchasedMusic = new HashSet<ProductMusic>();
 	
-	@OneToMany
-	@JoinColumn(name = "user_id")
-	private Set<ProductBook> bookList = new HashSet<ProductBook>();
+//	@ManyToOne
+//	@JoinColumn(name = "user_id")
+//	private Set<ProductBook> purchasedBook = new HashSet<ProductBook>();
 			
 	public void addRole(Role role) {
 		roles.add(role);
 	}
 	
-	public void addToPurchaseHistory(AbstractProduct product) {
-		purchaseHistory.add(product);
-	}
-	
+	// Per aggiungere alla lista acquistati, tramite pulsante acquista/get free with sub
+		
 	public void addVideogame(ProductVideogame videogame) {
-		videogamesList.add(videogame);
+//		purchaseHistory.add(videogame);
+//		purchasedVg.add(videogame);
 	}
 	
 	public void addMusic(ProductMusic music) {
-		musicList.add(music);
+//		purchaseHistory.add(music);
+//		purchasedMusic.add(music);
 	}
 	
 	public void addBook(ProductBook book) {
-		bookList.add(book);
+//		purchaseHistory.add(book);
+//		purchasedBook.add(book);
 	}
 
 }

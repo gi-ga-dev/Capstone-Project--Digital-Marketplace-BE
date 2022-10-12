@@ -1,31 +1,30 @@
 package com.gigadev.digitalmarketplace.prod;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
-import com.gigadev.digitalmarketplace.auth.users.User;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
-@Table(name = "videogames")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ProductVideogame extends AbstractProduct {
+public class ProductDtoVideogame {
 	
-	private Long downloads; //?
+	// AbstractProduct
+	private Double priceInitial;
+	private Double priceActual;
+	private String title;	
+	private String description;
+	private String platform;
+	private String publisher;
+	private String releaseDate;
+	private String language;
+	private String genre;	
+	
+	// ProductVideogame
 	private Long uniqueCode;
 	private String vgSeries;
-	private String dlc;     //?
 	private String developer;
 	private Integer ageRecommendation;
 	private Integer players;
@@ -35,5 +34,5 @@ public class ProductVideogame extends AbstractProduct {
 	private Integer minResolution;
 	private Integer maxResolution;
 	private Integer requiredSpace;
-		
+
 }

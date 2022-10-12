@@ -9,43 +9,38 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.gigadev.digitalmarketplace.auth.jwt.JwtResponse;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserDetailsImpl  implements UserDetails{
 
+	// JwtResponse jwtresp - prende i dati da restituire dopo il login
 	private Long id;
-
 	private String userName;
-
-
 	@JsonIgnore
 	private String password;
-
 	private Collection<? extends GrantedAuthority> authorities;
+	private Double accountBalance;
+	private Boolean isSubscribed;
 
-	public UserDetailsImpl(Long id, String userName, String password,
-			Collection<? extends GrantedAuthority> authorities) {
-		this.id = id;
-		this.userName = userName;
-		this.password = password;
-		this.authorities = authorities;
-		
-		
-	}
-
-	public static UserDetailsImpl build(User user) {
-		
+	public static UserDetailsImpl build(User user) {		
 		List<GrantedAuthority> authorities = user.getRoles().stream()
 				.map(role -> new SimpleGrantedAuthority(role.getRoleName().name()))
-				.collect(Collectors.toList());
-
-	
+				.collect(Collectors.toList());	
 		return new UserDetailsImpl(
 				user.getId(), 
 				user.getUserName(), 
 				user.getPassword(), 
-				authorities);
+				authorities, user.getAccountBalance(), user.getIsSubscribed());
 	}
+	
+	// Getters - Setters 
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -66,7 +61,7 @@ public class UserDetailsImpl  implements UserDetails{
 	public String getUsername() {
 		return userName;
 	}
-
+	
 	@Override
 	public boolean isAccountNonExpired() {
 		return true;

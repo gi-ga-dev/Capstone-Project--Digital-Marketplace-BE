@@ -34,8 +34,8 @@ public class UserDtoGetResponse {
 	private Integer subTotalTime;
 	private Integer subRemaining;
 	private Set<AbstractProduct> purchaseHistory;
-	private Set<ProductVideogame> videogamesList;
-	private Set<ProductMusic> musicList;
-	private Set<ProductBook> bookList;
+	private Set<ProductVideogame> purchasedVg;
+	private Set<ProductMusic> purchasedMusic;
+	private Set<ProductBook> purchasedBook;
 
 }
