@@ -1,4 +1,4 @@
-package com.gigadev.digitalmarketplace.prod;
+package com.gigadev.digitalmarketplace.products;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

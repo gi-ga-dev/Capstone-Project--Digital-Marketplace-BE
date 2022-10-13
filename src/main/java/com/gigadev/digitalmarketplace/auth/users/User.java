@@ -17,15 +17,19 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.core.sym.Name;
 import com.gigadev.digitalmarketplace.auth.roles.Role;
-import com.gigadev.digitalmarketplace.prod.AbstractProduct;
-import com.gigadev.digitalmarketplace.prod.ProductBook;
-import com.gigadev.digitalmarketplace.prod.ProductMusic;
-import com.gigadev.digitalmarketplace.prod.ProductVideogame;
+import com.gigadev.digitalmarketplace.products.AbstractProduct;
+import com.gigadev.digitalmarketplace.products.ProductBook;
+import com.gigadev.digitalmarketplace.products.ProductMusic;
+import com.gigadev.digitalmarketplace.products.ProductVideogame;
+import com.gigadev.digitalmarketplace.shopsystem.ShoppingCart;
+import com.gigadev.digitalmarketplace.shopsystem.ShoppingCartDtoList;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -43,7 +47,7 @@ import lombok.extern.slf4j.Slf4j;
 public class User {
 
 	@Id	
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	@NotBlank @Size(max = 50) private String firstName;	
@@ -58,13 +62,20 @@ public class User {
 	private LocalDate subStart;
 	private LocalDate subEnd;  
 	private Integer subTotalTime;
-	private Integer subRemaining;	
+	private Integer subRemaining;
+	
+	@OneToOne
+	//@JoinTable(name = "users_cart_assoc", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "shopping_cart_id"))
+	private ShoppingCart shoppingCart;
 	
 	// @ManyToMany e' necessaria in modo da creare molti utenti con i ruoli istanziati nel runner
 	// JoinTable definisce solo i nomi del table/columns dell'associazione user/role
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "users_roles_assoc", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles = new HashSet<Role>();
+	
+	
+	
 	
 //	@ManyToOne
 //	@JoinColumn(name = "user_id")

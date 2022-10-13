@@ -1,4 +1,4 @@
-package com.gigadev.digitalmarketplace.prod;
+package com.gigadev.digitalmarketplace.products;
 
 import java.util.List;
 
@@ -52,8 +52,8 @@ public class ProductController {
 		return ResponseEntity.ok(productServ.getAllBooks());
 	}
 	
-	// ============== POST ==============
-	
+	// ============== POST (articoli acquistabili) ==============
+		
 	@PostMapping("/videogames/saveVideogame")
 	@PreAuthorize("hasRole('ADMIN')")
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))

@@ -5,10 +5,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.gigadev.digitalmarketplace.prod.AbstractProduct;
-import com.gigadev.digitalmarketplace.prod.ProductBook;
-import com.gigadev.digitalmarketplace.prod.ProductMusic;
-import com.gigadev.digitalmarketplace.prod.ProductVideogame;
+import com.gigadev.digitalmarketplace.products.AbstractProduct;
+import com.gigadev.digitalmarketplace.products.ProductBook;
+import com.gigadev.digitalmarketplace.products.ProductMusic;
+import com.gigadev.digitalmarketplace.products.ProductVideogame;
+import com.gigadev.digitalmarketplace.shopsystem.ShoppingCart;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,9 +34,11 @@ public class UserDtoGetResponse {
 	private LocalDate subEnd;  
 	private Integer subTotalTime;
 	private Integer subRemaining;
-	private Set<AbstractProduct> purchaseHistory;
-	private Set<ProductVideogame> purchasedVg;
-	private Set<ProductMusic> purchasedMusic;
-	private Set<ProductBook> purchasedBook;
+	private ShoppingCart shoppingCart;
+	
+//	private Set<AbstractProduct> purchaseHistory;
+//	private Set<ProductVideogame> purchasedVg;
+//	private Set<ProductMusic> purchasedMusic;
+//	private Set<ProductBook> purchasedBook;
 
 }

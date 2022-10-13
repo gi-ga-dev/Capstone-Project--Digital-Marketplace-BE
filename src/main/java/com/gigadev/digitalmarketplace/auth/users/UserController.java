@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gigadev.digitalmarketplace.auth.roles.Role;
+import com.gigadev.digitalmarketplace.shopsystem.ShoppingCart;
+import com.gigadev.digitalmarketplace.shopsystem.ShoppingCartDtoList;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -49,8 +51,8 @@ public class UserController {
 	// ============== GET ==============
 		
 	@GetMapping("/getAllInfo")
-	@PreAuthorize("hasRole('ADMIN')")
-	@Operation(summary = "Get all users info", security = @SecurityRequirement(name = "bearer-authentication"))
+	//@PreAuthorize("hasRole('ADMIN')")
+	//@Operation(summary = "Get all users info", security = @SecurityRequirement(name = "bearer-authentication"))
 	public ResponseEntity<List<UserDtoGetResponse>> findAllUsersInfo() {
 		return ResponseEntity.ok(userService.getAllUsersInfo());
 	}

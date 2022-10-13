@@ -2,8 +2,10 @@ package com.gigadev.digitalmarketplace.auth.users;
 
 import java.beans.Beans;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityExistsException;
@@ -17,6 +19,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.gigadev.digitalmarketplace.auth.roles.Role;
+import com.gigadev.digitalmarketplace.products.AbstractProduct;
+import com.gigadev.digitalmarketplace.shopsystem.ShoppingCart;
+import com.gigadev.digitalmarketplace.shopsystem.ShoppingCartDtoList;
+import com.gigadev.digitalmarketplace.shopsystem.ShoppingCartRepo;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,6 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 public class UserService {
 	
 	@Autowired UserRepository userRepository;
+	@Autowired ShoppingCartRepo shoppingRepo;
 	@Autowired PasswordEncoder encoder;
 	
 	// ============== GET ==============
@@ -47,6 +54,7 @@ public class UserService {
 			.subEnd(user.getSubEnd())
 			.subTotalTime(user.getSubTotalTime())
 			.subRemaining(user.getSubRemaining())
+			.shoppingCart(user.getShoppingCart())
 //			.purchaseHistory(user.getPurchaseHistory())
 //			.purchasedVg(user.getPurchasedVg())
 //			.purchasedMusic(user.getPurchasedMusic())
@@ -73,6 +81,7 @@ public class UserService {
 		.subEnd(user.getSubEnd())
 		.subTotalTime(user.getSubTotalTime())
 		.subRemaining(user.getSubRemaining())
+		.shoppingCart(user.getShoppingCart())
 //		.purchaseHistory(user.getPurchaseHistory())
 //		.purchasedVg(user.getPurchasedVg())
 //		.purchasedMusic(user.getPurchasedMusic())
@@ -132,12 +141,28 @@ public class UserService {
 		if(userRepository.existsByUserName(user.getUserName())) {
 			throw new EntityExistsException("User already exist...");
 		} else {
-			doBeforeSaveUser(user);		
+			doBeforeSaveUser(user);				
 			User finalUser = new User();
-			BeanUtils.copyProperties(user, finalUser);		
-			finalUser.addRole(role);	
+			BeanUtils.copyProperties(user, finalUser);			
+			
+//			Set<AbstractProduct> cartList = new HashSet<AbstractProduct>();
+//			shoppingRepo.save(cartList);
+			
+			
+			// istanzio ed attribuisco oggetto carrello (con all'interno lista) all'utente
+			// Con GenerationType IDENTITY su entrambe le classi setta l'id utente = id cart
+			ShoppingCart cart = new ShoppingCart();
+			shoppingRepo.save(cart);
+			// il carrello avra' lo stesso id dell'utente
+			//cart.setId(finalUser.getId());
+			//cart.setUser(finalUser);
+			
+			finalUser.setShoppingCart(cart);			
+			finalUser.addRole(role);			
+			userRepository.save(finalUser);
+			
 			log.info("--> SAVE USER - Inserting new user: " + finalUser.getUserName());
-			return userRepository.save(finalUser);			
+			return finalUser;			
 		}
 	}	
 		

@@ -1,4 +1,4 @@
-package com.gigadev.digitalmarketplace.prod;
+package com.gigadev.digitalmarketplace.products;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
