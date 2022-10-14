@@ -127,7 +127,7 @@ public class UserController {
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
 	public ResponseEntity<String> deleteById(@PathVariable Long id) {
 		userService.delete(id);
-		return ResponseEntity.ok("Delete successfull");
+		return ResponseEntity.ok("- DELETE - successfull");
 	}
 
 }

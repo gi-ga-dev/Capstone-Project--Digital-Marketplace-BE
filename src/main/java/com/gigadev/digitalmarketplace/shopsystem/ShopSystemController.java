@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -57,8 +58,7 @@ public class ShopSystemController {
 	// ============== POST (articoli da aggiungere al carrello) ==============
 		
 	@PostMapping("/{shopId}/{productId}/addToCart")
-	@PreAuthorize("isAuthenticated()")
-	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
+	// con Pre-Authorize genera errore autenticazione
 	public ResponseEntity<ShopSystem> addToCart(@PathVariable Long shopId, @PathVariable Long productId) {
 		return ResponseEntity.ok(shopServ.addToCart(shopId, productId));
 	}
@@ -66,5 +66,13 @@ public class ShopSystemController {
 	// ============== PATCH/PUT ==============
 	
 	// ============== DELETE ==============
-
+	
+	@DeleteMapping("/{shopId}/{productId}/deleteFromCart")
+	@Operation(summary = "Delete Product from Cart by shopId and productId",security = @SecurityRequirement(name = "bearer-authentication"))
+	public ResponseEntity<String> deleteFromCart(@PathVariable Long shopId, @PathVariable Long productId) {
+		shopServ.deleteFromCart(shopId, productId);
+		return ResponseEntity.ok("- DELETE - successfull");
+	}
+	
+	
 }

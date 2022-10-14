@@ -50,6 +50,10 @@ public class ShopSystem {
 	public void addToCartList(AbstractProduct product) {
 		cartList.add(product);
 	}
+	
+	public void removeFromCart(AbstractProduct product) {
+		cartList.remove(product);
+	}
 
 	
 }

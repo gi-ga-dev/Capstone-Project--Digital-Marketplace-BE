@@ -60,8 +60,8 @@ public class User {
 	private Integer subTotalTime;
 	private Integer subRemaining;
 	
-	@OneToOne
-	@JoinTable(name = "assoc_users_shopsystem", joinColumns = @JoinColumn(name = "shop_system_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+	@OneToOne(mappedBy = "user")
+	//@JoinTable(name = "assoc_users_shopsystem", joinColumns = @JoinColumn(name = "shop_system_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
 	private ShopSystem shopSystem;
 	
 	// @ManyToMany e' necessaria in modo da creare molti utenti con i ruoli istanziati nel runner
