@@ -7,9 +7,8 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 import com.gigadev.digitalmarketplace.auth.roles.Role;
 import com.gigadev.digitalmarketplace.auth.roles.RoleRepository;
-import com.gigadev.digitalmarketplace.shopsystem.ShoppingCart;
-import com.gigadev.digitalmarketplace.shopsystem.ShoppingCartDtoList;
-import com.gigadev.digitalmarketplace.shopsystem.ShoppingCartRepo;
+import com.gigadev.digitalmarketplace.shopsystem.ShopSystem;
+import com.gigadev.digitalmarketplace.shopsystem.ShopSystemRepository;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;

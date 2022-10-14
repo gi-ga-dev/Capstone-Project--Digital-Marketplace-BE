@@ -8,8 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.gigadev.digitalmarketplace.products.AbstractProduct;
 
 @Repository
-public interface ShoppingCartRepo extends JpaRepository<ShoppingCart, Long> {
+public interface ShopSystemRepository extends JpaRepository<ShopSystem, Long> {
 
-	void save(Set<AbstractProduct> cartList);
-
+	
 }

@@ -18,8 +18,9 @@ import lombok.NoArgsConstructor;
 public abstract class AbstractProduct {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE) // IDENTITY non funziona su classe abstract
 	private Long id;	
+	private String productType;
 	private Double priceInitial;
 	private Double priceDiscounted;
 	private Double discount;

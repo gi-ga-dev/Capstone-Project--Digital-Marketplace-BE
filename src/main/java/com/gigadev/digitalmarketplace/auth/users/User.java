@@ -3,7 +3,6 @@ package com.gigadev.digitalmarketplace.auth.users;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -21,16 +20,13 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-
 import com.fasterxml.jackson.core.sym.Name;
 import com.gigadev.digitalmarketplace.auth.roles.Role;
 import com.gigadev.digitalmarketplace.products.AbstractProduct;
 import com.gigadev.digitalmarketplace.products.ProductBook;
 import com.gigadev.digitalmarketplace.products.ProductMusic;
 import com.gigadev.digitalmarketplace.products.ProductVideogame;
-import com.gigadev.digitalmarketplace.shopsystem.ShoppingCart;
-import com.gigadev.digitalmarketplace.shopsystem.ShoppingCartDtoList;
-
+import com.gigadev.digitalmarketplace.shopsystem.ShopSystem;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -65,53 +61,17 @@ public class User {
 	private Integer subRemaining;
 	
 	@OneToOne
-	//@JoinTable(name = "users_cart_assoc", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "shopping_cart_id"))
-	private ShoppingCart shoppingCart;
+	@JoinTable(name = "assoc_users_shopsystem", joinColumns = @JoinColumn(name = "shop_system_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+	private ShopSystem shopSystem;
 	
 	// @ManyToMany e' necessaria in modo da creare molti utenti con i ruoli istanziati nel runner
 	// JoinTable definisce solo i nomi del table/columns dell'associazione user/role
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "users_roles_assoc", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-	private Set<Role> roles = new HashSet<Role>();
-	
-	
-	
-	
-//	@ManyToOne
-//	@JoinColumn(name = "user_id")
-//	private Set<AbstractProduct> purchaseHistory = new HashSet<AbstractProduct>(); // tutte le tipol. di prodotti
-	
-//	@ManyToOne
-//	@JoinColumn(name = "user_id")
-//	private Set<ProductVideogame> purchasedVg = new HashSet<ProductVideogame>();
-	
-//	@ManyToOne
-//	@JoinColumn(name = "user_id")
-//	private Set<ProductMusic> purchasedMusic = new HashSet<ProductMusic>();
-	
-//	@ManyToOne
-//	@JoinColumn(name = "user_id")
-//	private Set<ProductBook> purchasedBook = new HashSet<ProductBook>();
-			
+	@JoinTable(name = "assoc_users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+	private Set<Role> roles = new HashSet<Role>();	
+		
 	public void addRole(Role role) {
 		roles.add(role);
 	}
 	
-	// Per aggiungere alla lista acquistati, tramite pulsante acquista/get free with sub
-		
-	public void addVideogame(ProductVideogame videogame) {
-//		purchaseHistory.add(videogame);
-//		purchasedVg.add(videogame);
-	}
-	
-	public void addMusic(ProductMusic music) {
-//		purchaseHistory.add(music);
-//		purchasedMusic.add(music);
-	}
-	
-	public void addBook(ProductBook book) {
-//		purchaseHistory.add(book);
-//		purchasedBook.add(book);
-	}
-
 }

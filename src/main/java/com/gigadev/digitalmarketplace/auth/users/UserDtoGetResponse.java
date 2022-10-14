@@ -4,13 +4,11 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import com.gigadev.digitalmarketplace.products.AbstractProduct;
 import com.gigadev.digitalmarketplace.products.ProductBook;
 import com.gigadev.digitalmarketplace.products.ProductMusic;
 import com.gigadev.digitalmarketplace.products.ProductVideogame;
-import com.gigadev.digitalmarketplace.shopsystem.ShoppingCart;
-
+import com.gigadev.digitalmarketplace.shopsystem.ShopSystem;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,11 +32,6 @@ public class UserDtoGetResponse {
 	private LocalDate subEnd;  
 	private Integer subTotalTime;
 	private Integer subRemaining;
-	private ShoppingCart shoppingCart;
+	private ShopSystem shopSystem;
 	
-//	private Set<AbstractProduct> purchaseHistory;
-//	private Set<ProductVideogame> purchasedVg;
-//	private Set<ProductMusic> purchasedMusic;
-//	private Set<ProductBook> purchasedBook;
-
 }

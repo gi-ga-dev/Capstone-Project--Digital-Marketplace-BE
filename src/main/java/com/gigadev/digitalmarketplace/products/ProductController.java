@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,6 +51,29 @@ public class ProductController {
 	@Operation(summary = "Get List of all Books", security = @SecurityRequirement(name = "bearer-authentication"))
 	public ResponseEntity<List<ProductBook>> getAllBooks() {
 		return ResponseEntity.ok(productServ.getAllBooks());
+	}
+	
+	// ----------------
+	
+	@GetMapping("/{id}/getVideogameById")
+	@PreAuthorize("isAuthenticated()")
+	@Operation(summary = "Get Videogame By Id", security = @SecurityRequirement(name = "bearer-authentication"))
+	public ResponseEntity<ProductVideogame> getVideogameById(@PathVariable Long id) {
+		return ResponseEntity.ok(productServ.getVideogameById(id));
+	}
+	
+	@GetMapping("/{id}/getMusicById")
+	@PreAuthorize("isAuthenticated()")
+	@Operation(summary = "Get Music By Id", security = @SecurityRequirement(name = "bearer-authentication"))
+	public ResponseEntity<ProductMusic> getMusicById(@PathVariable Long id) {
+		return ResponseEntity.ok(productServ.getMusicById(id));
+	}
+	
+	@GetMapping("/{id}/getBookById")
+	@PreAuthorize("isAuthenticated()")
+	@Operation(summary = "Get Book By Id", security = @SecurityRequirement(name = "bearer-authentication"))
+	public ResponseEntity<ProductBook> getBookById(@PathVariable Long id) {
+		return ResponseEntity.ok(productServ.getBookById(id));
 	}
 	
 	// ============== POST (articoli acquistabili) ==============

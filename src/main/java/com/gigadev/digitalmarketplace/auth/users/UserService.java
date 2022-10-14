@@ -7,22 +7,18 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import com.gigadev.digitalmarketplace.auth.roles.Role;
 import com.gigadev.digitalmarketplace.products.AbstractProduct;
-import com.gigadev.digitalmarketplace.shopsystem.ShoppingCart;
-import com.gigadev.digitalmarketplace.shopsystem.ShoppingCartDtoList;
-import com.gigadev.digitalmarketplace.shopsystem.ShoppingCartRepo;
+import com.gigadev.digitalmarketplace.shopsystem.ShopSystem;
+import com.gigadev.digitalmarketplace.shopsystem.ShopSystemRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 public class UserService {
 	
 	@Autowired UserRepository userRepository;
-	@Autowired ShoppingCartRepo shoppingRepo;
+	@Autowired ShopSystemRepository shopSystemRepo;
 	@Autowired PasswordEncoder encoder;
 	
 	// ============== GET ==============
@@ -54,11 +50,7 @@ public class UserService {
 			.subEnd(user.getSubEnd())
 			.subTotalTime(user.getSubTotalTime())
 			.subRemaining(user.getSubRemaining())
-			.shoppingCart(user.getShoppingCart())
-//			.purchaseHistory(user.getPurchaseHistory())
-//			.purchasedVg(user.getPurchasedVg())
-//			.purchasedMusic(user.getPurchasedMusic())
-//			.purchasedBook(user.getPurchasedBook())
+			.shopSystem(user.getShopSystem())
 			.build()   
 		).collect(Collectors.toList());
 	}
@@ -81,11 +73,7 @@ public class UserService {
 		.subEnd(user.getSubEnd())
 		.subTotalTime(user.getSubTotalTime())
 		.subRemaining(user.getSubRemaining())
-		.shoppingCart(user.getShoppingCart())
-//		.purchaseHistory(user.getPurchaseHistory())
-//		.purchasedVg(user.getPurchasedVg())
-//		.purchasedMusic(user.getPurchasedMusic())
-//		.purchasedBook(user.getPurchasedBook())
+		.shopSystem(user.getShopSystem())
 		.build();	
 	}
 	
@@ -143,24 +131,15 @@ public class UserService {
 		} else {
 			doBeforeSaveUser(user);				
 			User finalUser = new User();
-			BeanUtils.copyProperties(user, finalUser);			
-			
-//			Set<AbstractProduct> cartList = new HashSet<AbstractProduct>();
-//			shoppingRepo.save(cartList);
-			
-			
-			// istanzio ed attribuisco oggetto carrello (con all'interno lista) all'utente
-			// Con GenerationType IDENTITY su entrambe le classi setta l'id utente = id cart
-			ShoppingCart cart = new ShoppingCart();
-			shoppingRepo.save(cart);
-			// il carrello avra' lo stesso id dell'utente
-			//cart.setId(finalUser.getId());
-			//cart.setUser(finalUser);
-			
-			finalUser.setShoppingCart(cart);			
+			BeanUtils.copyProperties(user, finalUser);				
+			// istanzio shopSystem (con all'interno liste) e lo attr. all'utente
+			// setto l'id utente = id shopSystem 
+			ShopSystem shopSystem = new ShopSystem();
+			shopSystem.setId(finalUser.getId());
+			shopSystemRepo.save(shopSystem);		
+			finalUser.setShopSystem(shopSystem);
 			finalUser.addRole(role);			
-			userRepository.save(finalUser);
-			
+			userRepository.save(finalUser);			
 			log.info("--> SAVE USER - Inserting new user: " + finalUser.getUserName());
 			return finalUser;			
 		}

@@ -3,6 +3,8 @@ package com.gigadev.digitalmarketplace.products;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,15 +36,37 @@ public class ProductService {
 	public List<ProductBook> getAllBooks() {
 		return bookRepo.findAll();				
 	}
+	
+	// ----------------
+	
+	public ProductVideogame getVideogameById(Long id) {
+		if(!videogameRepo.existsById(id)) {
+			throw new EntityNotFoundException("Videogame not found...");
+		} else return videogameRepo.findById(id).get();
+	}
+	
+	public ProductMusic getMusicById(Long id) {
+		if(!musicRepo.existsById(id)) {
+			throw new EntityNotFoundException("Music not found...");
+		} else return musicRepo.findById(id).get();
+	}
+	
+	public ProductBook getBookById(Long id) {
+		if(!bookRepo.existsById(id)) {
+			throw new EntityNotFoundException("Book not found...");
+		} else return bookRepo.findById(id).get();
+	}
 		
 	// ============== POST ==============
+	// post dati compilati nei campi di input 
 	
 	public AbstractProduct saveVideogame(ProductDtoVideogame videogame) {			
 		if(productRepo.existsByTitle(videogame.getTitle())) {
 			throw new EntityExistsException("Videogame already exist...");
 		} else {	
 			ProductVideogame finalVideogame = new ProductVideogame();
-			BeanUtils.copyProperties(videogame, finalVideogame);						
+			BeanUtils.copyProperties(videogame, finalVideogame);
+			finalVideogame.setProductType("Videogame");
 			log.info("--> SAVE VIDEOGAME - Inserting new videogame: " + finalVideogame.getTitle());
 			return productRepo.save(finalVideogame);			
 		}
@@ -53,7 +77,8 @@ public class ProductService {
 			throw new EntityExistsException("Music already exist...");
 		} else {	
 			ProductMusic finalMusic = new ProductMusic();
-			BeanUtils.copyProperties(music, finalMusic);						
+			BeanUtils.copyProperties(music, finalMusic);
+			finalMusic.setProductType("Music");
 			log.info("--> SAVE MUSIC - Inserting new music: " + finalMusic.getTitle());
 			return productRepo.save(finalMusic);			
 		}
@@ -64,7 +89,8 @@ public class ProductService {
 			throw new EntityExistsException("Book already exist...");
 		} else {	
 			ProductBook finalBook = new ProductBook();
-			BeanUtils.copyProperties(book, finalBook);						
+			BeanUtils.copyProperties(book, finalBook);	
+			finalBook.setProductType("Book");
 			log.info("--> SAVE BOOK - Inserting new book: " + finalBook.getTitle());
 			return productRepo.save(finalBook);			
 		}
