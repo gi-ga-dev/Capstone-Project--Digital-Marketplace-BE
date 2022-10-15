@@ -30,6 +30,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 public class ShopSystemController {
 	
 	@Autowired ShopSystemService shopServ;
+	@Autowired ShopSystemRepository shopRepo;
 	
 	// ============== GET ==============
 	
@@ -48,19 +49,35 @@ public class ShopSystemController {
 		return ResponseEntity.ok(shopServ.getShopSystemById(id));
 	}	
 	
-	@GetMapping("/{shopId}/getCartListById")
+	// ---------------------
+	
+	@GetMapping("/{shopId}/getCartListByShopId")
 	@PreAuthorize("isAuthenticated()")
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
-	public ResponseEntity<Set<AbstractProduct>> getCartListById(@PathVariable Long shopId) {
-		return ResponseEntity.ok(shopServ.getCartListById(shopId));
+	public ResponseEntity<Set<AbstractProduct>> getCartListByShopId(@PathVariable Long shopId) {
+		return ResponseEntity.ok(shopServ.getListByShopId(shopId, shopRepo.findById(shopId).get().getCartList()));
+	}
+	
+	@GetMapping("/{shopId}/getWishListByShopId")
+	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
+	// con Pre-Authorize genera errore autenticazione
+	public ResponseEntity<Set<AbstractProduct>> getWishListByShopId(@PathVariable Long shopId) {
+		return ResponseEntity.ok(shopServ.getListByShopId(shopId, shopRepo.findById(shopId).get().getWishList()));
 	}
 	
 	// ============== POST (articoli da aggiungere al carrello) ==============
 		
 	@PostMapping("/{shopId}/{productId}/addToCart")
+	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
 	// con Pre-Authorize genera errore autenticazione
 	public ResponseEntity<ShopSystem> addToCart(@PathVariable Long shopId, @PathVariable Long productId) {
-		return ResponseEntity.ok(shopServ.addToCart(shopId, productId));
+		return ResponseEntity.ok(shopServ.addToList(shopId, productId, shopRepo.findById(shopId).get().getCartList()));
+	}
+	
+	@PostMapping("/{shopId}/{productId}/addToWishList")
+	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
+	public ResponseEntity<ShopSystem> addToWishList(@PathVariable Long shopId, @PathVariable Long productId) {
+		return ResponseEntity.ok(shopServ.addToList(shopId, productId, shopRepo.findById(shopId).get().getWishList()));
 	}
 	
 	// ============== PATCH/PUT ==============
@@ -68,9 +85,16 @@ public class ShopSystemController {
 	// ============== DELETE ==============
 	
 	@DeleteMapping("/{shopId}/{productId}/deleteFromCart")
-	@Operation(summary = "Delete Product from Cart by shopId and productId",security = @SecurityRequirement(name = "bearer-authentication"))
+	@Operation(summary = "Delete Product from Cart (by shopId and productId)",security = @SecurityRequirement(name = "bearer-authentication"))
 	public ResponseEntity<String> deleteFromCart(@PathVariable Long shopId, @PathVariable Long productId) {
-		shopServ.deleteFromCart(shopId, productId);
+		shopServ.deleteFromList(shopId, productId, shopRepo.findById(shopId).get().getCartList());
+		return ResponseEntity.ok("- DELETE - successfull");
+	}
+	
+	@DeleteMapping("/{shopId}/{productId}/deleteFromWishList")
+	@Operation(summary = "Delete Product from WishList (by shopId and productId)",security = @SecurityRequirement(name = "bearer-authentication"))
+	public ResponseEntity<String> deleteFromWishList(@PathVariable Long shopId, @PathVariable Long productId) {
+		shopServ.deleteFromList(shopId, productId, shopRepo.findById(shopId).get().getWishList());
 		return ResponseEntity.ok("- DELETE - successfull");
 	}
 	
