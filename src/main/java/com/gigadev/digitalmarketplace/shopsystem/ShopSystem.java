@@ -34,11 +34,13 @@ public class ShopSystem {
 	@Id	
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	// Id utente, shop system id delle liste partono da 1 per ogni obj istanziato
-	private Long id;
+	private Long id;	
 	
 	// Uno shop system per un solo utente
 	@OneToOne
 	private User user;	
+	
+	private Double cartSubtotal;
 		
 	// ManyToMany per fare in modo che piu' utenti possano avere gli stessi prodotti nel carrello
 	@ManyToMany(cascade = CascadeType.ALL)
@@ -62,12 +64,7 @@ public class ShopSystem {
 	public void addProductToList(Set<AbstractProduct> list, AbstractProduct product) {
 		list.add(product);
 	}	
-	
-	public void addAllToList(Set<AbstractProduct> cartList, Set<AbstractProduct> libraryList, Set<AbstractProduct> historyList) {		
-		libraryList.addAll(cartList);
-		historyList.addAll(cartList);
-	}	
-	
+		
 	public Set<AbstractProduct> getList(Set<AbstractProduct> list) {
 		return list;
 	}

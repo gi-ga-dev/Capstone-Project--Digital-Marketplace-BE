@@ -62,7 +62,7 @@ public class UserService {
 		return UserDtoGetResponse
 		.builder()
 		.userName(user.getUserName())
-		.id(id)
+		.id(user.getId())
 		.firstName(user.getFirstName())
 		.lastName(user.getLastName())
 		.email(user.getEmail())
@@ -85,8 +85,9 @@ public class UserService {
 		User user = userRepository.findByUserName(userName).get();				
 		return UserDtoGetResponse
 		.builder()
-		.userName(userName)
-		.role( user.getRoles().stream().findFirst().get().getRoleName().name().replace("ROLE_", "")).build();		
+		.userName(user.getUserName())
+		.role( user.getRoles().stream().findFirst().get().getRoleName().name().replace("ROLE_", ""))
+		.build();		
 	}
 	
 	// ============== doBeforeSave ==============

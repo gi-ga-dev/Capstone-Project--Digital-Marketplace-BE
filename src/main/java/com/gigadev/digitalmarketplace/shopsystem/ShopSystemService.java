@@ -21,6 +21,7 @@ import com.gigadev.digitalmarketplace.products.AbstractProductRepo;
 import com.gigadev.digitalmarketplace.products.ProductDtoVideogame;
 import com.gigadev.digitalmarketplace.products.ProductVideogame;
 
+import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -37,17 +38,46 @@ public class ShopSystemService {
 		return shopRepo.findAll();
 	}
 	
-	public ShopSystem getShopSystemById(Long id) {	
+	public ShopSystem getShopSystemById(Long shopId) {	
 		// ritorna tutto l'oggetto shop system con all'interno liste
-		if(!shopRepo.existsById(id)) {
+		if(!shopRepo.existsById(shopId)) {
 			throw new EntityNotFoundException("Shop System not found...");
-		} else return shopRepo.findById(id).get();		
-	}	
+		} else return shopRepo.findById(shopId).get();		
+	}
 	
-	public Set<AbstractProduct> getListByShopId(Long shopId, Set<AbstractProduct> list) {
-		// dall'id dello shop system risalgo alla lista 
+	public ShopSystemDto getShopSystemBasicInfo(Long shopId) {	
+		// ritorna solo proprieta' dto dell'oggetto
+		if(!shopRepo.existsById(shopId)) {
+			throw new EntityNotFoundException("Shop System not found...");
+		} else {
+			ShopSystem shopSystem = shopRepo.findById(shopId).get();
+			updateSubTotal(shopId);
+			return ShopSystemDto
+			.builder()
+			.id(shopSystem.getId())
+			.cartSubtotal(shopSystem.getCartSubtotal())
+			.build();
+		}
+	}
+	
+	// -------------
+	
+	public Set<AbstractProduct> getListByShopId(Long shopId, Set<AbstractProduct> list) {		
+		// da getListByShopId ottengo lista da ciclare 
+		// da getShopSystemBasicInfo aggiorno ed ottengo la prop. cartSubtotal dove ho memorizzato il prezzo totale degli elem nel carrello
 		return shopRepo.findById(shopId).get().getList(list);
-	}		
+	}	
+
+	public ShopSystem updateSubTotal(Long shopId) {
+		ShopSystem shopSystem = shopRepo.findById(shopId).get();
+		// variabile temporanea per riportare totale nella pagina Shopping Cart
+		Double subTotal = 0.00;		
+		for (AbstractProduct ele : shopSystem.getCartList()) {
+			subTotal += ele.getPriceInitial();	
+		}			
+		shopSystem.setCartSubtotal(subTotal);	
+		return shopRepo.save(shopSystem);
+	}
 		
 	// ============== POST ==============
 	// post nel carrello di prodotti esistenti (no campi input - no DTO)
@@ -67,11 +97,11 @@ public class ShopSystemService {
 				shopSystem.addProductToList(list, prod);			
 				shopRepo.save(shopSystem);
 				log.info("--> ADD TO LIST - Product: " + prod.getTitle() + " saved in List of Shop System w/ id: " + shopSystem.getId());
-				log.info("There are " + shopSystem.getCartList().stream().count() + "products in the List");
+				log.info("--> " + shopSystem.getCartList().size() + " Product/s in the List");
 			} return shopSystem;
 		}
 	}	
-	
+		
 	public ShopSystem commitPurchase(Long shopId) {
 		if(!shopRepo.existsById(shopId)) {
 			throw new EntityNotFoundException("Shop System not implemented...");
@@ -87,13 +117,13 @@ public class ShopSystemService {
 				// che verra' confermata con il ciclo 2, se rispetta la condizione
 				subTotal += ele.getPriceInitial();	
 				prodQnt += shopSystem.getCartList().size();
-				log.info("--> SubTotal: " + subTotal + " Prod. Qnt: " + prodQnt);	
+				log.info("--> SubTotal: " + subTotal + " Prod. Qnt: " + shopSystem.getCartList().size());	
 			}
 			
 			for (AbstractProduct ele : shopSystem.getCartList()) {
 				// ciclo 2) se il saldo account e' superiore al totale carrello si puo' effettuare l'acquisto
 				if(user.getAccountBalance() >=  subTotal) {
-					// detrarre saldo account e incrementare quantita' prod. acquistati
+					// detrarre saldo, incrementare qnt prod. acquistati
 					user.setAccountBalance(user.getAccountBalance() - subTotal);
 					user.setQntPurchased(user.getQntPurchased() + prodQnt);
 					// per ogni elem nel carrello lo aggiungi nelle liste acquisti/libreria e rimuovi dal cart
@@ -101,15 +131,12 @@ public class ShopSystemService {
 					shopSystem.getHistoryList().add(ele);
 					shopSystem.getCartList().remove(ele);
 				} else throw new EntityNotFoundException("Account Balance insufficient...");
-			}
-			
-			shopRepo.flush();
-			shopRepo.save(shopSystem);
+			}	
+			shopRepo.flush();			
 			log.info("--> PURCHASE COMPLETED - for Shop System w/ id: " + shopSystem.getId());			
-			return shopSystem;
+			return shopRepo.save(shopSystem);
 		}
-	}
-	
+	}	
 	
 	// ============== PATCH/PUT ==============
 	

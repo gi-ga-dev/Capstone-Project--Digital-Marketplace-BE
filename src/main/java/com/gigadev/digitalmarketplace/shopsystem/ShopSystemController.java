@@ -45,8 +45,14 @@ public class ShopSystemController {
 	@PreAuthorize("isAuthenticated()")
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
 	public ResponseEntity<ShopSystem> getShopSystemById(@PathVariable Long id) {
-		// restituisce lo shop system di un utente che al suo interno ha tutte le liste
 		return ResponseEntity.ok(shopServ.getShopSystemById(id));
+	}	
+	
+	@GetMapping("/{id}/getShopSystemBasicInfo")
+	@PreAuthorize("isAuthenticated()")
+	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
+	public ResponseEntity<ShopSystemDto> getShopSystemBasicInfo(@PathVariable Long id) {
+		return ResponseEntity.ok(shopServ.getShopSystemBasicInfo(id));
 	}	
 	
 	// ---------------------

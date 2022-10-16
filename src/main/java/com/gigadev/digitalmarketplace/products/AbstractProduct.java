@@ -20,7 +20,7 @@ public abstract class AbstractProduct {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE) // IDENTITY non funziona su classe abstract
 	private Long id;	
-	private String productType;
+	private String productType;	
 	
 	// lo scrivo nel campo di input alla creazione oggetto, 
 	// serve per tenere memorizzato il prezzo iniziale nel caso di uno sconto
@@ -28,7 +28,7 @@ public abstract class AbstractProduct {
 	
 	// inizialmente sono uguali, ma priceFinal sara' quello sempre visualizzato
 	// che cambiera a seconda se c'e' promozione oppure no
-	private Double priceFinal = priceInitial; 
+	private Double priceFinal; 
 
 	// if(isDiscounted) --> priceFinal = priceInitial - (priceInitial/100*discount)
 	private Double discount;
