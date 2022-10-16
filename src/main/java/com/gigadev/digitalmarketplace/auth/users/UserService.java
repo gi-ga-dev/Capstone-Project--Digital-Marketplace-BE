@@ -43,7 +43,8 @@ public class UserService {
 			.email(user.getEmail())
 			.userName(user.getUserName())				
 			// restituisce il ruolo (nella lista ruoli dell'user) come stringa
-			.role( user.getRoles().stream().findFirst().get().getRoleName().name().replace("ROLE_", "") )								
+			.role( user.getRoles().stream().findFirst().get().getRoleName().name().replace("ROLE_", "") )	
+			.qntPurchased(user.getQntPurchased())
 			.accountBalance(user.getAccountBalance())			
 			.isSubscribed(user.getIsSubscribed())			
 			.subStart(user.getSubStart())			
@@ -67,6 +68,7 @@ public class UserService {
 		.email(user.getEmail())
 		.userName(user.getUserName())				
 		.role( user.getRoles().stream().findFirst().get().getRoleName().name().replace("ROLE_", "") )
+		.qntPurchased(user.getQntPurchased())
 		.accountBalance(user.getAccountBalance())			
 		.isSubscribed(user.getIsSubscribed())			
 		.subStart(user.getSubStart())			

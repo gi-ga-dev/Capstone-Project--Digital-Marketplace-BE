@@ -72,42 +72,41 @@ public class ShopSystemService {
 		}
 	}	
 	
-	public void commitPurchase(Long shopId) {
-		// shopId per risalire alle liste, userId per detrarre denaro
+	public ShopSystem commitPurchase(Long shopId) {
 		if(!shopRepo.existsById(shopId)) {
 			throw new EntityNotFoundException("Shop System not implemented...");
 		} else { 
-			// Prendo referenze. shopSystem -> per cartList, user -> per accountBalance (utente che sta acquistando)
+			// Prendo ref. shopSystem -> per cartList, user -> per accountBalance (utente che sta acquistando)
 			User user = userRepo.findById(shopId).get();
 			ShopSystem shopSystem = shopRepo.findById(shopId).get();
 			Double subTotal = 0.00;
-			Double cartTotal = 0.00;
+			Integer prodQnt = 0;
 			
-			// il subTotal viene incrementato prendendo il prezzo finale di ogni oggetto
 			for (AbstractProduct ele : shopSystem.getCartList()) {
-				subTotal += ele.getPriceInitial();
-				log.info("!!!!" + ele.getPriceInitial());
-				log.info("!!!!" + subTotal);
-			}			
-						
-			// se il saldo account e' superiore al totale carrello si puo' effettuare l'acquisto
-			if(user.getAccountBalance() >=  subTotal) {
-				// detrarre saldo account
-				user.setAccountBalance(user.getAccountBalance() - subTotal);
-				// prendere tutti gli elementi presenti nel carrello, ed agg. nelle liste acquisti/libreria			
-				shopSystem.addAllToList(
-						shopRepo.findById(shopId).get().getCartList(), 
-						shopRepo.findById(shopId).get().getLibraryList(), 
-						shopRepo.findById(shopId).get().getHistoryList());
-				// dopodiche' cancellare contenuto carrello
-				shopSystem.getCartList().clear();
-				shopSystem.getWishList().clear();
-				shopRepo.flush();	
-				log.info("--> PURCHASE COMPLETED - for Shop System w/ id: " + shopSystem.getId());
-				shopRepo.save(shopSystem);
-			} // else throw new EntityNotFoundException("Account Balance insufficient...");				
+				// ciclo 1) aggiornare subTotal e prodQnt (senza aver ancora acquistato)
+				// che verra' confermata con il ciclo 2, se rispetta la condizione
+				subTotal += ele.getPriceInitial();	
+				prodQnt += shopSystem.getCartList().size();
+				log.info("--> SubTotal: " + subTotal + " Prod. Qnt: " + prodQnt);	
+			}
 			
-			//return shopSystem;
+			for (AbstractProduct ele : shopSystem.getCartList()) {
+				// ciclo 2) se il saldo account e' superiore al totale carrello si puo' effettuare l'acquisto
+				if(user.getAccountBalance() >=  subTotal) {
+					// detrarre saldo account e incrementare quantita' prod. acquistati
+					user.setAccountBalance(user.getAccountBalance() - subTotal);
+					user.setQntPurchased(user.getQntPurchased() + prodQnt);
+					// per ogni elem nel carrello lo aggiungi nelle liste acquisti/libreria e rimuovi dal cart
+					shopSystem.getLibraryList().add(ele);
+					shopSystem.getHistoryList().add(ele);
+					shopSystem.getCartList().remove(ele);
+				} else throw new EntityNotFoundException("Account Balance insufficient...");
+			}
+			
+			shopRepo.flush();
+			shopRepo.save(shopSystem);
+			log.info("--> PURCHASE COMPLETED - for Shop System w/ id: " + shopSystem.getId());			
+			return shopSystem;
 		}
 	}
 	

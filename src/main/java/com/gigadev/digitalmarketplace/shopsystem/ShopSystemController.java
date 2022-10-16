@@ -82,9 +82,8 @@ public class ShopSystemController {
 	
 	@PostMapping("/{shopId}/commitPurchase")
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
-	public ResponseEntity<String> commitPurchase(@PathVariable Long shopId) {
-		shopServ.commitPurchase(shopId);
-		return ResponseEntity.ok("Purchase Completed");
+	public ResponseEntity<ShopSystem> commitPurchase(@PathVariable Long shopId) {		
+		return ResponseEntity.ok(shopServ.commitPurchase(shopId));
 	}
 	
 	// ============== PATCH/PUT ==============

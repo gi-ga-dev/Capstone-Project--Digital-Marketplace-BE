@@ -26,6 +26,7 @@ public class UserDtoGetResponse {
 	private String email;	
 	private String userName;		
 	private String role;
+	private Integer qntPurchased;
 	private Double accountBalance;
 	private Boolean isSubscribed;
 	private LocalDate subStart;
