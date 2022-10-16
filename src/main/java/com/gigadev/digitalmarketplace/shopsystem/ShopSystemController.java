@@ -80,6 +80,13 @@ public class ShopSystemController {
 		return ResponseEntity.ok(shopServ.addToList(shopId, productId, shopRepo.findById(shopId).get().getWishList()));
 	}
 	
+	@PostMapping("/{shopId}/commitPurchase")
+	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
+	public ResponseEntity<String> commitPurchase(@PathVariable Long shopId) {
+		shopServ.commitPurchase(shopId);
+		return ResponseEntity.ok("Purchase Completed");
+	}
+	
 	// ============== PATCH/PUT ==============
 	
 	// ============== DELETE ==============

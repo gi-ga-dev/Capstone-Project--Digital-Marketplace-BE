@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ProductService {
 	
-	@Autowired AbstractProductRepo productRepo;
+	@Autowired AbstractProductRepo abstractRepo;
 	@Autowired ProductVideogameRepo videogameRepo;
 	@Autowired ProductMusicRepo musicRepo;
 	@Autowired ProductBookRepo bookRepo;	
@@ -22,8 +22,10 @@ public class ProductService {
 	// ============== GET ==============
 	
 	public List<AbstractProduct> getAllProducts() {
-		return productRepo.findAll();
+		return abstractRepo.findAll();
 	}
+	
+	// ---- Necessari per ritornare array specifici in Front-End ----
 	
 	public List<ProductVideogame> getAllVideogames() {
 		return videogameRepo.findAll();				
@@ -39,60 +41,48 @@ public class ProductService {
 	
 	// ----------------
 	
-	public ProductVideogame getVideogameById(Long id) {
-		if(!videogameRepo.existsById(id)) {
-			throw new EntityNotFoundException("Videogame not found...");
-		} else return videogameRepo.findById(id).get();
+	public AbstractProduct getProductById(Long id) {
+		if(!abstractRepo.existsById(id)) {
+			throw new EntityNotFoundException("Product not found...");
+		} else return abstractRepo.findById(id).get();
 	}
-	
-	public ProductMusic getMusicById(Long id) {
-		if(!musicRepo.existsById(id)) {
-			throw new EntityNotFoundException("Music not found...");
-		} else return musicRepo.findById(id).get();
-	}
-	
-	public ProductBook getBookById(Long id) {
-		if(!bookRepo.existsById(id)) {
-			throw new EntityNotFoundException("Book not found...");
-		} else return bookRepo.findById(id).get();
-	}
-		
+			
 	// ============== POST ==============
-	// post dati compilati nei campi di input 
+	// post dati compilati nei campi di input, necessari 3 metodi perche' di AbstractProd non si puo fare new obj 
 	
 	public AbstractProduct saveVideogame(ProductDtoVideogame videogame) {			
-		if(productRepo.existsByTitle(videogame.getTitle())) {
+		if(abstractRepo.existsByTitle(videogame.getTitle())) {
 			throw new EntityExistsException("Videogame already exist...");
 		} else {	
 			ProductVideogame finalVideogame = new ProductVideogame();
 			BeanUtils.copyProperties(videogame, finalVideogame);
 			finalVideogame.setProductType("Videogame");
 			log.info("--> SAVE VIDEOGAME - Inserting new videogame: " + finalVideogame.getTitle());
-			return productRepo.save(finalVideogame);			
+			return abstractRepo.save(finalVideogame);			
 		}
 	}
 	
 	public AbstractProduct saveMusic(ProductDtoMusic music) {			
-		if(productRepo.existsByTitle(music.getTitle())) {
+		if(abstractRepo.existsByTitle(music.getTitle())) {
 			throw new EntityExistsException("Music already exist...");
 		} else {	
 			ProductMusic finalMusic = new ProductMusic();
 			BeanUtils.copyProperties(music, finalMusic);
 			finalMusic.setProductType("Music");
 			log.info("--> SAVE MUSIC - Inserting new music: " + finalMusic.getTitle());
-			return productRepo.save(finalMusic);			
+			return abstractRepo.save(finalMusic);			
 		}
 	}
 	
 	public AbstractProduct saveBook(ProductDtoBook book) {			
-		if(productRepo.existsByTitle(book.getTitle())) {
+		if(abstractRepo.existsByTitle(book.getTitle())) {
 			throw new EntityExistsException("Book already exist...");
 		} else {	
 			ProductBook finalBook = new ProductBook();
 			BeanUtils.copyProperties(book, finalBook);	
 			finalBook.setProductType("Book");
 			log.info("--> SAVE BOOK - Inserting new book: " + finalBook.getTitle());
-			return productRepo.save(finalBook);			
+			return abstractRepo.save(finalBook);			
 		}
 	}
 	

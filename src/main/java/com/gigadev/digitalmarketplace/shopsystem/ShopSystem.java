@@ -63,8 +63,9 @@ public class ShopSystem {
 		list.add(product);
 	}	
 	
-	public void addAllToList(Set<AbstractProduct> cartList, Set<AbstractProduct> purchasingList) {		
-		purchasingList.addAll(cartList);
+	public void addAllToList(Set<AbstractProduct> cartList, Set<AbstractProduct> libraryList, Set<AbstractProduct> historyList) {		
+		libraryList.addAll(cartList);
+		historyList.addAll(cartList);
 	}	
 	
 	public Set<AbstractProduct> getList(Set<AbstractProduct> list) {

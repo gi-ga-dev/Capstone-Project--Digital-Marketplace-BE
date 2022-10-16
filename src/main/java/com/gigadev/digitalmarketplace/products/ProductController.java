@@ -55,27 +55,13 @@ public class ProductController {
 	
 	// ----------------
 	
-	@GetMapping("/{id}/getVideogameById")
+	@GetMapping("/{id}/getProductById")
 	@PreAuthorize("isAuthenticated()")
-	@Operation(summary = "Get Videogame By Id", security = @SecurityRequirement(name = "bearer-authentication"))
-	public ResponseEntity<ProductVideogame> getVideogameById(@PathVariable Long id) {
-		return ResponseEntity.ok(productServ.getVideogameById(id));
+	@Operation(summary = "Get Product By Id", security = @SecurityRequirement(name = "bearer-authentication"))
+	public ResponseEntity<AbstractProduct> getProductById(@PathVariable Long id) {
+		return ResponseEntity.ok(productServ.getProductById(id));
 	}
-	
-	@GetMapping("/{id}/getMusicById")
-	@PreAuthorize("isAuthenticated()")
-	@Operation(summary = "Get Music By Id", security = @SecurityRequirement(name = "bearer-authentication"))
-	public ResponseEntity<ProductMusic> getMusicById(@PathVariable Long id) {
-		return ResponseEntity.ok(productServ.getMusicById(id));
-	}
-	
-	@GetMapping("/{id}/getBookById")
-	@PreAuthorize("isAuthenticated()")
-	@Operation(summary = "Get Book By Id", security = @SecurityRequirement(name = "bearer-authentication"))
-	public ResponseEntity<ProductBook> getBookById(@PathVariable Long id) {
-		return ResponseEntity.ok(productServ.getBookById(id));
-	}
-	
+		
 	// ============== POST (articoli acquistabili) ==============
 		
 	@PostMapping("/videogames/saveVideogame")
