@@ -90,7 +90,22 @@ public class ShopSystemService {
 	// ============== POST ==============
 	// post nel carrello di prodotti esistenti (no campi input - no DTO)
 	
-	public ShopSystem addToList(Long shopId, Long productId, Set<AbstractProduct> list) {
+	public ShopSystem addFreeWithSub(Long shopId, Long productId, Set<AbstractProduct> list, Set<AbstractProduct> purchasedList) {
+		User user = userRepo.findById(shopId).get();
+		ShopSystem shopSystem = shopRepo.findById(shopId).get();
+		// prendo il prodotto cliccato
+		AbstractProduct prod = productRepo.findById(productId).get();
+		
+		if(user.getIsSubscribed() == true) {
+			// lo sconto del 100% e lo aggiungo al carrello
+			prod.setPriceInitial(0.00);
+			addToList(shopId, productId, list, purchasedList);			
+		} else throw new EntityNotFoundException("You are not subscribed...");
+		
+		return shopRepo.save(shopSystem);
+	}
+	
+	public ShopSystem addToList(Long shopId, Long productId, Set<AbstractProduct> list, Set<AbstractProduct> purchasedList) {
 		if(!shopRepo.existsById(shopId)) {
 			throw new EntityNotFoundException("Shop System not implemented...");
 		} else { 
@@ -99,13 +114,8 @@ public class ShopSystemService {
 			AbstractProduct prod = productRepo.findById(productId).get();
 			User user = userRepo.findById(shopId).get();
 			
-			// il pulsante Get Free sara' associato sempre a questo metodo
-			if(user.getIsSubscribed() == true) {
-				// devo settare il prezzo dell'articolo a 0
-				prod.setPriceInitial(0.00);
-			}
-			
-			if(list.contains(prod)) {
+			// (list) --> cart/wishlist - (purchasedList) --> library/p.history
+			if(list.contains(prod) || purchasedList.contains(prod)) {
 				throw new EntityExistsException("Product already in List...");				
 			} else {
 				// salvo la lista con gli elementi al suo interno, nel db
@@ -123,7 +133,8 @@ public class ShopSystemService {
 		} else { 
 			// Prendo ref. shopSystem -> per cartList, user -> per accountBalance (utente che sta acquistando)
 			User user = userRepo.findById(shopId).get();
-			ShopSystem shopSystem = shopRepo.findById(shopId).get();			
+			ShopSystem shopSystem = shopRepo.findById(shopId).get();		
+			// update del carrello in base al costo prodotti e in base al metodo di acquisto (get free/purchase)
 			updateCart(shopId);
 			
 			if(user.getAccountBalance() >=  shopSystem.getCartSubtotal()) {
@@ -137,7 +148,6 @@ public class ShopSystemService {
 						shopRepo.findById(shopId).get().getHistoryList());
 				// dopodiche' cancellare contenuto carrello
 				shopSystem.getCartList().clear();
-				//shopSystem.getWishList().clear();
 				shopRepo.flush();	
 			} else throw new EntityNotFoundException("Account Balance insufficient...");
 			

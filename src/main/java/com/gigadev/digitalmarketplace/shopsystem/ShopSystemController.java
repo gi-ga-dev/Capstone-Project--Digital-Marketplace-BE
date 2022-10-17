@@ -71,19 +71,40 @@ public class ShopSystemController {
 		return ResponseEntity.ok(shopServ.getListByShopId(shopId, shopRepo.findById(shopId).get().getWishList()));
 	}
 	
-	// ============== POST (articoli da aggiungere al carrello) ==============
+	@GetMapping("/{shopId}/getLibraryListByShopId")
+	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
+	public ResponseEntity<Set<AbstractProduct>> getLibraryListByShopId(@PathVariable Long shopId) {
+		return ResponseEntity.ok(shopServ.getListByShopId(shopId, shopRepo.findById(shopId).get().getLibraryList()));
+	}
+	
+	@GetMapping("/{shopId}/getHistoryListByShopId")
+	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
+	public ResponseEntity<Set<AbstractProduct>> getHistoryListByShopId(@PathVariable Long shopId) {
+		return ResponseEntity.ok(shopServ.getListByShopId(shopId, shopRepo.findById(shopId).get().getHistoryList()));
+	}
+	
+	// ============== POST (articoli da aggiungere alle liste) ==============
+	
+	@PostMapping("/{shopId}/{productId}/addFreeWithSub")
+	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
+	public ResponseEntity<ShopSystem> addFreeWithSub(@PathVariable Long shopId, @PathVariable Long productId) {
+		return ResponseEntity.ok(shopServ.addFreeWithSub(shopId, productId, 
+				shopRepo.findById(shopId).get().getCartList(), shopRepo.findById(shopId).get().getLibraryList()));
+	}
 		
 	@PostMapping("/{shopId}/{productId}/addToCart")
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
 	// con Pre-Authorize genera errore autenticazione
 	public ResponseEntity<ShopSystem> addToCart(@PathVariable Long shopId, @PathVariable Long productId) {
-		return ResponseEntity.ok(shopServ.addToList(shopId, productId, shopRepo.findById(shopId).get().getCartList()));
+		return ResponseEntity.ok(shopServ.addToList(shopId, productId, 
+				shopRepo.findById(shopId).get().getCartList(), shopRepo.findById(shopId).get().getLibraryList()));
 	}
 	
 	@PostMapping("/{shopId}/{productId}/addToWishList")
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
 	public ResponseEntity<ShopSystem> addToWishList(@PathVariable Long shopId, @PathVariable Long productId) {
-		return ResponseEntity.ok(shopServ.addToList(shopId, productId, shopRepo.findById(shopId).get().getWishList()));
+		return ResponseEntity.ok(shopServ.addToList(shopId, productId, 
+				shopRepo.findById(shopId).get().getWishList(), shopRepo.findById(shopId).get().getLibraryList()));
 	}
 	
 	@PostMapping("/{shopId}/commitPurchase")
