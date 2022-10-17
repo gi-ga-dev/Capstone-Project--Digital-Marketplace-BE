@@ -41,6 +41,8 @@ public class ShopSystem {
 	private User user;	
 	
 	private Double cartSubtotal;
+	
+	private Integer prodQnt;
 		
 	// ManyToMany per fare in modo che piu' utenti possano avere gli stessi prodotti nel carrello
 	@ManyToMany(cascade = CascadeType.ALL)

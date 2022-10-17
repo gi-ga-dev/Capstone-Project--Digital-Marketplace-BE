@@ -12,4 +12,5 @@ import lombok.NoArgsConstructor;
 public class ShopSystemDto {
 	private Long id;
 	private Double cartSubtotal;
+	private Integer prodQnt;
 }

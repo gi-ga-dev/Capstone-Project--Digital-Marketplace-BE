@@ -31,7 +31,8 @@ public abstract class AbstractProduct {
 	private Double priceFinal; 
 
 	// if(isDiscounted) --> priceFinal = priceInitial - (priceInitial/100*discount)
-	private Double discount;
+	private Integer discount;	
+	//private Double priceDiscounted = priceInitial - (priceInitial/100*discount); 
 	
 	private String title;	
 	private String description;
