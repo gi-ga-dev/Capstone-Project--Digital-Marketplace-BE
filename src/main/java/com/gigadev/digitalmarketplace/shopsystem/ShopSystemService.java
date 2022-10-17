@@ -113,31 +113,28 @@ public class ShopSystemService {
 			Integer prodQnt = 0;
 			
 			for (AbstractProduct ele : shopSystem.getCartList()) {
-				// ciclo 1) aggiornare subTotal e prodQnt (senza aver ancora acquistato)
-				// che verra' confermata con il ciclo 2, se rispetta la condizione
+				// aggiornare subTotal e prodQnt (senza aver ancora acquistato)
 				subTotal += ele.getPriceInitial();	
 				prodQnt ++;
 				log.info("--> SubTotal: " + subTotal + " Prod. Qnt: " + prodQnt);	
 			}
-						
-			log.info("Account Balance Prima dell'acquisto: " + user.getAccountBalance());
-			log.info("SubTotal Prima dell'acquisto: " + subTotal);
 			
 			// il subTotal mi serve solo per controllare se l'utente puo' effettuare l'acquisto
-			if(user.getAccountBalance() >=  subTotal) {			
-				for (AbstractProduct ele : shopSystem.getCartList()) {
-					// ciclo 2) se il saldo account e' superiore al totale carrello si puo' effettuare l'acquisto					
-					// detrarre saldo, incrementare qnt prod. acquistati
-					user.setAccountBalance(user.getAccountBalance() - ele.getPriceInitial());
-					user.setQntPurchased(user.getQntPurchased() + prodQnt);
-					// per ogni elem nel carrello lo aggiungi nelle liste acquisti/libreria e rimuovi dal cart
-					shopSystem.getLibraryList().add(ele);
-					shopSystem.getHistoryList().add(ele);
-					shopSystem.getCartList().remove(ele);				
-				}	
+			if(user.getAccountBalance() >=  subTotal) {
+				// detrarre saldo, incrementare qnt prod. acquistati
+				user.setAccountBalance(user.getAccountBalance() - subTotal);
+				user.setQntPurchased(user.getQntPurchased() + prodQnt);
+				// prendere tutti gli elementi presenti nel carrello, ed agg. nelle liste acquisti/libreria			
+				shopSystem.addAllToList(
+						shopRepo.findById(shopId).get().getCartList(), 
+						shopRepo.findById(shopId).get().getLibraryList(), 
+						shopRepo.findById(shopId).get().getHistoryList());
+				// dopodiche' cancellare contenuto carrello
+				shopSystem.getCartList().clear();
+				//shopSystem.getWishList().clear();
+				shopRepo.flush();	
 			} else throw new EntityNotFoundException("Account Balance insufficient...");
 			
-			//shopRepo.flush();			
 			log.info("--> PURCHASE COMPLETED - for Shop System w/ id: " + shopSystem.getId());			
 			return shopRepo.save(shopSystem);
 		}

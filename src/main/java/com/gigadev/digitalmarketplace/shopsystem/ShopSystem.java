@@ -64,6 +64,11 @@ public class ShopSystem {
 	public void addProductToList(Set<AbstractProduct> list, AbstractProduct product) {
 		list.add(product);
 	}	
+	
+	public void addAllToList(Set<AbstractProduct> cartList, Set<AbstractProduct> libraryList, Set<AbstractProduct> historyList) {		
+		libraryList.addAll(cartList);
+		historyList.addAll(cartList);
+	}
 		
 	public Set<AbstractProduct> getList(Set<AbstractProduct> list) {
 		return list;
