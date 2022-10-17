@@ -116,23 +116,28 @@ public class ShopSystemService {
 				// ciclo 1) aggiornare subTotal e prodQnt (senza aver ancora acquistato)
 				// che verra' confermata con il ciclo 2, se rispetta la condizione
 				subTotal += ele.getPriceInitial();	
-				prodQnt += shopSystem.getCartList().size();
-				log.info("--> SubTotal: " + subTotal + " Prod. Qnt: " + shopSystem.getCartList().size());	
+				prodQnt ++;
+				log.info("--> SubTotal: " + subTotal + " Prod. Qnt: " + prodQnt);	
 			}
+						
+			log.info("Account Balance Prima dell'acquisto: " + user.getAccountBalance());
+			log.info("SubTotal Prima dell'acquisto: " + subTotal);
 			
-			for (AbstractProduct ele : shopSystem.getCartList()) {
-				// ciclo 2) se il saldo account e' superiore al totale carrello si puo' effettuare l'acquisto
-				if(user.getAccountBalance() >=  subTotal) {
+			// il subTotal mi serve solo per controllare se l'utente puo' effettuare l'acquisto
+			if(user.getAccountBalance() >=  subTotal) {			
+				for (AbstractProduct ele : shopSystem.getCartList()) {
+					// ciclo 2) se il saldo account e' superiore al totale carrello si puo' effettuare l'acquisto					
 					// detrarre saldo, incrementare qnt prod. acquistati
-					user.setAccountBalance(user.getAccountBalance() - subTotal);
+					user.setAccountBalance(user.getAccountBalance() - ele.getPriceInitial());
 					user.setQntPurchased(user.getQntPurchased() + prodQnt);
 					// per ogni elem nel carrello lo aggiungi nelle liste acquisti/libreria e rimuovi dal cart
 					shopSystem.getLibraryList().add(ele);
 					shopSystem.getHistoryList().add(ele);
-					shopSystem.getCartList().remove(ele);
-				} else throw new EntityNotFoundException("Account Balance insufficient...");
-			}	
-			shopRepo.flush();			
+					shopSystem.getCartList().remove(ele);				
+				}	
+			} else throw new EntityNotFoundException("Account Balance insufficient...");
+			
+			//shopRepo.flush();			
 			log.info("--> PURCHASE COMPLETED - for Shop System w/ id: " + shopSystem.getId());			
 			return shopRepo.save(shopSystem);
 		}
