@@ -2,6 +2,7 @@ package com.gigadev.digitalmarketplace.auth.users;
 
 import java.beans.Beans;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -58,7 +59,9 @@ public class UserService {
 	
 	public UserDtoGetResponse getUserInfo(Long id) {
 		// Restituisce tutte le prop. di un singolo User
-		User user = userRepository.findById(id).get();
+		User user = userRepository.findById(id).get();		
+		if(user.getIsSubscribed() == true) { checkSubscription(user); }
+		
 		return UserDtoGetResponse
 		.builder()
 		.userName(user.getUserName())
@@ -117,13 +120,18 @@ public class UserService {
 		} else throw new EntityNotFoundException("--> ERROR - Account balance is insufficient, or user is already subscribed!");
 	}
 	
-	public void checkSubscription(User user) {			
-		Integer subEnd = user.getSubEnd().getDayOfYear();
-		Integer subStart = user.getSubStart().getDayOfYear();
-		user.setSubRemaining(subEnd - subStart);		
-		if(user.getSubRemaining() <= 0) {
-			user.setIsSubscribed(false);
-		}		
+	public void checkSubscription(User user) {		
+		// currentDay e' il momento in cui si fa il check (nel get info)
+		LocalDate currentDay = LocalDate.now();
+		LocalDate subEnd = user.getSubEnd();		
+		Integer subUsed = subEnd.compareTo(currentDay); // giorni utilizzati		
+		Integer subTotalTime = user.getSubTotalTime(); // giorni totali sub
+		
+		user.setSubRemaining(subTotalTime-subUsed);	// giorni rimanenti	
+		if(user.getSubRemaining() <= 0) { user.setIsSubscribed(false); }
+		
+		userRepository.flush();
+		userRepository.save(user);
 	}
 	
 	// ============== POST ==============

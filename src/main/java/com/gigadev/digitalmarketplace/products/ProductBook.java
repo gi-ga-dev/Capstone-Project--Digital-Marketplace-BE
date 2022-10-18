@@ -24,5 +24,6 @@ public class ProductBook extends AbstractProduct {
 	private Long isbnCode;
 	private String bookSeries;
 	private String author;
+
 		
 }

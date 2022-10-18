@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public abstract class AbstractProduct {
+public abstract class AbstractProduct{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE) // IDENTITY non funziona su classe abstract
@@ -43,5 +43,6 @@ public abstract class AbstractProduct {
 	private String genre;
 	private Double ratings;
 	private Long reviews;
+	
 
 }

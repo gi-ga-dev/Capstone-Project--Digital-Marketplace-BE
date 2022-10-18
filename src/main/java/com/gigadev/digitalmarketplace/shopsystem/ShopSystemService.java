@@ -80,7 +80,7 @@ public class ShopSystemService {
 			subTotal += ele.getPriceInitial();	
 			prodQnt ++;
 			log.info("--> SubTotal: " + subTotal + " Prod. Qnt: " + prodQnt);	
-		}		
+		}				
 		shopSystem.setCartSubtotal(subTotal);
 		shopSystem.setProdQnt(prodQnt);		
 		shopRepo.flush();
@@ -135,7 +135,7 @@ public class ShopSystemService {
 			User user = userRepo.findById(shopId).get();
 			ShopSystem shopSystem = shopRepo.findById(shopId).get();		
 			// update del carrello in base al costo prodotti e in base al metodo di acquisto (get free/purchase)
-			updateCart(shopId);
+			updateCart(shopId);			
 			
 			if(user.getAccountBalance() >=  shopSystem.getCartSubtotal()) {
 				// detrarre saldo, incrementare qnt prod. acquistati
@@ -148,6 +148,7 @@ public class ShopSystemService {
 						shopRepo.findById(shopId).get().getHistoryList());
 				// dopodiche' cancellare contenuto carrello
 				shopSystem.getCartList().clear();
+				shopSystem.getWishList().clear();
 				shopRepo.flush();	
 			} else throw new EntityNotFoundException("Account Balance insufficient...");
 			
