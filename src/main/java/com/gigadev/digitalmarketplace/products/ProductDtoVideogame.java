@@ -12,7 +12,8 @@ import lombok.NoArgsConstructor;
 public class ProductDtoVideogame {
 	
 	// AbstractProduct
-	private Double priceInitial;
+	private String imgLink;
+	private Double price;
 	private String title;	
 	private String description;
 	private String platform;
@@ -22,7 +23,6 @@ public class ProductDtoVideogame {
 	private String genre;	
 	
 	// ProductVideogame
-	private Long uniqueCode;
 	private String vgSeries;
 	private String developer;
 	private Integer ageRecommendation;
@@ -30,8 +30,6 @@ public class ProductDtoVideogame {
 	private String coopPlay;
 	private String controllerSupport;
 	private String subtitles;
-	private Integer minResolution;
-	private Integer maxResolution;
 	private Integer requiredSpace;
 	
 	

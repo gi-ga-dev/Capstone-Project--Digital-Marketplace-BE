@@ -12,7 +12,8 @@ import lombok.NoArgsConstructor;
 public class ProductDtoBook {
 	
 	// AbstractProduct
-	private Double priceInitial;
+	private String imgLink;
+	private Double price;
 	private String title;	
 	private String description;
 	private String platform;
@@ -22,7 +23,9 @@ public class ProductDtoBook {
 	private String genre;
 	
 	// ProductBook
-	private Long isbnCode;
+	
+	private Integer pages;
+	private String isbnCode;
 	private String bookSeries;
 	private String author;
 

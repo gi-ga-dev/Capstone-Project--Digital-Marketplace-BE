@@ -19,9 +19,9 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 @RestController
 @CrossOrigin(origins="*")
 @RequestMapping("/products")
-public class ProductController {
+public class AbstractProductController {
 	
-	@Autowired ProductService productServ;
+	@Autowired AbstractProductService productServ;
 	
 	// ============== GET ==============
 	

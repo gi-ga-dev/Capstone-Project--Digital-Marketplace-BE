@@ -128,7 +128,10 @@ public class UserService {
 		Integer subTotalTime = user.getSubTotalTime(); // giorni totali sub
 		
 		user.setSubRemaining(subTotalTime-subUsed);	// giorni rimanenti	
-		if(user.getSubRemaining() <= 0) { user.setIsSubscribed(false); }
+		if(user.getSubRemaining() <= 0) { 
+			user.setIsSubscribed(false); 
+			// NOTA: aggiungere disable sui prodotti presi a 0.00 dato che il periodo di sub e' terminato
+		}
 		
 		userRepository.flush();
 		userRepository.save(user);

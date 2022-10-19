@@ -23,7 +23,6 @@ import lombok.NoArgsConstructor;
 public class ProductMusic extends AbstractProduct {
 	
 	private Long plays;
-	private Long isrcCode;
 	private String artist;
 	private String album;
 	private String duration;

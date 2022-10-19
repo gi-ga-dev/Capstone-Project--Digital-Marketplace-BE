@@ -77,7 +77,7 @@ public class ShopSystemService {
 		Integer prodQnt = 0;		
 		for (AbstractProduct ele : shopSystem.getCartList()) {
 			// aggiornare subTotal e prodQnt (senza aver ancora acquistato)
-			subTotal += ele.getPriceInitial();	
+			subTotal += ele.getPrice();	
 			prodQnt ++;
 			log.info("--> SubTotal: " + subTotal + " Prod. Qnt: " + prodQnt);	
 		}				
@@ -98,7 +98,7 @@ public class ShopSystemService {
 		
 		if(user.getIsSubscribed() == true) {
 			// lo sconto del 100% e lo aggiungo al carrello
-			prod.setPriceInitial(0.00);
+			prod.setPrice(0.00);
 			addToList(shopId, productId, list, purchasedList);			
 		} else throw new EntityNotFoundException("You are not subscribed...");
 		

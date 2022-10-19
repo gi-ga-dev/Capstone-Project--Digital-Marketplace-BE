@@ -12,7 +12,8 @@ import lombok.NoArgsConstructor;
 public class ProductDtoMusic {
 	
 	// AbstractProduct
-	private Double priceInitial;
+	private String imgLink;
+	private Double price;
 	private String title;	
 	private String description;
 	private String platform;
@@ -22,7 +23,6 @@ public class ProductDtoMusic {
 	private String genre;
 	
 	// ProductMusic
-	private Long isrcCode;
 	private String artist;
 	private String album;
 	private String duration;

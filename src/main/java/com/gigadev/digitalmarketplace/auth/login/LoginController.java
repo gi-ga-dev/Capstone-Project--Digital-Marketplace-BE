@@ -49,9 +49,7 @@ public class LoginController {
 				jwt, 
 				userDetails.getId(), 
 				userDetails.getUsername(),
-				roles,
-				userDetails.getAccountBalance(),
-				userDetails.getIsSubscribed()
+				roles
 			);
 		
 		return ResponseEntity.ok(jwtresp);

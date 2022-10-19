@@ -21,7 +21,8 @@ import lombok.NoArgsConstructor;
 public class ProductBook extends AbstractProduct {
 	
 	private Long read;
-	private Long isbnCode;
+	private Integer pages;
+	private String isbnCode;
 	private String bookSeries;
 	private String author;
 
