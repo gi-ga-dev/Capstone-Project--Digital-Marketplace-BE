@@ -11,7 +11,7 @@ public class AbstractProductConfiguration {
 	@Bean("shadowTombRaider")
 	public ProductDtoVideogame shadowTombRaider() {
 		ProductDtoVideogame shadowTombRaider = new ProductDtoVideogame
-			("https://i.imgur.com/ZM3UqkW.png", 59.95, "Shadow of the Tomb Raider: Definitive Ed.", 
+			("https://i.imgur.com/j3XLQX0.png", 59.95, "Shadow of the Tomb Raider: Definitive Ed.", 
 			"In Shadow of the Tomb Raider Definitive Edition experience the final chapter of Lara’s origin as she is forged into the Tomb Raider she is destined to be.", 
 			"Windows", "Square Enix", "12/30/21", "English, French, Italian, German, Spanish - Spain, Arabic, Chinese - Simplified, Chinese - Traditional, Polish, Portuguese - Brazil, Russian", 
 			"Action-Adventure", "Tomb Raider", "Eidos-Montréal, Crystal Dynamics, Nixxes Software", 18, 1, "Single-Player only", "Full Support", "Yes", 63);
@@ -21,7 +21,7 @@ public class AbstractProductConfiguration {
 	@Bean("grandTheftAutoV")
 	public ProductDtoVideogame grandTheftAutoV() {
 		ProductDtoVideogame grandTheftAutoV = new ProductDtoVideogame
-			("https://i.imgur.com/uKxY9kD.png", 47.99, "Grand Theft Auto V: Premium Edition", 
+			("https://i.imgur.com/G2qTkbV.png", 47.99, "Grand Theft Auto V: Premium Edition", 
 			"When a young street hustler, a retired bank robber and a terrifying psychopath land themselves in trouble, they must pull off a series of dangerous heists to survive in a city in which they can trust nobody, least of all each other.", 
 			"Windows", "Rockstar Games", "05/14/20", "English, French, Italian, German, Spanish, Russian, Brazilian Portuguese, Polish.", 
 			"Action-Adventure", "Grand Theft Auto", "Rockstar Games", 18, 1, "GTA Online Multiplayer co-op", "Full Support", "Yes", 107);
@@ -31,7 +31,7 @@ public class AbstractProductConfiguration {
 	@Bean("control")
 	public ProductDtoVideogame control() {
 		ProductDtoVideogame control = new ProductDtoVideogame
-			("https://i.imgur.com/zZf6C52.png", 59.99, "Control", 
+			("https://i.imgur.com/Cxa62cg.png", 59.99, "Control", 
 			"After a secretive agency in New York is invaded by an otherworldly threat, you become the new Director struggling to regain Control.", 
 			"Windows", "505 Games", "08/27/19", "English, French, German, Spanish.", 
 			"Survival-Horror, Action-Adventure", "Control", "Remedy Entertainment", 18, 1, "Single-Player only", "Full Support", "Yes", 50);
