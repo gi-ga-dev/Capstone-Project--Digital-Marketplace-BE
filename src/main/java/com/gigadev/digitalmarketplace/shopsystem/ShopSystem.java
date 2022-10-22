@@ -64,15 +64,24 @@ public class ShopSystem {
 	// -----------------
 	
 	public void addProductToList(Set<AbstractProduct> list, AbstractProduct product) {
+		// metodo generico riutilizzabile per liste cart/wishlist
 		list.add(product);
 	}	
+		
+	public void addProductToLists(AbstractProduct product, Set<AbstractProduct> libraryList, Set<AbstractProduct> historyList) {	
+		// spostare prodotto cliccato nelle liste library/p.history
+		libraryList.add(product);
+		historyList.add(product);
+	}
 	
-	public void addAllToList(Set<AbstractProduct> cartList, Set<AbstractProduct> libraryList, Set<AbstractProduct> historyList) {		
+	public void addAllToList(Set<AbstractProduct> cartList, Set<AbstractProduct> libraryList, Set<AbstractProduct> historyList) {	
+		// metodo per copiare lista carrello nelle liste library/p.history
 		libraryList.addAll(cartList);
 		historyList.addAll(cartList);
 	}
 		
 	public Set<AbstractProduct> getList(Set<AbstractProduct> list) {
+		// ritorna la lista di quello shop system tramite id
 		return list;
 	}
 	

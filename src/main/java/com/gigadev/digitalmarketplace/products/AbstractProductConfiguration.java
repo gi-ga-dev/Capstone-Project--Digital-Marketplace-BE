@@ -72,7 +72,7 @@ public class AbstractProductConfiguration {
 	@Bean("thinkLikeaProgrammer")
 	public ProductDtoBook thinkLikeaProgrammer() {
 		ProductDtoBook thinkLikeaProgrammer = new ProductDtoBook
-			("https://i.imgur.com/Gx5OXKJ.png", 29.00, "Think Like a Programmer", 
+			("https://i.imgur.com/BkUcqeh.png", 29.00, "Think Like a Programmer", 
 			"The real challenge of programming isn't learning a language's syntax—it's learning to creatively solve problems so you can build something great. - author V. Anton Spraul", 
 			"Amazon Kindle", "No Starch Press", "12-08-2012", "English", "Information & Technology", 256, "1593274246", "Think Like a Programmer", "V. Anton Spraul"); 
 		return thinkLikeaProgrammer;
@@ -81,7 +81,7 @@ public class AbstractProductConfiguration {
 	@Bean("harryPotter1")
 	public ProductDtoBook harryPotter1() {
 		ProductDtoBook harryPotter1 = new ProductDtoBook
-			("https://i.imgur.com/QvbUzag.png", 15.40, "Harry Potter and the Philosopher's Stone", 
+			("https://i.imgur.com/ADPq2bS.png", 15.40, "Harry Potter and the Philosopher's Stone", 
 			"Harry Potter has never even heard of Hogwarts when the letters start dropping on the doormat at number four, Privet Drive.", 
 			"Amazon Kindle", "Bloomsbury Children's Books", "26-06-1997", "English", "Fantasy", 223, "9781408855652", "Harry Potter", "J.K. Rowling"); 
 		return harryPotter1;
@@ -90,7 +90,7 @@ public class AbstractProductConfiguration {
 	@Bean("mortalInstrument1")
 	public ProductDtoBook mortalInstrument1() {
 		ProductDtoBook mortalInstrument1 = new ProductDtoBook
-			("https://i.imgur.com/TC4i6MU.png", 10.47, "The Mortal Instruments: City of Bones", 
+			("https://i.imgur.com/kPxPfFe.png", 10.47, "The Mortal Instruments: City of Bones", 
 			"New York City teenager Clary Fray begins seeing and drawing a strange symbol, worrying her mother Jocelyn Fray and family friend, Luke Garroway... ", 
 			"Amazon Kindle", "Margaret K McElderry", "27-03-2007", "English", "Fantasy", 485, "1416914285", "The Mortal Instrument", "Cassandra Clare"); 
 		return mortalInstrument1;

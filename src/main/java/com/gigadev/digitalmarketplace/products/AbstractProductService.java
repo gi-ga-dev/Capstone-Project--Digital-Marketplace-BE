@@ -25,7 +25,7 @@ public class AbstractProductService {
 		return abstractRepo.findAll();
 	}
 	
-	// ---- Necessari per ritornare array specifici in Front-End ----
+	// ---- Necessari per ritornare array specifici in Front-End (Pagine Products) ----
 	
 	public List<ProductVideogame> getAllVideogames() {
 		return videogameRepo.findAll();				
@@ -48,7 +48,8 @@ public class AbstractProductService {
 	}
 			
 	// ============== POST ==============
-	// post dati compilati nei campi di input, necessari 3 metodi perche' di AbstractProd non si puo fare new obj 
+	// ---> Classi Products e Metodi relativi, si riferiscono sempre ai prodotti nelle schede (Pagine Products)
+	// ---> Post dati compilati nei campi di input (Pagina Profilo Admin Actions), no polimorfismo perche' AbstractProd non si puo' istanziare
 	
 	public AbstractProduct saveVideogame(ProductDtoVideogame videogame) {			
 		if(abstractRepo.existsByTitle(videogame.getTitle())) {

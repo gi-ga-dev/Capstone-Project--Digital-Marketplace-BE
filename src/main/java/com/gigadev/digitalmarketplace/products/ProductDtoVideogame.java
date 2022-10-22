@@ -20,7 +20,7 @@ public class ProductDtoVideogame {
 	private String publisher;
 	private String releaseDate;
 	private String language;
-	private String genre;	
+	private String genre;
 	
 	// ProductVideogame
 	private String vgSeries;

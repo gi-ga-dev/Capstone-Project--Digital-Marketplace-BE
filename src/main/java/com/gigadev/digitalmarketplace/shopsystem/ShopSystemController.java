@@ -85,11 +85,16 @@ public class ShopSystemController {
 	
 	// ============== POST (articoli da aggiungere alle liste) ==============
 	
-	@PostMapping("/{shopId}/{productId}/addFreeWithSub")
+	@PostMapping("/{shopId}/{productId}/purchaseWithSub")
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
-	public ResponseEntity<ShopSystem> addFreeWithSub(@PathVariable Long shopId, @PathVariable Long productId) {
-		return ResponseEntity.ok(shopServ.addFreeWithSub(shopId, productId, 
-				shopRepo.findById(shopId).get().getCartList(), shopRepo.findById(shopId).get().getLibraryList()));
+	public ResponseEntity<ShopSystem> purchaseWithSub(@PathVariable Long shopId, @PathVariable Long productId) {
+		return ResponseEntity.ok(shopServ.purchaseWithSub(shopId, productId));
+	}
+	
+	@PostMapping("/{shopId}/{productId}/purchaseWithBalance")
+	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
+	public ResponseEntity<ShopSystem> purchaseWithBalance(@PathVariable Long shopId, @PathVariable Long productId) {
+		return ResponseEntity.ok(shopServ.purchaseWithBalance(shopId, productId));
 	}
 		
 	@PostMapping("/{shopId}/{productId}/addToCart")
