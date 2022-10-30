@@ -44,9 +44,10 @@ public class UserService {
 			.email(user.getEmail())
 			.userName(user.getUserName())				
 			// restituisce il ruolo (nella lista ruoli dell'user) come stringa
-			.role( user.getRoles().stream().findFirst().get().getRoleName().name().replace("ROLE_", "") )	
+			.role( user.getRoles().stream().findFirst().get().getRoleName().name().replace("ROLE_", "") )
 			.qntPurchased(user.getQntPurchased())
-			.accountBalance(user.getAccountBalance())			
+			.accountBalance(user.getAccountBalance())	
+			.avatar(user.getAvatar())
 			.isSubscribed(user.getIsSubscribed())			
 			.subStart(user.getSubStart())			
 			.subEnd(user.getSubEnd())
@@ -72,7 +73,8 @@ public class UserService {
 		.userName(user.getUserName())				
 		.role( user.getRoles().stream().findFirst().get().getRoleName().name().replace("ROLE_", "") )
 		.qntPurchased(user.getQntPurchased())
-		.accountBalance(user.getAccountBalance())			
+		.accountBalance(user.getAccountBalance())
+		.avatar(user.getAvatar())
 		.isSubscribed(user.getIsSubscribed())			
 		.subStart(user.getSubStart())			
 		.subEnd(user.getSubEnd())
@@ -158,8 +160,29 @@ public class UserService {
 			return finalUser;			
 		}
 	}	
-		
+			
 	// ============== PUT/PATCH ==============
+	
+	public User updateAvatarViaUrl(UserDtoAvatar dto, Long id) throws Exception {
+		// patch proprieta' avatar tramite campo input
+		User finalUser = userRepository.findById(id).get();
+		BeanUtils.copyProperties(dto, finalUser);
+		
+		if(finalUser.getAvatar().length() == 0) {
+			throw new Exception("Invalid Field");
+		} else log.info("--> PROFILE AVATAR UPDATE - for user: " + finalUser.getUserName());		
+		
+		return userRepository.save(finalUser);
+	}
+	
+	public User updateAvatarPreSet(String avatar, Long id) {
+		// patch proprieta' avatar senza campo input, selezionando da dei pre-set
+		// passo la stringa contenuta nell'array di avatar (FE), che e' attribuita a ciascun button,
+		// al back-end per patchare la proprieta' avatar dell'utente, tramite setAvatar() 
+		User finalUser = userRepository.findById(id).get();
+		finalUser.setAvatar(avatar);
+		return userRepository.save(finalUser);
+	}
 		
 	public User updateProfileInfo(UserDtoProfile user, Long id) {
 		// restituisco solo l'obj con i primi 3 parametri del profilo
@@ -173,7 +196,7 @@ public class UserService {
 		}
 	}
 	
-	public User updateCredentials(UserDtoCredentials user, Long id) {	
+	public User updateCredentials(UserDtoCredentials user, Long id) throws Exception{	
 		// restituisco solo l'obj con i 2 parametri credenziali
 		if(!userRepository.existsById(id)) {
 			throw new EntityNotFoundException("User does not exist...");
@@ -181,7 +204,7 @@ public class UserService {
 			// Al momento del patch se il campo password e' vuoto il sistema genera un token lo stesso
 			// se la password prima di essere trasformata in token (60 char) e' 0 lancia eccezione
 			if(user.getPassword().length() == 0) {
-				throw new EntityNotFoundException("Password field is blank!!!");
+				throw new Exception("Password field is blank!!!");
 			} else {						
 				doBeforeSaveCredentials(user);
 				User finalUser = userRepository.findById(id).get();

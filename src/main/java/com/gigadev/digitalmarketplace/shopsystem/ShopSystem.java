@@ -52,11 +52,7 @@ public class ShopSystem {
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "assoc_shopsystem_librarylist", joinColumns = @JoinColumn(name = "shop_system_id"), inverseJoinColumns = @JoinColumn(name = "library_prod_id"))
 	private Set<AbstractProduct> libraryList = new HashSet<AbstractProduct>();
-	
-	@ManyToMany(cascade = CascadeType.ALL)
-	@JoinTable(name = "assoc_shopsystem_historylist", joinColumns = @JoinColumn(name = "shop_system_id"), inverseJoinColumns = @JoinColumn(name = "history_prod_id"))
-	private Set<AbstractProduct> historyList = new HashSet<AbstractProduct>();
-	
+		
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "assoc_shopsystem_wishlist", joinColumns = @JoinColumn(name = "shop_system_id"), inverseJoinColumns = @JoinColumn(name = "wishlist_prod_id"))
 	private Set<AbstractProduct> wishList = new HashSet<AbstractProduct>();
@@ -67,17 +63,10 @@ public class ShopSystem {
 		// metodo generico riutilizzabile per liste cart/wishlist
 		list.add(product);
 	}	
-		
-	public void addProductToLists(AbstractProduct product, Set<AbstractProduct> libraryList, Set<AbstractProduct> historyList) {	
-		// spostare prodotto cliccato nelle liste library/p.history
-		libraryList.add(product);
-		historyList.add(product);
-	}
-	
-	public void addAllToList(Set<AbstractProduct> cartList, Set<AbstractProduct> libraryList, Set<AbstractProduct> historyList) {	
-		// metodo per copiare lista carrello nelle liste library/p.history
+			
+	public void addAllToList(Set<AbstractProduct> cartList, Set<AbstractProduct> libraryList) {	
+		// metodo per copiare lista carrello nella library
 		libraryList.addAll(cartList);
-		historyList.addAll(cartList);
 	}
 		
 	public Set<AbstractProduct> getList(Set<AbstractProduct> list) {

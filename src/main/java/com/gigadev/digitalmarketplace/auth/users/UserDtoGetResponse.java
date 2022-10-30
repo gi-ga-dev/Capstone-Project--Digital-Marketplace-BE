@@ -29,6 +29,7 @@ public class UserDtoGetResponse {
 	private Integer qntPurchased;
 	private Double accountBalance;
 	private Boolean isSubscribed;
+	private String avatar;
 	private LocalDate subStart;
 	private LocalDate subEnd;  
 	private Integer subTotalTime;

@@ -76,7 +76,7 @@ public class ShopSystemService {
 				// se ha abbastanza balance spostare prodotto cliccato nelle liste library/p.history	
 				user.setAccountBalance(user.getAccountBalance() - prod.getPrice());
 				user.setQntPurchased(user.getQntPurchased() + 1);
-				shopSystem.addProductToLists(prod, shopSystem.getLibraryList(), shopSystem.getHistoryList());
+				shopSystem.addProductToList(shopSystem.getLibraryList(), prod);
 				log.info("--> ADD TO LIST - Product: " + prod.getTitle() + " saved in Library of Shop System w/ id: " + shopSystem.getId());
 				log.info("--> " + shopSystem.getLibraryList().size() + " Product/s in the Library");
 			} else throw new EntityNotFoundException("You are not subscribed...");
@@ -101,7 +101,7 @@ public class ShopSystemService {
 				prod.setPaymentMethod(EProductPayment.SUBSCRIPTION);
 				// se subscribed spostare prodotto cliccato nelle liste library/p.history senza detrazioni	
 				user.setQntPurchased(user.getQntPurchased() + 1);
-				shopSystem.addProductToLists(prod, shopSystem.getLibraryList(), shopSystem.getHistoryList());
+				shopSystem.addProductToList(shopSystem.getLibraryList(), prod);
 				log.info("--> ADD TO LIST - Product: " + prod.getTitle() + " saved in Library of Shop System w/ id: " + shopSystem.getId());
 				log.info("--> " + shopSystem.getLibraryList().size() + " Product/s in the Library");
 			} else throw new EntityNotFoundException("You are not subscribed...");
@@ -120,6 +120,8 @@ public class ShopSystemService {
 		Integer prodQnt = 0;		
 		for (AbstractProduct ele : shopSystem.getCartList()) {
 			// aggiornare subTotal e prodQnt (senza aver ancora acquistato)
+			// Il metodo di pagamento sara' necessariamente Balance perche' siamo nello Shopp. Cart
+			ele.setPaymentMethod(EProductPayment.BALANCE);
 			subTotal += ele.getPrice();	
 			prodQnt ++;
 			log.info("--> SubTotal: " + subTotal + " Prod. Qnt: " + prodQnt);	
@@ -164,7 +166,7 @@ public class ShopSystemService {
 				user.setAccountBalance(user.getAccountBalance() - shopSystem.getCartSubtotal());
 				user.setQntPurchased(user.getQntPurchased() + shopSystem.getProdQnt());
 				// prendere tutti gli elementi presenti nel carrello, ed agg. nelle liste acquisti/libreria			
-				shopSystem.addAllToList(shopSystem.getCartList(), shopSystem.getLibraryList(), shopSystem.getHistoryList());
+				shopSystem.addAllToList(shopSystem.getCartList(), shopSystem.getLibraryList());
 				// dopodiche' cancellare contenuto carrello
 				shopSystem.getCartList().clear();
 				shopSystem.getWishList().clear();

@@ -62,6 +62,20 @@ public class UserController {
 	}
 		
 	// ============== PUT/PATCH ==============
+	
+	@PatchMapping("/{id}/updateAvatarViaUrl")
+	@PreAuthorize("isAuthenticated()")
+	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
+	public ResponseEntity<User> updateAvatarViaUrl(@RequestBody UserDtoAvatar dto, @PathVariable Long id) throws Exception {
+		return ResponseEntity.ok(userService.updateAvatarViaUrl(dto, id));
+	}
+	
+	@PatchMapping("/{id}/updateAvatarPreSet")
+	@PreAuthorize("isAuthenticated()")
+	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
+	public ResponseEntity<User> updateAvatarPreSet(@RequestBody String avatar, @PathVariable Long id) {
+		return ResponseEntity.ok(userService.updateAvatarPreSet(avatar, id));
+	}
 		
 	@PatchMapping("/{id}/updateProfileInfo")
 	@PreAuthorize("isAuthenticated()")
@@ -73,15 +87,11 @@ public class UserController {
 	@PatchMapping("/{id}/updateCredentials")
 	@PreAuthorize("isAuthenticated()")
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
-	public ResponseEntity<User> updateCredentials(@RequestBody UserDtoCredentials user, @PathVariable Long id) {
+	public ResponseEntity<User> updateCredentials(@RequestBody UserDtoCredentials user, @PathVariable Long id) throws Exception {
 			return ResponseEntity.ok(userService.updateCredentials(user, id));
 	}
 	
-	// >>>Polimorfismo<<<
-	// Per un PATCH senza scrittura nei campi di input (FE) omettere il @RequestBody, il metodo verra' lanciato	
-	
-	// Omettere @PreAuthorize altrimenti da errore di authentication
-	// il componente modal non verra' comunque caricato perche' non si e' fornito un id.
+	// Per un PATCH senza scrittura nei campi di input (FE) omettere il @RequestBody, il metodo verra' lanciato		
 	@PatchMapping("/{id}/subscribeMonthly")
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
 	public ResponseEntity<User> subscribeMonthly(@PathVariable Long id) {

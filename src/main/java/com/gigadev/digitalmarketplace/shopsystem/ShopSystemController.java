@@ -76,13 +76,7 @@ public class ShopSystemController {
 	public ResponseEntity<Set<AbstractProduct>> getLibraryListByShopId(@PathVariable Long shopId) {
 		return ResponseEntity.ok(shopServ.getListByShopId(shopId, shopRepo.findById(shopId).get().getLibraryList()));
 	}
-	
-	@GetMapping("/{shopId}/getHistoryListByShopId")
-	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
-	public ResponseEntity<Set<AbstractProduct>> getHistoryListByShopId(@PathVariable Long shopId) {
-		return ResponseEntity.ok(shopServ.getListByShopId(shopId, shopRepo.findById(shopId).get().getHistoryList()));
-	}
-	
+		
 	// ============== POST (articoli da aggiungere alle liste) ==============
 	
 	@PostMapping("/{shopId}/{productId}/purchaseWithSub")
