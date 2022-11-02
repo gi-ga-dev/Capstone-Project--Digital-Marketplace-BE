@@ -1,5 +1,8 @@
 package com.gigadev.digitalmarketplace.products;
 
+import java.time.LocalDate;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -9,6 +12,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+
+import com.gigadev.digitalmarketplace.downloadcode.DownloadCode;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,12 +28,12 @@ public abstract class AbstractProduct{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE) // IDENTITY non funziona su classe abstract
-	private Long id;	
+	private Long id;		
 	
 	@Enumerated(EnumType.STRING)
 	@Column(length = 20)
 	private EProductPayment paymentMethod;
-	
+		
 	private String imgLink;
 	private String productType;		
 	private Double price;
@@ -38,7 +44,7 @@ public abstract class AbstractProduct{
 	private String description;
 	private String platform;
 	private String publisher;
-	private String releaseDate;
+	private LocalDate releaseDate;
 	private String language;
 	private String genre;
 	private Double ratings;

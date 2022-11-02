@@ -26,28 +26,24 @@ public class AbstractProductController {
 	// ============== GET ==============
 	
 	@GetMapping("/getAllProducts")
-	@PreAuthorize("isAuthenticated()")
 	@Operation(summary = "Get List of all Products", security = @SecurityRequirement(name = "bearer-authentication"))
 	public ResponseEntity<List<AbstractProduct>> getAllProducts() {
 		return ResponseEntity.ok(productServ.getAllProducts());
 	}
 	
 	@GetMapping("/getAllVideogames")
-	@PreAuthorize("isAuthenticated()")
 	@Operation(summary = "Get List of all Videogames", security = @SecurityRequirement(name = "bearer-authentication"))
 	public ResponseEntity<List<ProductVideogame>> getAllVideogames() {
 		return ResponseEntity.ok(productServ.getAllVideogames());
 	}
 	
 	@GetMapping("/getAllMusic")
-	@PreAuthorize("isAuthenticated()")
 	@Operation(summary = "Get List of all Music", security = @SecurityRequirement(name = "bearer-authentication"))
 	public ResponseEntity<List<ProductMusic>> getAllMusic() {
 		return ResponseEntity.ok(productServ.getAllMusic());
 	}
 	
 	@GetMapping("/getAllBooks")
-	@PreAuthorize("isAuthenticated()")
 	@Operation(summary = "Get List of all Books", security = @SecurityRequirement(name = "bearer-authentication"))
 	public ResponseEntity<List<ProductBook>> getAllBooks() {
 		return ResponseEntity.ok(productServ.getAllBooks());
@@ -56,7 +52,6 @@ public class AbstractProductController {
 	// ----------------
 	
 	@GetMapping("/{id}/getProductById")
-	@PreAuthorize("isAuthenticated()")
 	@Operation(summary = "Get Product By Id", security = @SecurityRequirement(name = "bearer-authentication"))
 	public ResponseEntity<AbstractProduct> getProductById(@PathVariable Long id) {
 		return ResponseEntity.ok(productServ.getProductById(id));
@@ -67,21 +62,21 @@ public class AbstractProductController {
 	@PostMapping("/videogames/saveVideogame")
 	@PreAuthorize("hasRole('ADMIN')")
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
-	public ResponseEntity<AbstractProduct> saveVideogame(@RequestBody ProductDtoVideogame dto) {
+	public ResponseEntity<AbstractProduct> saveVideogame(@RequestBody ProductDtoVideogame dto) throws Exception {
 		return ResponseEntity.ok(productServ.saveVideogame(dto));
 	}
 	
 	@PostMapping("/music/saveMusic")
 	@PreAuthorize("hasRole('ADMIN')")
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
-	public ResponseEntity<AbstractProduct> saveMusic(@RequestBody ProductDtoMusic dto) {
+	public ResponseEntity<AbstractProduct> saveMusic(@RequestBody ProductDtoMusic dto) throws Exception {
 		return ResponseEntity.ok(productServ.saveMusic(dto));
 	}
 	
 	@PostMapping("/books/saveBook")
 	@PreAuthorize("hasRole('ADMIN')")
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
-	public ResponseEntity<AbstractProduct> saveBook(@RequestBody ProductDtoBook dto) {
+	public ResponseEntity<AbstractProduct> saveBook(@RequestBody ProductDtoBook dto) throws Exception {
 		return ResponseEntity.ok(productServ.saveBook(dto));
 	}
 	

@@ -56,7 +56,6 @@ public class User {
 	@Builder.Default private Double accountBalance = 0.00;
 	@Builder.Default private Boolean isSubscribed = false;
 	private String avatar;
-	//@Builder.Default private String avatar = "../../../../assets/images/img-avatar-default.png";
 	private LocalDate subStart;
 	private LocalDate subEnd;  
 	private Integer subTotalTime;

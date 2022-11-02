@@ -1,5 +1,7 @@
 package com.gigadev.digitalmarketplace.products;
 
+import java.time.LocalDate;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,7 +20,7 @@ public class ProductDtoBook {
 	private String description;
 	private String platform;
 	private String publisher;
-	private String releaseDate;
+	private LocalDate releaseDate;
 	private String language;
 	private String genre;
 	

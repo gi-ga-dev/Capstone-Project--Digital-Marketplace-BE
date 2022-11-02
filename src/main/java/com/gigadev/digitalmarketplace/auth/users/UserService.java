@@ -96,6 +96,12 @@ public class UserService {
 	}
 	
 	// ============== doBeforeSave ==============
+	
+//	public void doBeforeSaveCode(UserDtoRegister savedUser) {
+//		// Encoding password prima di salvare nel db utente con [dati completi] 
+//		String encodedPass = encoder.encode(savedUser.getPassword());
+//		savedUser.setPassword(encodedPass);
+//	}	
 				
 	public void doBeforeSaveUser(UserDtoRegister savedUser) {
 		// Encoding password prima di salvare nel db utente con [dati completi] 

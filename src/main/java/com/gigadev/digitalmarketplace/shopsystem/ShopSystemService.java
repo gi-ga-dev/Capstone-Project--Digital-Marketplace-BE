@@ -73,7 +73,7 @@ public class ShopSystemService {
 		} else {			
 			if(user.getAccountBalance() >= prod.getPrice()) {
 				prod.setPaymentMethod(EProductPayment.BALANCE);
-				// se ha abbastanza balance spostare prodotto cliccato nelle liste library/p.history	
+				// se ha abbastanza balance spostare prodotto cliccato nella lista library	
 				user.setAccountBalance(user.getAccountBalance() - prod.getPrice());
 				user.setQntPurchased(user.getQntPurchased() + 1);
 				shopSystem.addProductToList(shopSystem.getLibraryList(), prod);
@@ -95,11 +95,10 @@ public class ShopSystemService {
 			throw new EntityExistsException("Product already bought...");				
 		} else {					
 			if(user.getIsSubscribed() == true) {
-				// AGGIUNGERE prod.setPaymentMethod("Subscription") - agg. prima prop. ai prodotti
 				// SE il metodo di pagamento dei prodotti nella libreria e' "Subscription" disabilitare il campo del table
 				
 				prod.setPaymentMethod(EProductPayment.SUBSCRIPTION);
-				// se subscribed spostare prodotto cliccato nelle liste library/p.history senza detrazioni	
+				// se subscribed spostare prodotto cliccato nella lista library senza detrazioni	
 				user.setQntPurchased(user.getQntPurchased() + 1);
 				shopSystem.addProductToList(shopSystem.getLibraryList(), prod);
 				log.info("--> ADD TO LIST - Product: " + prod.getTitle() + " saved in Library of Shop System w/ id: " + shopSystem.getId());
