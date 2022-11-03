@@ -21,7 +21,7 @@ import com.gigadev.digitalmarketplace.auth.users.UserDetailsImpl;
 import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
-@CrossOrigin(origins="*", allowedHeaders = "*")
+@CrossOrigin(origins="*")
 //@CrossOrigin(origins = "https://gecko2code.vercel.app", allowedHeaders = "*")
 @RequestMapping("/auth")
 public class LoginController {
