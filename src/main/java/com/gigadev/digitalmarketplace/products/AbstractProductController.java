@@ -17,7 +17,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
-@CrossOrigin(origins="*")
+//@CrossOrigin(origins="*")
+@CrossOrigin(origins = "https://gecko2code.vercel.app", allowedHeaders = "*")
 @RequestMapping("/products")
 public class AbstractProductController {
 	
