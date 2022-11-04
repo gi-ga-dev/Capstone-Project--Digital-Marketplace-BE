@@ -8,6 +8,9 @@ import javax.persistence.EntityNotFoundException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.gigadev.digitalmarketplace.shopsystem.ShopSystem;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -96,5 +99,15 @@ public class AbstractProductService {
 	// ============== PATCH/PUT ==============
 	
 	// ============== DELETE ==============
+	
+	public void deleteProduct(Long productId) {
+		// eliminare oggetto presente nella pagine prodotti
+		if(!abstractRepo.existsById(productId)) {
+			throw new EntityNotFoundException("Product not found...");
+		} else {			
+			abstractRepo.deleteById(productId);
+			log.info("--> DELETE - successfull...");
+		}
+	}
 
 }
