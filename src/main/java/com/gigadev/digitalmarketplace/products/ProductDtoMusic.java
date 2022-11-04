@@ -28,5 +28,21 @@ public class ProductDtoMusic {
 	private String artist;
 	private String album;
 	private String duration;
+	
+	public boolean allEmptyFields() {
+		// se anche solo uno dei campi e' null return true
+		return (this.imgLink.length() == 0 || 
+				this.price == null ||
+				this.title.length() == 0 ||
+				this.description.length() == 0 ||
+				this.platform.length() == 0 ||
+				this.publisher.length() == 0 ||
+				this.releaseDate == null ||
+				this.language.length() == 0 ||
+				this.genre.length() == 0 ||
+				this.artist.length() == 0 ||
+				this.album.length() == 0 ||
+				this.duration.length() == 0);
+	}
 
 }

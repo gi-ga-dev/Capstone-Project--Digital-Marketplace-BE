@@ -30,5 +30,23 @@ public class ProductDtoBook {
 	private String isbnCode;
 	private String bookSeries;
 	private String author;
+	
+	public boolean allEmptyFields() {
+		// se anche solo uno dei campi e' null return true
+		return (this.imgLink.length() == 0 || 
+				this.price == null ||
+				this.title.length() == 0 ||
+				this.description.length() == 0 ||
+				this.platform.length() == 0 ||
+				this.publisher.length() == 0 ||
+				this.releaseDate == null ||
+				this.language.length() == 0 ||
+				this.genre.length() == 0 ||
+				this.pages == null ||
+				this.isbnCode.length() == 0 ||
+				this.bookSeries.length() == 0 ||
+				this.author.length() == 0);
+	}
+
 
 }

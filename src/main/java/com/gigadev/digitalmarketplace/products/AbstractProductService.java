@@ -54,93 +54,43 @@ public class AbstractProductService {
 	public AbstractProduct saveVideogame(ProductDtoVideogame videogame) throws Exception {			
 		if(abstractRepo.existsByTitle(videogame.getTitle())) {
 			throw new EntityExistsException("Videogame already exist...");
-		} else if (
-			videogame.getImgLink().length() == 0 ||
-			videogame.getPrice() == 0 || 
-			videogame.getTitle().length() == 0 ||
-			videogame.getDescription().length() == 0 ||
-			videogame.getPlatform().length() == 0 ||
-			videogame.getPublisher().length() == 0 || 
-			videogame.getReleaseDate() == null|| 
-			videogame.getLanguage().length() == 0 || 
-			videogame.getGenre().length() == 0 || 
-			videogame.getVgSeries().length() == 0 || 
-			videogame.getDeveloper().length() == 0 || 
-			videogame.getAgeRecommendation() == 0 || 
-			videogame.getPlayers() == 0 ||
-			videogame.getCoopPlay().length() == 0 || 
-			videogame.getControllerSupport().length() == 0 || 
-			videogame.getSubtitles().length() == 0 || 
-			videogame.getRequiredSpace() == 0) {		
-		
-			throw new Exception ("Fields cannot be blank");
-		}		
-		
-		else {	
+			
+		} else if(!videogame.allEmptyFields()) {	
 			ProductVideogame finalVideogame = new ProductVideogame();
 			BeanUtils.copyProperties(videogame, finalVideogame);
 			finalVideogame.setProductType("Videogame");
 			log.info("--> SAVE VIDEOGAME - Inserting new videogame: " + finalVideogame.getTitle());
-			return abstractRepo.save(finalVideogame);			
-		}
+			return abstractRepo.save(finalVideogame);				
+		} else throw new Exception ("Fields cannot be blank");
 	}
 	
 	public AbstractProduct saveMusic(ProductDtoMusic music) throws Exception {			
 		if(abstractRepo.existsByTitle(music.getTitle())) {
-			throw new EntityExistsException("Music already exist...");
-		} else if (
-			music.getImgLink().length() == 0 ||
-			music.getPrice() == 0 || 
-			music.getTitle().length() == 0 ||
-			music.getDescription().length() == 0 ||
-			music.getPlatform().length() == 0 ||
-			music.getPublisher().length() == 0 || 
-			music.getReleaseDate() == null || 
-			music.getLanguage().length() == 0 || 
-			music.getGenre().length() == 0 || 				
-			music.getArtist().length() == 0 || 
-			music.getAlbum().length() == 0 || 
-			music.getDuration().length() == 0) {		
+			throw new EntityExistsException("Music already exist...");			
 		
-			throw new Exception ("Fields cannot be blank");
-			
-		} else if (!music.getDuration().matches("(((0[1-9])|[^0]\\d):)?[0-5]\\d:[0-5]\\d$")) {
-			throw new Exception ("Duration Format must be mm:ss or hh:mm:ss");
-		} else {	
+		} else if (!music.allEmptyFields()) {			
+			if (!music.getDuration().matches("(((0[1-9])|[^0]\\d):)?[0-5]\\d:[0-5]\\d$")) {
+				throw new Exception ("Duration Format must be mm:ss or hh:mm:ss");				
+			}			
 			ProductMusic finalMusic = new ProductMusic();
 			BeanUtils.copyProperties(music, finalMusic);
 			finalMusic.setProductType("Music");
 			log.info("--> SAVE MUSIC - Inserting new music: " + finalMusic.getTitle());
-			return abstractRepo.save(finalMusic);			
-		}
+			return abstractRepo.save(finalMusic);				
+		} else throw new Exception ("Fields cannot be blank");			
 	}
 	
 	public AbstractProduct saveBook(ProductDtoBook book) throws Exception {			
 		if(abstractRepo.existsByTitle(book.getTitle())) {
 			throw new EntityExistsException("Book already exist...");
-		} else if (
-			book.getImgLink().length() == 0 ||
-			book.getPrice() == 0 || 
-			book.getTitle().length() == 0 ||
-			book.getDescription().length() == 0 ||
-			book.getPlatform().length() == 0 ||
-			book.getPublisher().length() == 0 || 
-			book.getReleaseDate() == null || 
-			book.getLanguage().length() == 0 || 
-			book.getGenre().length() == 0 || 
-			book.getPages() == 0 || 
-			book.getIsbnCode().length() == 0 || 
-			book.getBookSeries().length() == 0 || 
-			book.getAuthor().length() == 0) {		
-		
-			throw new Exception ("Fields cannot be blank");
-		} else {	
+			
+		} else if (!book.allEmptyFields()) {		
 			ProductBook finalBook = new ProductBook();
 			BeanUtils.copyProperties(book, finalBook);	
 			finalBook.setProductType("Book");
 			log.info("--> SAVE BOOK - Inserting new book: " + finalBook.getTitle());
 			return abstractRepo.save(finalBook);			
-		}
+		} else throw new Exception ("Fields cannot be blank");		
 	}
 	
 	// ============== PATCH/PUT ==============
