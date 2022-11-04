@@ -7,9 +7,6 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 import com.gigadev.digitalmarketplace.auth.roles.Role;
 import com.gigadev.digitalmarketplace.auth.roles.RoleRepository;
-import com.gigadev.digitalmarketplace.shopsystem.ShopSystem;
-import com.gigadev.digitalmarketplace.shopsystem.ShopSystemRepository;
-
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +19,7 @@ public class UserRunner implements ApplicationRunner {
 	
 	@Autowired UserService userServ;
 	@Autowired RoleRepository roleRepo;
-//	@Autowired @Qualifier("systemAdmin") UserDtoRegister admin;	
+	@Autowired @Qualifier("systemAdmin") UserDtoRegister admin;	
 	@Autowired @Qualifier("roleAdmin") Role roleAdmin;
 	@Autowired @Qualifier("roleUser") Role roleUser;
 	
@@ -33,7 +30,7 @@ public class UserRunner implements ApplicationRunner {
 		// all'avvio creazione 2 ruoli ed 1 admin di sistema persistenti
 		roleRepo.save(roleAdmin);
 		roleRepo.save(roleUser);	
-//		userServ.saveUser(admin, roleAdmin);
+		userServ.saveUser(admin, roleAdmin);
 		
 	}
 
