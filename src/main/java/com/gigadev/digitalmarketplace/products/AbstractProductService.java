@@ -1,16 +1,11 @@
 package com.gigadev.digitalmarketplace.products;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.gigadev.digitalmarketplace.shopsystem.ShopSystem;
-
 import lombok.extern.slf4j.Slf4j;
 
 @Service

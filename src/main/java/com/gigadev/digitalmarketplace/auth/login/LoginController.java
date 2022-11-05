@@ -18,8 +18,6 @@ import com.gigadev.digitalmarketplace.auth.jwt.JwtResponse;
 import com.gigadev.digitalmarketplace.auth.jwt.JwtUtils;
 import com.gigadev.digitalmarketplace.auth.users.UserDetailsImpl;
 
-import io.swagger.v3.oas.annotations.Operation;
-
 @RestController
 @CrossOrigin(origins="*", allowedHeaders = "*")
 @RequestMapping("/auth")

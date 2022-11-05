@@ -1,26 +1,17 @@
 package com.gigadev.digitalmarketplace.auth.users;
 
-import java.beans.Beans;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.gigadev.digitalmarketplace.auth.roles.Role;
-import com.gigadev.digitalmarketplace.products.AbstractProduct;
 import com.gigadev.digitalmarketplace.shopsystem.ShopSystem;
 import com.gigadev.digitalmarketplace.shopsystem.ShopSystemRepository;
-
 import lombok.extern.slf4j.Slf4j;
 
 @Service
