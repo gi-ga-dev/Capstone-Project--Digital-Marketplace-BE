@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.gigadev.digitalmarketplace.auth.roles.ERole;
 import com.gigadev.digitalmarketplace.auth.roles.Role;
+import com.gigadev.digitalmarketplace.auth.roles.RoleRepository;
 import com.gigadev.digitalmarketplace.shopsystem.ShopSystem;
 import com.gigadev.digitalmarketplace.shopsystem.ShopSystemRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 public class UserService {
 	
 	@Autowired UserRepository userRepository;
+	@Autowired RoleRepository roleRepository;
 	@Autowired ShopSystemRepository shopSystemRepo;
 	@Autowired PasswordEncoder encoder;
 	
@@ -155,7 +157,9 @@ public class UserService {
 			finalUser.setShopSystem(shopSystem);
 			
 			Role userRole = new Role(ERole.ROLE_USER);			
-			finalUser.addRole(userRole);			
+			finalUser.addRole(userRole);
+			
+			roleRepository.save(userRole);			
 			userRepository.save(finalUser);			
 			log.info("--> SAVE USER - Inserting new user: " + finalUser.getUserName());
 			return finalUser;			
@@ -174,7 +178,9 @@ public class UserService {
 			shopSystemRepo.save(shopSystem);		
 			finalUser.setShopSystem(shopSystem);			
 			Role adminRole = new Role(ERole.ROLE_ADMIN);			
-			finalUser.addRole(adminRole);			
+			finalUser.addRole(adminRole);	
+			
+			roleRepository.save(adminRole);
 			userRepository.save(finalUser);			
 			log.info("--> SAVE USER - Inserting new user: " + finalUser.getUserName());
 			return finalUser;			
