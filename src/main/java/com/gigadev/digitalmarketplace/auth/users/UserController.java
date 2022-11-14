@@ -37,6 +37,7 @@ public class UserController {
 	}	
 	
 	@PostMapping("/createUser")
+	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
 	public ResponseEntity<User> createUser(@RequestBody UserDtoRegister user) {
 		return ResponseEntity.ok(userService.saveUser(user));
 	}
