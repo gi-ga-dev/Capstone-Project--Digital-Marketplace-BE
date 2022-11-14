@@ -9,6 +9,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import com.gigadev.digitalmarketplace.auth.roles.ERole;
 import com.gigadev.digitalmarketplace.auth.roles.Role;
 import com.gigadev.digitalmarketplace.shopsystem.ShopSystem;
 import com.gigadev.digitalmarketplace.shopsystem.ShopSystemRepository;
@@ -138,7 +140,7 @@ public class UserService {
 	
 	// ============== POST ==============
 			
-	public User saveUser(UserDtoRegister user, Role role) {		
+	public User saveUser(UserDtoRegister user) {		
 		if(userRepository.existsByUserName(user.getUserName())) {
 			throw new EntityExistsException("User already exist...");
 		} else {
@@ -151,7 +153,10 @@ public class UserService {
 			shopSystem.setId(finalUser.getId());
 			shopSystemRepo.save(shopSystem);		
 			finalUser.setShopSystem(shopSystem);
-			finalUser.addRole(role);			
+			
+			Role userRole = new Role(ERole.ROLE_USER);			
+			finalUser.addRole(userRole);		
+			
 			userRepository.save(finalUser);			
 			log.info("--> SAVE USER - Inserting new user: " + finalUser.getUserName());
 			return finalUser;			

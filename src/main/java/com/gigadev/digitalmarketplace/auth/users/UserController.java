@@ -24,8 +24,8 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 public class UserController {
 	
 	@Autowired UserService userService;	
-	@Autowired @Qualifier("roleAdmin") Role roleAdmin;
-	@Autowired @Qualifier("roleUser") Role roleUser;
+//	@Autowired @Qualifier("roleAdmin") Role roleAdmin;
+//	@Autowired @Qualifier("roleUser") Role roleUser;
 	
 	// ============== POST ==============
 		
@@ -33,12 +33,12 @@ public class UserController {
 	@PreAuthorize("hasRole('ADMIN')")
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
 	public ResponseEntity<User> createAdmin(@RequestBody UserDtoRegister admin) {	
-		return ResponseEntity.ok(userService.saveUser(admin, roleAdmin));
+		return ResponseEntity.ok(userService.saveUser(admin));
 	}	
 	
 	@PostMapping("/createUser")
 	public ResponseEntity<User> createUser(@RequestBody UserDtoRegister user) {
-		return ResponseEntity.ok(userService.saveUser(user, roleUser));
+		return ResponseEntity.ok(userService.saveUser(user));
 	}
 	
 	// ============== GET ==============
