@@ -30,7 +30,7 @@ public class UserController {
 	// ============== POST ==============
 		
 	@PostMapping("/createAdmin")
-	@PreAuthorize("hasRole('ADMIN')")
+	//@PreAuthorize("hasRole('ADMIN')")
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
 	public ResponseEntity<User> createAdmin(@RequestBody UserDtoRegister admin) {	
 		return ResponseEntity.ok(userService.saveAdmin(admin));
