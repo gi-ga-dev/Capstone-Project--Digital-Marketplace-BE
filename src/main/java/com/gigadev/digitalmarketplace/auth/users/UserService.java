@@ -7,6 +7,7 @@ import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -142,7 +143,8 @@ public class UserService {
 	
 	// ============== POST ==============
 			
-	public User saveUser(UserDtoRegister user) throws Exception {		
+	public ResponseEntity<User> saveUser(UserDtoRegister user) throws Exception {
+		
 		if(userRepository.existsByUserName(user.getUserName())) {
 			throw new EntityExistsException("User already exists...");			
 		} else if(!user.allEmptyFields()) {
@@ -161,7 +163,7 @@ public class UserService {
 			roleRepository.save(userRole);			
 			userRepository.save(finalUser);			
 			log.info("--> SAVE USER - Inserting new user: " + finalUser.getUserName());
-			return finalUser;			
+			return ResponseEntity.ok(finalUser);			
 		} else throw new Exception ("All fields are mandatory!");
 	}	
 	

@@ -35,14 +35,12 @@ public class UserController {
 	@PostMapping("/createUser")
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
 	public ResponseEntity<?> createUser(@RequestBody UserDtoRegister user) throws Exception {
+		// ritorna il metodo eseguito con successo oppure l'eccezione
 		try {
-			userService.saveUser(user);
+			return userService.saveUser(user);
 		} catch (Exception e) {
-			System.out.println("_______" + e.getMessage());
-			e.getMessage();
 			return ResponseEntity.ok(e.getMessage());
 		}
-		return ResponseEntity.ok(userService.saveUser(user));
 	}
 	
 	// ============== GET ==============
