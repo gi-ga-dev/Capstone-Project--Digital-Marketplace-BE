@@ -230,7 +230,9 @@ public class UserService {
 			// Al momento del patch se il campo password e' vuoto il sistema genera un token lo stesso
 			// se la password prima di essere trasformata in token (60 char) e' 0 lancia eccezione
 			if(user.getPassword().length() == 0) {
-				throw new Exception("Password field is blank!!!");
+				
+				//throw new Exception("Password field is blank!!!");
+				throw new ExceptionInInitializerError("Password field is blank!!!");
 			} else {						
 				doBeforeSaveCredentials(user);
 				User finalUser = userRepository.findById(id).get();
