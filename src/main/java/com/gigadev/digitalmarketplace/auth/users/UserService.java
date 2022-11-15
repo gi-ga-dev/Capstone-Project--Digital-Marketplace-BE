@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import com.gigadev.digitalmarketplace.auth.roles.ERole;
 import com.gigadev.digitalmarketplace.auth.roles.Role;
 import com.gigadev.digitalmarketplace.auth.roles.RoleRepository;
@@ -92,13 +91,7 @@ public class UserService {
 	}
 	
 	// ============== doBeforeSave ==============
-	
-//	public void doBeforeSaveCode(UserDtoRegister savedUser) {
-//		// Encoding password prima di salvare nel db utente con [dati completi] 
-//		String encodedPass = encoder.encode(savedUser.getPassword());
-//		savedUser.setPassword(encodedPass);
-//	}	
-				
+					
 	public void doBeforeSaveUser(UserDtoRegister savedUser) {
 		// Encoding password prima di salvare nel db utente con [dati completi] 
 		String encodedPass = encoder.encode(savedUser.getPassword());
@@ -111,7 +104,7 @@ public class UserService {
 		savedUser.setPassword(encodedPass);
 	}
 	
-	public void doBeforeSubscribe(User user, Double subCost, Integer subDays) {
+	public void doBeforeSubscribe(User user, Double subCost, Integer subDays) throws Exception {
 		// solo se l'utente ha denaro sufficiente e non e' gia' iscritto
 		if(user.getAccountBalance() >= subCost && user.getIsSubscribed() == false) {
 			user.setAccountBalance(user.getAccountBalance() - subCost);
@@ -121,43 +114,41 @@ public class UserService {
 			user.setSubEnd(LocalDate.now().plusDays(subDays));
 			user.setSubTotalTime(subDays); // 30-180-365 days			
 			log.info("--> SUB UPDATE -  User: " + user.getUserName() + " has subscribed for: " + user.getSubTotalTime());
-		} else throw new EntityNotFoundException("--> ERROR - Account balance is insufficient, or user is already subscribed!");
-	}
+		} else if(user.getAccountBalance() < subCost) throw new Exception ("Account balance is insufficient.");
+		  else if(user.getIsSubscribed() == true) throw new Exception ("You are already subscribed!");
+		}
 	
 	public void checkSubscription(User user) {		
 		// currentDay e' il momento in cui si fa il check (nel get info)
 		LocalDate currentDay = LocalDate.now();
 		LocalDate subEnd = user.getSubEnd();		
 		Integer subUsed = subEnd.compareTo(currentDay); // giorni utilizzati		
-		Integer subTotalTime = user.getSubTotalTime(); // giorni totali sub
-		
+		Integer subTotalTime = user.getSubTotalTime(); // giorni totali sub		
 		user.setSubRemaining(subTotalTime-subUsed);	// giorni rimanenti	
 		if(user.getSubRemaining() <= 0) { 
 			user.setIsSubscribed(false); 
 			// NOTA: aggiungere disable sui prodotti presi a 0.00 dato che il periodo di sub e' terminato
-		}
-		
+		}		
 		userRepository.flush();
 		userRepository.save(user);
 	}
 	
 	// ============== POST ==============
 			
-	public ResponseEntity<User> saveUser(UserDtoRegister user) throws Exception {
-		
+	public ResponseEntity<User> createUser(UserDtoRegister user) throws Exception {		
 		if(userRepository.existsByUserName(user.getUserName())) {
 			throw new EntityExistsException("User already exists...");			
 		} else if(!user.allEmptyFields()) {
+			// Encodare password prima di copiare proprieta'
 			doBeforeSaveUser(user);				
 			User finalUser = new User();
 			BeanUtils.copyProperties(user, finalUser);				
-			// istanzio shopSystem (con all'interno liste) e lo attr. all'utente
-			// setto l'id utente = id shopSystem 
+			// istanzio shopSystem (con all'interno liste) e lo attr. settando id utente = id shopSystem 
 			ShopSystem shopSystem = new ShopSystem();
 			shopSystem.setId(finalUser.getId());
-			shopSystemRepo.save(shopSystem);		
+			shopSystemRepo.save(shopSystem);				
 			finalUser.setShopSystem(shopSystem);
-			
+			// Istanzio ruolo User e lo attr. all'utente
 			Role userRole = new Role(ERole.ROLE_USER);			
 			finalUser.addRole(userRole);			
 			roleRepository.save(userRole);			
@@ -167,83 +158,90 @@ public class UserService {
 		} else throw new Exception ("All fields are mandatory!");
 	}	
 	
-	public User saveAdmin(UserDtoRegister admin) throws Exception {		
+	public ResponseEntity<User> createAdmin(UserDtoRegister admin) throws Exception {		
 		if(userRepository.existsByUserName(admin.getUserName())) {
 			throw new EntityExistsException("Admin already exist...");
 		} else if(!admin.allEmptyFields()) {
+			// Encodare password prima di copiare proprieta'
 			doBeforeSaveUser(admin);				
 			User finalUser = new User();
-			BeanUtils.copyProperties(admin, finalUser);				
+			BeanUtils.copyProperties(admin, finalUser);	
+			// istanzio shopSystem (con all'interno liste) e lo attr. settando id utente = id shopSystem 
 			ShopSystem shopSystem = new ShopSystem();
 			shopSystem.setId(finalUser.getId());
 			shopSystemRepo.save(shopSystem);		
 			finalUser.setShopSystem(shopSystem);	
-			
+			// Istanzio ruolo Admin e lo attr. all'utente
 			Role adminRole = new Role(ERole.ROLE_ADMIN);			
 			finalUser.addRole(adminRole);				
 			roleRepository.save(adminRole);
 			userRepository.save(finalUser);			
 			log.info("--> SAVE USER - Inserting new user: " + finalUser.getUserName());
-			return finalUser;			
+			return ResponseEntity.ok(finalUser);			
 		} else throw new Exception ("Fields cannot be blank");
 	}	
 			
 	// ============== PUT/PATCH ==============
 	
-	public User updateAvatarViaUrl(UserDtoAvatar dto, Long id) throws Exception {
+	public ResponseEntity<User> updateAvatarViaUrl(UserDtoAvatar dto, Long id) throws Exception {
 		// patch proprieta' avatar tramite campo input
 		User finalUser = userRepository.findById(id).get();
 		BeanUtils.copyProperties(dto, finalUser);
-		
+		userRepository.save(finalUser);		
 		if(finalUser.getAvatar().length() == 0) {
-			throw new Exception("Invalid Field");
-		} else log.info("--> PROFILE AVATAR UPDATE - for user: " + finalUser.getUserName());		
-		
-		return userRepository.save(finalUser);
+			throw new Exception("Insert a valid URL...");
+		} else log.info("--> PROFILE AVATAR UPDATE - for user: " + finalUser.getUserName());
+		return ResponseEntity.ok(finalUser);
 	}
 	
 	public User updateAvatarPreSet(String avatar, Long id) {
-		// patch proprieta' avatar senza campo input, selezionando da dei pre-set
 		// passo la stringa contenuta nell'array di avatar (FE), che e' attribuita a ciascun button,
-		// al back-end per patchare la proprieta' avatar dell'utente, tramite setAvatar() 
+		// al back-end per patchare la proprieta' avatar dell'utente (senza campo input), tramite setAvatar() 
 		User finalUser = userRepository.findById(id).get();
 		finalUser.setAvatar(avatar);
 		return userRepository.save(finalUser);
 	}
 		
-	public User updateProfileInfo(UserDtoProfile user, Long id) throws Exception {
+	public ResponseEntity<User> updateProfileInfo(UserDtoProfile user, Long id) throws Exception {
 		// restituisco solo l'obj con i primi 3 parametri del profilo
 		if(!userRepository.existsById(id)) {
 			throw new EntityNotFoundException("User does not exist...");
-		} else { 			
+		// se i singoli campi sono vuoti
+		} else if(user.getFirstName().length() == 0) {
+			throw new Exception ("First Name field is empty");
+		} else if(user.getLastName().length() == 0) {
+			throw new Exception ("Last Name field is empty");
+		} else if(user.getEmail().length() == 0) {
+			throw new Exception ("Email field is empty");
+		// esegui operazione se tutti i campi non sono vuoti e se i campi compilati non sono uguali alle proprieta' esistenti
+		} else if(!user.allEmptyFields() && 
+				!user.getFirstName().equals(userRepository.findById(id).get().getFirstName()) ||
+				!user.getLastName().equals(userRepository.findById(id).get().getLastName()) ||
+				!user.getEmail().equals(userRepository.findById(id).get().getEmail()) ) { 			
 			User finalUser = userRepository.findById(id).get();
 			BeanUtils.copyProperties(user, finalUser);
 			log.info("--> PROFILE INFO UPDATE - for user: " + finalUser.getUserName());			
-			return userRepository.save(finalUser);
-		}
+			userRepository.save(finalUser);
+			return ResponseEntity.ok(finalUser);
+		} else throw new Exception ("Select fields to be changed!");
 	}
 	
-	public User updateCredentials(UserDtoCredentials user, Long id) throws Exception {	
-				
+	public ResponseEntity<User> updateCredentials(UserDtoCredentials user, Long id) throws Exception {					
 		// restituisco solo l'obj con i 2 parametri credenziali
 		if(!userRepository.existsById(id)) {
 			throw new EntityNotFoundException("User does not exist...");
-		} else {	
-			// Al momento del patch se il campo password e' vuoto il sistema genera un token lo stesso
-			// se la password prima di essere trasformata in token (60 char) e' 0 lancia eccezione
-			if(user.getPassword().length() == 0) {				
-				throw new Exception("Password field is blank!!!");
-			} else {						
-				doBeforeSaveCredentials(user);
-				User finalUser = userRepository.findById(id).get();
-				BeanUtils.copyProperties(user, finalUser);
-				log.info("--> CREDENTIALS UPDATE - for user: " + finalUser.getUserName());	
-				return userRepository.save(finalUser);
-			} 
-		}						
+		// se entrambi i campi oppure i singoli campi sono vuoti
+		} else if(!user.allEmptyFields() ) {
+			doBeforeSaveCredentials(user);
+			User finalUser = userRepository.findById(id).get();
+			BeanUtils.copyProperties(user, finalUser);
+			log.info("--> CREDENTIALS UPDATE - for user: " + finalUser.getUserName());	
+			userRepository.save(finalUser);
+			return ResponseEntity.ok(finalUser);
+		} else throw new Exception ("Fill both Username and Password to change them!");						
 	}	
 	
-	public User beginSubscription(Long id, Double subCost, Integer subDays) {
+	public ResponseEntity<User> beginSubscription(Long id, Double subCost, Integer subDays) throws Exception {
 		// restituisco solo l'obj con i parametri sub patchati
 		if(!userRepository.existsById(id)) {
 			throw new EntityNotFoundException("User does not exist...");
@@ -251,7 +249,8 @@ public class UserService {
 			User finalUser = userRepository.findById(id).get();	
 			// se si avverano le condizioni del metodo patcha i dati di finalUser e viene restituito
 			doBeforeSubscribe(finalUser, subCost, subDays);			
-			return userRepository.save(finalUser);
+			userRepository.save(finalUser);
+			return ResponseEntity.ok(finalUser);		
 		}
 	}
 	

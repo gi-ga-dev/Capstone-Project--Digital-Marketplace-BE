@@ -28,16 +28,20 @@ public class UserController {
 	@PostMapping("/createAdmin")
 	@PreAuthorize("hasRole('ADMIN')")
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
-	public ResponseEntity<User> createAdmin(@RequestBody UserDtoRegister admin) throws Exception {	
-		return ResponseEntity.ok(userService.saveAdmin(admin));
+	public ResponseEntity<?> createAdmin(@RequestBody UserDtoRegister admin) throws Exception {	
+		try {
+			return userService.createAdmin(admin);
+		} catch (Exception e) {
+			return ResponseEntity.ok(e.getMessage());
+		}
 	}	
 	
 	@PostMapping("/createUser")
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
 	public ResponseEntity<?> createUser(@RequestBody UserDtoRegister user) throws Exception {
-		// ritorna il metodo eseguito con successo oppure l'eccezione
+		// prova ad eseguire il metodo, se riscontra eccezione ritorna il testo relativo
 		try {
-			return userService.saveUser(user);
+			return userService.createUser(user);
 		} catch (Exception e) {
 			return ResponseEntity.ok(e.getMessage());
 		}
@@ -64,8 +68,12 @@ public class UserController {
 	@PatchMapping("/{id}/updateAvatarViaUrl")
 	@PreAuthorize("isAuthenticated()")
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
-	public ResponseEntity<User> updateAvatarViaUrl(@RequestBody UserDtoAvatar dto, @PathVariable Long id) throws Exception {
-		return ResponseEntity.ok(userService.updateAvatarViaUrl(dto, id));
+	public ResponseEntity<?> updateAvatarViaUrl(@RequestBody UserDtoAvatar dto, @PathVariable Long id) throws Exception {
+		try {
+			return userService.updateAvatarViaUrl(dto, id);
+		} catch (Exception e) {
+			return ResponseEntity.ok(e.getMessage());
+		}		
 	}
 	
 	@PatchMapping("/{id}/updateAvatarPreSet")
@@ -78,34 +86,54 @@ public class UserController {
 	@PatchMapping("/{id}/updateProfileInfo")
 	@PreAuthorize("isAuthenticated()")
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
-	public ResponseEntity<User> updateProfileInfo(@RequestBody UserDtoProfile user, @PathVariable Long id) throws Exception {
-		return ResponseEntity.ok(userService.updateProfileInfo(user, id));
+	public ResponseEntity<?> updateProfileInfo(@RequestBody UserDtoProfile user, @PathVariable Long id) throws Exception {
+		try {
+			return userService.updateProfileInfo(user, id);
+		} catch (Exception e) {
+			return ResponseEntity.ok(e.getMessage());
+		}	
 	}
 		
 	@PatchMapping("/{id}/updateCredentials")
 	@PreAuthorize("isAuthenticated()")
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
-	public ResponseEntity<User> updateCredentials(@RequestBody UserDtoCredentials user, @PathVariable Long id) throws Exception {
-			return ResponseEntity.ok(userService.updateCredentials(user, id));
+	public ResponseEntity<?> updateCredentials(@RequestBody UserDtoCredentials user, @PathVariable Long id) throws Exception {
+		try {
+			return userService.updateCredentials(user, id);
+		} catch (Exception e) {
+			return ResponseEntity.ok(e.getMessage());
+		}
 	}
 	
 	// Per un PATCH senza scrittura nei campi di input (FE) omettere il @RequestBody, il metodo verra' lanciato		
 	@PatchMapping("/{id}/subscribeMonthly")
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
-	public ResponseEntity<User> subscribeMonthly(@PathVariable Long id) {
-			return ResponseEntity.ok(userService.beginSubscription(id, 4.90, 30));
+	public ResponseEntity<?> subscribeMonthly(@PathVariable Long id) throws Exception {
+		try {
+			return userService.beginSubscription(id, 4.90, 30);
+		} catch (Exception e) {
+			return ResponseEntity.ok(e.getMessage());
+		}
 	}
 	
 	@PatchMapping("/{id}/subscribeSemestral")
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
-	public ResponseEntity<User> subscribeSemestral(@PathVariable Long id) {
-			return ResponseEntity.ok(userService.beginSubscription(id, 24.90, 180));
+	public ResponseEntity<?> subscribeSemestral(@PathVariable Long id) throws Exception {
+		try {
+			return userService.beginSubscription(id, 24.90, 180);
+		} catch (Exception e) {
+			return ResponseEntity.ok(e.getMessage());
+		}
 	}
 	
 	@PatchMapping("/{id}/subscribeAnnual")
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
-	public ResponseEntity<User> subscribeAnnual(@PathVariable Long id) {
-			return ResponseEntity.ok(userService.beginSubscription(id, 44.90, 365));
+	public ResponseEntity<?> subscribeAnnual(@PathVariable Long id) throws Exception {
+		try {
+			return userService.beginSubscription(id, 44.90, 365);
+		} catch (Exception e) {
+			return ResponseEntity.ok(e.getMessage());
+		}
 	}	
 	
 	// --------------------------------------
