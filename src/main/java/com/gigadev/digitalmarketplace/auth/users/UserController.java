@@ -52,7 +52,7 @@ public class UserController {
 	}
 		
 	@GetMapping("/{id}")
-	@PreAuthorize("isAuthenticated()")
+	//@PreAuthorize("isAuthenticated()")
 	@Operation(summary = "Get single user info", security = @SecurityRequirement(name = "bearer-authentication"))
 	public ResponseEntity<UserDtoGetResponse> findUserInfo(@PathVariable Long id) {
 		return ResponseEntity.ok(userService.getUserInfo(id));
