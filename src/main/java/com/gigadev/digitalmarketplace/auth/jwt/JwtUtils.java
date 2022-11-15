@@ -3,16 +3,13 @@ package com.gigadev.digitalmarketplace.auth.jwt;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
-
 import com.gigadev.digitalmarketplace.auth.users.UserDetailsImpl;
 import com.gigadev.digitalmarketplace.auth.users.UserDtoGetResponse;
 import com.gigadev.digitalmarketplace.auth.users.UserService;
-
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;

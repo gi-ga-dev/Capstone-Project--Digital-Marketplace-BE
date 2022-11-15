@@ -271,8 +271,7 @@ public class UserService {
 			throw new EntityNotFoundException("User not found...");
 		} else {			
 			userRepository.deleteById(id);
-			log.info("DELETE - successfull...");
-			log.error("DELETE - successfull...");
+			log.info("--> DELETE - successfull...");
 		}
 	}
 	

@@ -88,7 +88,7 @@ public class AbstractProductController {
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
 	public ResponseEntity<String> deleteById(@PathVariable Long id) {
 		productServ.deleteProduct(id);
-		return ResponseEntity.ok("- DELETE - successfull");
+		return ResponseEntity.ok("Product deletion successfull.");
 	}
 
 }

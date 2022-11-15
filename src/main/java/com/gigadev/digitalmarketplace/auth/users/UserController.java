@@ -2,7 +2,6 @@ package com.gigadev.digitalmarketplace.auth.users;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.gigadev.digitalmarketplace.auth.roles.Role;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
@@ -24,8 +22,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 public class UserController {
 	
 	@Autowired UserService userService;	
-//	@Autowired @Qualifier("roleAdmin") Role roleAdmin;
-//	@Autowired @Qualifier("roleUser") Role roleUser;
 	
 	// ============== POST ==============
 		
@@ -134,7 +130,7 @@ public class UserController {
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
 	public ResponseEntity<String> deleteById(@PathVariable Long id) {
 		userService.delete(id);
-		return ResponseEntity.ok("- DELETE - successfull");
+		return ResponseEntity.ok("Account deletion successfull. Re-directing you to the Login page...");
 	}
 
 }

@@ -1,8 +1,6 @@
 package com.gigadev.digitalmarketplace.auth.jwt;
 
 import java.util.List;
-
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
