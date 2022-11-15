@@ -144,8 +144,7 @@ public class UserService {
 			
 	public User saveUser(UserDtoRegister user) throws Exception {		
 		if(userRepository.existsByUserName(user.getUserName())) {
-			throw new EntityExistsException("User already exist...");
-			
+			throw new EntityExistsException("User already exist...");			
 		} else if(!user.allEmptyFields()) {
 			doBeforeSaveUser(user);				
 			User finalUser = new User();
@@ -166,10 +165,10 @@ public class UserService {
 		} else throw new Exception ("All fields are mandatory!");
 	}	
 	
-	public User saveAdmin(UserDtoRegister admin) {		
+	public User saveAdmin(UserDtoRegister admin) throws Exception {		
 		if(userRepository.existsByUserName(admin.getUserName())) {
 			throw new EntityExistsException("Admin already exist...");
-		} else {
+		} else if(!admin.allEmptyFields()) {
 			doBeforeSaveUser(admin);				
 			User finalUser = new User();
 			BeanUtils.copyProperties(admin, finalUser);				
@@ -184,7 +183,7 @@ public class UserService {
 			userRepository.save(finalUser);			
 			log.info("--> SAVE USER - Inserting new user: " + finalUser.getUserName());
 			return finalUser;			
-		}
+		} else throw new Exception ("Fields cannot be blank");
 	}	
 			
 	// ============== PUT/PATCH ==============
@@ -210,7 +209,7 @@ public class UserService {
 		return userRepository.save(finalUser);
 	}
 		
-	public User updateProfileInfo(UserDtoProfile user, Long id) {
+	public User updateProfileInfo(UserDtoProfile user, Long id) throws Exception {
 		// restituisco solo l'obj con i primi 3 parametri del profilo
 		if(!userRepository.existsById(id)) {
 			throw new EntityNotFoundException("User does not exist...");
@@ -222,7 +221,7 @@ public class UserService {
 		}
 	}
 	
-	public User updateCredentials(UserDtoCredentials user, Long id) throws Exception{	
+	public User updateCredentials(UserDtoCredentials user, Long id) throws Exception {	
 				
 		// restituisco solo l'obj con i 2 parametri credenziali
 		if(!userRepository.existsById(id)) {
