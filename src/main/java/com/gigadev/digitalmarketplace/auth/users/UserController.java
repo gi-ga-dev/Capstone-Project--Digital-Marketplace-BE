@@ -34,8 +34,8 @@ public class UserController {
 	
 	@PostMapping("/createUser")
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
-	public ResponseEntity<User> createUser(@RequestBody UserDtoRegister user) throws Exception {
-		return ResponseEntity.ok(userService.saveUser(user));
+	public User createUser(@RequestBody UserDtoRegister user) throws Exception {
+		return userService.saveUser(user);
 	}
 	
 	// ============== GET ==============

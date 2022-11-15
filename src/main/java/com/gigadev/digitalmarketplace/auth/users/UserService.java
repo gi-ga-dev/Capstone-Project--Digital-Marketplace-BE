@@ -144,7 +144,7 @@ public class UserService {
 			
 	public User saveUser(UserDtoRegister user) throws Exception {		
 		if(userRepository.existsByUserName(user.getUserName())) {
-			throw new EntityExistsException("User already exist...");			
+			throw new EntityExistsException("User already exists...");			
 		} else if(!user.allEmptyFields()) {
 			doBeforeSaveUser(user);				
 			User finalUser = new User();
