@@ -16,5 +16,13 @@ public class UserDtoRegister {
 	private String email;	
 	private String userName;
 	private String password;
+	
+	public boolean allEmptyFields() {
+		return (this.firstName.length() == 0 ||
+				this.lastName.length() == 0 ||
+				this.email.length() == 0 ||
+				this.userName.length() == 0 ||
+				this.password.length() == 0);
+	}
 
 }

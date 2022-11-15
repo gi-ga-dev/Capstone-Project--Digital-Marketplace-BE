@@ -1,7 +1,6 @@
 package com.gigadev.digitalmarketplace.auth.config;
 
 import java.util.Arrays;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,11 +17,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
-
 import com.gigadev.digitalmarketplace.auth.AuthEntryPointJwt;
 import com.gigadev.digitalmarketplace.auth.AuthTokenFilter;
 import com.gigadev.digitalmarketplace.auth.users.UserDetailsServiceImpl;
-
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Info;

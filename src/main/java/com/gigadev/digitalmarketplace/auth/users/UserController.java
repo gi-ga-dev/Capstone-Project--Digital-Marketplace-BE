@@ -32,13 +32,13 @@ public class UserController {
 	@PostMapping("/createAdmin")
 	@PreAuthorize("hasRole('ADMIN')")
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
-	public ResponseEntity<User> createAdmin(@RequestBody UserDtoRegister admin) {	
+	public ResponseEntity<User> createAdmin(@RequestBody UserDtoRegister admin) throws Exception {	
 		return ResponseEntity.ok(userService.saveAdmin(admin));
 	}	
 	
 	@PostMapping("/createUser")
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
-	public ResponseEntity<User> createUser(@RequestBody UserDtoRegister user) {
+	public ResponseEntity<User> createUser(@RequestBody UserDtoRegister user) throws Exception {
 		return ResponseEntity.ok(userService.saveUser(user));
 	}
 	
@@ -77,7 +77,7 @@ public class UserController {
 	@PatchMapping("/{id}/updateProfileInfo")
 	@PreAuthorize("isAuthenticated()")
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
-	public ResponseEntity<User> updateProfileInfo(@RequestBody UserDtoProfile user, @PathVariable Long id) {
+	public ResponseEntity<User> updateProfileInfo(@RequestBody UserDtoProfile user, @PathVariable Long id) throws Exception {
 		return ResponseEntity.ok(userService.updateProfileInfo(user, id));
 	}
 		

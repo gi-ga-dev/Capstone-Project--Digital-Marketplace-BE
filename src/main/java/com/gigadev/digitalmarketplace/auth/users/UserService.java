@@ -142,10 +142,11 @@ public class UserService {
 	
 	// ============== POST ==============
 			
-	public User saveUser(UserDtoRegister user) {		
+	public User saveUser(UserDtoRegister user) throws Exception {		
 		if(userRepository.existsByUserName(user.getUserName())) {
 			throw new EntityExistsException("User already exist...");
-		} else {
+			
+		} else if(!user.allEmptyFields()) {
 			doBeforeSaveUser(user);				
 			User finalUser = new User();
 			BeanUtils.copyProperties(user, finalUser);				
@@ -157,13 +158,12 @@ public class UserService {
 			finalUser.setShopSystem(shopSystem);
 			
 			Role userRole = new Role(ERole.ROLE_USER);			
-			finalUser.addRole(userRole);
-			
+			finalUser.addRole(userRole);			
 			roleRepository.save(userRole);			
 			userRepository.save(finalUser);			
 			log.info("--> SAVE USER - Inserting new user: " + finalUser.getUserName());
 			return finalUser;			
-		}
+		} else throw new Exception ("All fields are mandatory!");
 	}	
 	
 	public User saveAdmin(UserDtoRegister admin) {		
@@ -176,10 +176,10 @@ public class UserService {
 			ShopSystem shopSystem = new ShopSystem();
 			shopSystem.setId(finalUser.getId());
 			shopSystemRepo.save(shopSystem);		
-			finalUser.setShopSystem(shopSystem);			
-			Role adminRole = new Role(ERole.ROLE_ADMIN);			
-			finalUser.addRole(adminRole);	
+			finalUser.setShopSystem(shopSystem);	
 			
+			Role adminRole = new Role(ERole.ROLE_ADMIN);			
+			finalUser.addRole(adminRole);				
 			roleRepository.save(adminRole);
 			userRepository.save(finalUser);			
 			log.info("--> SAVE USER - Inserting new user: " + finalUser.getUserName());
@@ -223,16 +223,15 @@ public class UserService {
 	}
 	
 	public User updateCredentials(UserDtoCredentials user, Long id) throws Exception{	
+				
 		// restituisco solo l'obj con i 2 parametri credenziali
 		if(!userRepository.existsById(id)) {
 			throw new EntityNotFoundException("User does not exist...");
 		} else {	
 			// Al momento del patch se il campo password e' vuoto il sistema genera un token lo stesso
 			// se la password prima di essere trasformata in token (60 char) e' 0 lancia eccezione
-			if(user.getPassword().length() == 0) {
-				
-				//throw new Exception("Password field is blank!!!");
-				throw new ExceptionInInitializerError("Password field is blank!!!");
+			if(user.getPassword().length() == 0) {				
+				throw new Exception("Password field is blank!!!");
 			} else {						
 				doBeforeSaveCredentials(user);
 				User finalUser = userRepository.findById(id).get();

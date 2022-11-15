@@ -12,5 +12,11 @@ public class UserDtoProfile {
 	private String firstName;
 	private String lastName;
 	private String email;
+	
+	public boolean allEmptyFields() {
+		return (this.firstName.length() == 0 ||
+				this.lastName.length() == 0 ||
+				this.email.length() == 0);
+	}
 
 }
