@@ -30,7 +30,7 @@ public class AbstractProductRunner implements ApplicationRunner {
 	
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
-		log.info("--> AbstractProductRunner - Card Products created...");
+		log.info("--> AbstractProductRunner started...");
 		
 //		absProdServ.saveVideogame(shadowTombRaider);
 //		absProdServ.saveVideogame(grandTheftAutoV);

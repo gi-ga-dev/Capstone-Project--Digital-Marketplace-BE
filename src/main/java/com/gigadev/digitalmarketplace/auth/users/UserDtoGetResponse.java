@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDtoGetResponse {
-	// Ottengo il get nel front-end di tutti gli Utenti e le loro proprieta'
 	private Long id;
 	private String firstName;
 	private String lastName;	
@@ -27,6 +26,5 @@ public class UserDtoGetResponse {
 	private LocalDate subEnd;  
 	private Integer subTotalTime;
 	private Integer subRemaining;
-	private ShopSystem shopSystem;
-	
+	private ShopSystem shopSystem;	
 }

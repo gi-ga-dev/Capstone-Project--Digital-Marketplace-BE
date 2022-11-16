@@ -3,7 +3,6 @@ package com.gigadev.digitalmarketplace.products;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import com.gigadev.digitalmarketplace.downloadcode.DownloadCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,13 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class ProductVideogame extends AbstractProduct {
-	
-	// i codici per riscattare i giochi da vari retailers
-	//private Set<DownloadCode> downloadCodes;
-	@OneToOne
-	private DownloadCode downloadCode;
-	
-	//private String downloadCode;
+
 	private Long downloads; //?
 	private Long uniqueCode;
 	private String vgSeries;

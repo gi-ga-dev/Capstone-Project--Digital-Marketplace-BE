@@ -8,7 +8,7 @@ public class UserConfiguration {
 		
 //	@Bean("systemAdmin")	
 //	public UserDtoRegister systemAdmin() {
-//		UserDtoRegister admin = new UserDtoRegister("admin", "system", "admin.system@gmail.com", "gino", "12345");
+//		UserDtoRegister admin = new UserDtoRegister("admin", "system", "admin.system@mail.com", "gino", "12345");
 //		return admin;
 //	}	
 }

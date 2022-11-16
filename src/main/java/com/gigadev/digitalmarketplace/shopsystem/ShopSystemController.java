@@ -73,35 +73,55 @@ public class ShopSystemController {
 	
 	@PostMapping("/{shopId}/{productId}/purchaseWithSub")
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
-	public ResponseEntity<ShopSystem> purchaseWithSub(@PathVariable Long shopId, @PathVariable Long productId) {
-		return ResponseEntity.ok(shopServ.purchaseWithSub(shopId, productId));
+	public ResponseEntity<?> purchaseWithSub(@PathVariable Long shopId, @PathVariable Long productId) throws Exception {
+		try {
+			return shopServ.purchaseWithSub(shopId, productId);
+		} catch (Exception e) {
+			return ResponseEntity.ok(e.getMessage());
+		}
 	}
 	
 	@PostMapping("/{shopId}/{productId}/purchaseWithBalance")
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
-	public ResponseEntity<ShopSystem> purchaseWithBalance(@PathVariable Long shopId, @PathVariable Long productId) {
-		return ResponseEntity.ok(shopServ.purchaseWithBalance(shopId, productId));
+	public ResponseEntity<?> purchaseWithBalance(@PathVariable Long shopId, @PathVariable Long productId) throws Exception {
+		try {
+			return shopServ.purchaseWithBalance(shopId, productId);
+		} catch (Exception e) {
+			return ResponseEntity.ok(e.getMessage());
+		}
 	}
 		
 	@PostMapping("/{shopId}/{productId}/addToCart")
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
 	// con Pre-Authorize genera errore autenticazione
-	public ResponseEntity<ShopSystem> addToCart(@PathVariable Long shopId, @PathVariable Long productId) {
-		return ResponseEntity.ok(shopServ.addToList(shopId, productId, 
-				shopRepo.findById(shopId).get().getCartList(), shopRepo.findById(shopId).get().getLibraryList()));
+	public ResponseEntity<?> addToCart(@PathVariable Long shopId, @PathVariable Long productId) throws Exception {
+		try {
+			return shopServ.addToCart(shopId, productId, 
+					shopRepo.findById(shopId).get().getCartList(), shopRepo.findById(shopId).get().getLibraryList());
+		} catch (Exception e) {
+			return ResponseEntity.ok(e.getMessage());
+		}
 	}
 	
 	@PostMapping("/{shopId}/{productId}/addToWishList")
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
-	public ResponseEntity<ShopSystem> addToWishList(@PathVariable Long shopId, @PathVariable Long productId) {
-		return ResponseEntity.ok(shopServ.addToList(shopId, productId, 
-				shopRepo.findById(shopId).get().getWishList(), shopRepo.findById(shopId).get().getLibraryList()));
+	public ResponseEntity<?> addToWishList(@PathVariable Long shopId, @PathVariable Long productId) throws Exception {
+		try {
+			return shopServ.addToWishList(shopId, productId, 
+					shopRepo.findById(shopId).get().getWishList(), shopRepo.findById(shopId).get().getLibraryList());
+		} catch (Exception e) {
+			return ResponseEntity.ok(e.getMessage());
+		}
 	}
 	
 	@PostMapping("/{shopId}/commitPurchase")
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
-	public ResponseEntity<ShopSystem> commitPurchase(@PathVariable Long shopId) {		
-		return ResponseEntity.ok(shopServ.commitPurchase(shopId));
+	public ResponseEntity<?> commitPurchase(@PathVariable Long shopId) throws Exception {		
+		try {
+			return shopServ.commitPurchase(shopId);
+		} catch (Exception e) {
+			return ResponseEntity.ok(e.getMessage());
+		}
 	}
 	
 	// ============== PATCH/PUT ==============
@@ -112,14 +132,14 @@ public class ShopSystemController {
 	@Operation(summary = "Delete Product from Cart (by shopId and productId)",security = @SecurityRequirement(name = "bearer-authentication"))
 	public ResponseEntity<String> deleteFromCart(@PathVariable Long shopId, @PathVariable Long productId) {
 		shopServ.deleteFromList(shopId, productId, shopRepo.findById(shopId).get().getCartList());
-		return ResponseEntity.ok("- DELETE - successfull");
+		return ResponseEntity.ok("Delete from Shopping Cart successfull");
 	}
 	
 	@DeleteMapping("/{shopId}/{productId}/deleteFromWishList")
 	@Operation(summary = "Delete Product from WishList (by shopId and productId)",security = @SecurityRequirement(name = "bearer-authentication"))
 	public ResponseEntity<String> deleteFromWishList(@PathVariable Long shopId, @PathVariable Long productId) {
 		shopServ.deleteFromList(shopId, productId, shopRepo.findById(shopId).get().getWishList());
-		return ResponseEntity.ok("- DELETE - successfull");
+		return ResponseEntity.ok("Delete from Wishlist successfull");
 	}
 	
 	

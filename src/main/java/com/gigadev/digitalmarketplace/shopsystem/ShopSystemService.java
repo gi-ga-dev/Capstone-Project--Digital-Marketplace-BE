@@ -5,6 +5,7 @@ import java.util.Set;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import com.gigadev.digitalmarketplace.auth.users.User;
 import com.gigadev.digitalmarketplace.auth.users.UserRepository;
@@ -61,52 +62,44 @@ public class ShopSystemService {
 	// ============== POST ==============
 	// ---> Metodi relativi all'acquisto prodotti singoli senza utilizzo dello [Shopping Cart]
 	
-	public ShopSystem purchaseWithBalance(Long shopId, Long productId) {
-		// METODO IDENTICO AL COMMITPURCHASE FATTA ECCEZIONE CHE ACQUISTO UN SINGOLO PRODOTTO, SENZA REF. CARRELLO
+	public ResponseEntity<ShopSystem> purchaseWithBalance(Long shopId, Long productId) throws Exception {
+		// metodo identico al commitPurchase fatta eccezione che acquisto un singolo prodotto, senza ref. carrello
 		User user = userRepo.findById(shopId).get();
 		ShopSystem shopSystem = shopRepo.findById(shopId).get();
 		AbstractProduct prod = productRepo.findById(productId).get();			
 		
 		if(shopSystem.getLibraryList().contains(prod)) {
-			throw new EntityExistsException("Product already bought...");				
-		} else {			
-			if(user.getAccountBalance() >= prod.getPrice()) {
-				prod.setPaymentMethod(EProductPayment.BALANCE);
-				// se ha abbastanza balance spostare prodotto cliccato nella lista library	
-				user.setAccountBalance(user.getAccountBalance() - prod.getPrice());
-				user.setQntPurchased(user.getQntPurchased() + 1);
-				shopSystem.addProductToList(shopSystem.getLibraryList(), prod);
-				log.info("--> ADD TO LIST - Product: " + prod.getTitle() + " saved in Library of Shop System w/ id: " + shopSystem.getId());
-				log.info("--> " + shopSystem.getLibraryList().size() + " Product/s in the Library");
-			} else throw new EntityNotFoundException("You are not subscribed...");
-		}
-		shopRepo.flush();
-		shopRepo.save(shopSystem);
-		return shopSystem;
+			throw new Exception("Product is already in your Library...");				
+		} else if(user.getAccountBalance() >= prod.getPrice()) {
+			prod.setPaymentMethod(EProductPayment.BALANCE);
+			// se ha abbastanza balance spostare prodotto cliccato nella lista library	
+			user.setAccountBalance(user.getAccountBalance() - prod.getPrice());
+			user.setQntPurchased(user.getQntPurchased() + 1);
+			shopSystem.addProductToList(shopSystem.getLibraryList(), prod);
+			log.info("--> ADD TO LIST - Product: " + prod.getTitle() + " saved in Library of Shop System w/ id: " + shopSystem.getId());
+			shopRepo.flush();
+			shopRepo.save(shopSystem);
+			return ResponseEntity.ok(shopSystem);
+		} else throw new Exception("Credit is insufficient, please recharge your balance.");
 	}
 	
-	public ShopSystem purchaseWithSub(Long shopId, Long productId) {
+	public ResponseEntity<ShopSystem> purchaseWithSub(Long shopId, Long productId) throws Exception {
 		User user = userRepo.findById(shopId).get();
 		ShopSystem shopSystem = shopRepo.findById(shopId).get();
 		AbstractProduct prod = productRepo.findById(productId).get();			
 		
 		if(shopSystem.getLibraryList().contains(prod)) {
-			throw new EntityExistsException("Product already bought...");				
-		} else {					
-			if(user.getIsSubscribed() == true) {
-				// SE il metodo di pagamento dei prodotti nella libreria e' "Subscription" disabilitare il campo del table
-				
+			throw new Exception("Product is already in your Library...");				
+		} else if(user.getIsSubscribed() == true) {
 				prod.setPaymentMethod(EProductPayment.SUBSCRIPTION);
 				// se subscribed spostare prodotto cliccato nella lista library senza detrazioni	
 				user.setQntPurchased(user.getQntPurchased() + 1);
 				shopSystem.addProductToList(shopSystem.getLibraryList(), prod);
 				log.info("--> ADD TO LIST - Product: " + prod.getTitle() + " saved in Library of Shop System w/ id: " + shopSystem.getId());
-				log.info("--> " + shopSystem.getLibraryList().size() + " Product/s in the Library");
-			} else throw new EntityNotFoundException("You are not subscribed...");
-		}
-		shopRepo.flush();
-		shopRepo.save(shopSystem);
-		return shopSystem;
+				shopRepo.flush();
+				shopRepo.save(shopSystem);
+				return ResponseEntity.ok(shopSystem);
+		} else throw new Exception("You are not subscribed...");
 	}
 	
 	// ---> Metodi relativi all'acquisto di prodotti multipli utilizzando lo [Shopping Cart]
@@ -130,50 +123,64 @@ public class ShopSystemService {
 		return shopRepo.save(shopSystem);
 	}
 	
-	public ShopSystem addToList(Long shopId, Long productId, Set<AbstractProduct> list, Set<AbstractProduct> purchasedList) {
+	public ResponseEntity<ShopSystem> addToCart(Long shopId, Long productId, Set<AbstractProduct> list, Set<AbstractProduct> purchasedList) throws Exception {
 		// prendo shopsystem e prodotto tramite id
 		ShopSystem shopSystem = shopRepo.findById(shopId).get();
 		AbstractProduct prod = productRepo.findById(productId).get();
 		
-		// (list) --> cart/wishlist - (purchasedList) --> library/p.history
-		if(list.contains(prod) || purchasedList.contains(prod)) {
-			throw new EntityExistsException("Product already in List...");				
+		if(purchasedList.contains(prod)) {
+			throw new Exception("Product is already in your Library...");	
+		} else if(list.contains(prod)) {
+			throw new Exception("Product is already in your Shopping Cart...");	
 		} else {
 			// salvo la lista con gli elementi al suo interno, nel db
 			shopSystem.addProductToList(list, prod);	
 			shopRepo.flush();
 			shopRepo.save(shopSystem);
-			log.info("--> ADD TO LIST - Product: " + prod.getTitle() + " saved in List of Shop System w/ id: " + shopSystem.getId());
-			log.info("--> " + shopSystem.getCartList().size() + " Product/s in the List");
-		} return shopSystem;		
+			log.info("--> ADD TO CART - Product: " + prod.getTitle() + " saved in List of Shop System w/ id: " + shopSystem.getId());
+			return ResponseEntity.ok(shopSystem);
+		} 		
+	}	
+	
+	public ResponseEntity<ShopSystem> addToWishList(Long shopId, Long productId, Set<AbstractProduct> list, Set<AbstractProduct> purchasedList) throws Exception {
+		// prendo shopsystem e prodotto tramite id
+		ShopSystem shopSystem = shopRepo.findById(shopId).get();
+		AbstractProduct prod = productRepo.findById(productId).get();
+		
+		if(purchasedList.contains(prod)) {
+			throw new Exception("Product is already in your Library...");	
+		} else if(list.contains(prod)) {
+			throw new Exception("Product is already in your Wishlist...");	
+		} else {
+			// salvo la lista con gli elementi al suo interno, nel db
+			shopSystem.addProductToList(list, prod);	
+			shopRepo.flush();
+			shopRepo.save(shopSystem);
+			log.info("--> ADD TO WISHLIST - Product: " + prod.getTitle() + " saved in List of Shop System w/ id: " + shopSystem.getId());
+			return ResponseEntity.ok(shopSystem);
+		} 		
 	}	
 		
-	public ShopSystem commitPurchase(Long shopId) {
-		if(!shopRepo.existsById(shopId)) {
-			throw new EntityNotFoundException("Shop System not implemented...");
-		} else { 
-			// Prendo ref. shopSystem -> per cartList, user -> per accountBalance (utente che sta acquistando)
-			User user = userRepo.findById(shopId).get();
-			ShopSystem shopSystem = shopRepo.findById(shopId).get();		
-			
-			// aggiorna price e qnt totale Shopping Cart
-			updateCart(shopId); 		
-			
-			if(user.getAccountBalance() >=  shopSystem.getCartSubtotal()) {
-				// detrarre saldo, incrementare qnt prod. acquistati
-				user.setAccountBalance(user.getAccountBalance() - shopSystem.getCartSubtotal());
-				user.setQntPurchased(user.getQntPurchased() + shopSystem.getProdQnt());
-				// prendere tutti gli elementi presenti nel carrello, ed agg. nelle liste acquisti/libreria			
-				shopSystem.addAllToList(shopSystem.getCartList(), shopSystem.getLibraryList());
-				// dopodiche' cancellare contenuto carrello
-				shopSystem.getCartList().clear();
-				shopSystem.getWishList().clear();
-				shopRepo.flush();	
-			} else throw new EntityNotFoundException("Account Balance insufficient...");
-			
-			log.info("--> PURCHASE COMPLETED - for Shop System w/ id: " + shopSystem.getId());			
-			return shopRepo.save(shopSystem);
-		}
+	public ResponseEntity<ShopSystem> commitPurchase(Long shopId) throws Exception {
+		// Prendo ref. shopSystem -> per cartList, user -> per accountBalance (utente che sta acquistando)
+		User user = userRepo.findById(shopId).get();
+		ShopSystem shopSystem = shopRepo.findById(shopId).get();
+		// aggiorna price e qnt totale Shopping Cart
+		updateCart(shopId); 	
+		if(user.getAccountBalance() >=  shopSystem.getCartSubtotal()) {
+			// detrarre saldo, incrementare qnt prod. acquistati
+			user.setAccountBalance(user.getAccountBalance() - shopSystem.getCartSubtotal());
+			user.setQntPurchased(user.getQntPurchased() + shopSystem.getProdQnt());
+			// prendere tutti gli elementi presenti nel carrello, ed agg. nelle liste acquisti/libreria			
+			shopSystem.addAllToList(shopSystem.getCartList(), shopSystem.getLibraryList());
+			// dopodiche' cancellare contenuto carrello
+			shopSystem.getCartList().clear();
+			shopSystem.getWishList().clear();
+			shopRepo.flush();
+			shopRepo.save(shopSystem);
+			log.info("--> PURCHASE COMPLETED - for Shop System w/ id: " + shopSystem.getId());
+			return ResponseEntity.ok(shopSystem);			
+		} else throw new Exception("Account Balance insufficient.");	
 	}	
 	
 	// ============== PATCH/PUT ==============

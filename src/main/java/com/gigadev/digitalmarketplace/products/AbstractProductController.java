@@ -61,22 +61,34 @@ public class AbstractProductController {
 	@PostMapping("/videogames/saveVideogame")
 	@PreAuthorize("hasRole('ADMIN')")
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
-	public ResponseEntity<AbstractProduct> saveVideogame(@RequestBody ProductDtoVideogame dto) throws Exception {
-		return ResponseEntity.ok(productServ.saveVideogame(dto));
+	public ResponseEntity<?> saveVideogame(@RequestBody ProductDtoVideogame dto) throws Exception {
+		try {
+			return productServ.saveVideogame(dto);
+		} catch (Exception e) {
+			return ResponseEntity.ok(e.getMessage());
+		}
 	}
 	
 	@PostMapping("/music/saveMusic")
 	@PreAuthorize("hasRole('ADMIN')")
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
-	public ResponseEntity<AbstractProduct> saveMusic(@RequestBody ProductDtoMusic dto) throws Exception {
-		return ResponseEntity.ok(productServ.saveMusic(dto));
+	public ResponseEntity<?> saveMusic(@RequestBody ProductDtoMusic dto) throws Exception {
+		try {
+			return productServ.saveMusic(dto);
+		} catch (Exception e) {
+			return ResponseEntity.ok(e.getMessage());
+		}
 	}
 	
 	@PostMapping("/books/saveBook")
 	@PreAuthorize("hasRole('ADMIN')")
 	@Operation(security = @SecurityRequirement(name = "bearer-authentication"))
-	public ResponseEntity<AbstractProduct> saveBook(@RequestBody ProductDtoBook dto) throws Exception {
-		return ResponseEntity.ok(productServ.saveBook(dto));
+	public ResponseEntity<?> saveBook(@RequestBody ProductDtoBook dto) throws Exception {
+		try {
+			return productServ.saveBook(dto);
+		} catch (Exception e) {
+			return ResponseEntity.ok(e.getMessage());
+		}
 	}
 	
 	// ============== PATCH/PUT ==============

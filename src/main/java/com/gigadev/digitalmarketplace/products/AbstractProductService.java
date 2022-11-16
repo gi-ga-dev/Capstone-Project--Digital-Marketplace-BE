@@ -5,6 +5,7 @@ import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import lombok.extern.slf4j.Slf4j;
 
@@ -49,46 +50,46 @@ public class AbstractProductService {
 	// ---> Classi Products e Metodi relativi, si riferiscono sempre ai prodotti nelle schede (Pagine Products)
 	// ---> Post dati compilati nei campi di input (Pagina Profilo Admin Actions), no polimorfismo perche' AbstractProd non si puo' istanziare
 	
-	public AbstractProduct saveVideogame(ProductDtoVideogame videogame) throws Exception {			
+	public ResponseEntity<AbstractProduct> saveVideogame(ProductDtoVideogame videogame) throws Exception {			
 		if(abstractRepo.existsByTitle(videogame.getTitle())) {
 			throw new EntityExistsException("Videogame already exist...");
-			
 		} else if(!videogame.allEmptyFields()) {	
 			ProductVideogame finalVideogame = new ProductVideogame();
 			BeanUtils.copyProperties(videogame, finalVideogame);
 			finalVideogame.setProductType("Videogame");
 			log.info("--> SAVE VIDEOGAME - Inserting new videogame: " + finalVideogame.getTitle());
-			return abstractRepo.save(finalVideogame);				
-		} else throw new Exception ("Fields cannot be blank");
+			abstractRepo.save(finalVideogame);	
+			return ResponseEntity.ok(finalVideogame);
+		} else throw new Exception ("All fields must be filled!");
 	}
 	
-	public AbstractProduct saveMusic(ProductDtoMusic music) throws Exception {			
+	public ResponseEntity<AbstractProduct> saveMusic(ProductDtoMusic music) throws Exception {			
 		if(abstractRepo.existsByTitle(music.getTitle())) {
-			throw new EntityExistsException("Music already exist...");			
-		
+			throw new EntityExistsException("Music already exist...");	
 		} else if (!music.allEmptyFields()) {			
 			if (!music.getDuration().matches("(((0[1-9])|[^0]\\d):)?[0-5]\\d:[0-5]\\d$")) {
 				throw new Exception ("Duration Format must be mm:ss or hh:mm:ss");				
-			}			
+			}	
 			ProductMusic finalMusic = new ProductMusic();
 			BeanUtils.copyProperties(music, finalMusic);
 			finalMusic.setProductType("Music");
 			log.info("--> SAVE MUSIC - Inserting new music: " + finalMusic.getTitle());
-			return abstractRepo.save(finalMusic);				
-		} else throw new Exception ("Fields cannot be blank");			
+			abstractRepo.save(finalMusic);	
+			return ResponseEntity.ok(finalMusic);
+		} else throw new Exception ("All fields must be filled!");			
 	}
 	
-	public AbstractProduct saveBook(ProductDtoBook book) throws Exception {			
+	public ResponseEntity<AbstractProduct> saveBook(ProductDtoBook book) throws Exception {			
 		if(abstractRepo.existsByTitle(book.getTitle())) {
-			throw new EntityExistsException("Book already exist...");
-			
+			throw new EntityExistsException("Book already exist...");			
 		} else if (!book.allEmptyFields()) {		
 			ProductBook finalBook = new ProductBook();
 			BeanUtils.copyProperties(book, finalBook);	
 			finalBook.setProductType("Book");
 			log.info("--> SAVE BOOK - Inserting new book: " + finalBook.getTitle());
-			return abstractRepo.save(finalBook);			
-		} else throw new Exception ("Fields cannot be blank");		
+			abstractRepo.save(finalBook);	
+			return ResponseEntity.ok(finalBook);
+		} else throw new Exception ("All fields must be filled!");		
 	}
 	
 	// ============== PATCH/PUT ==============
