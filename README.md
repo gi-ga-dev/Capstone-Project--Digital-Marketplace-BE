@@ -30,6 +30,4 @@ From the `Products Page` you can add products to your `Shopping Cart` and/or `Wi
 
 https://gecko2code.vercel.app/
 
-There will be about a minute delay when first navigating the site (except the Home Page), in order to retrieve data from the Database (Free Database), please be patient.
-
 https://user-images.githubusercontent.com/77717069/203360729-027b14ea-d861-4b01-b6d6-4df0930b5e71.mp4
