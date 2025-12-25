@@ -26,6 +26,10 @@ From the `Products Page` you can add products to your `Shopping Cart` and/or `Wi
 
 <p><h2 align="center" dir="auto"><b>Deploy Link and Video Presentation:</b></h2></p>
 
+<p><h3><b>Front-End Repo Link:</b></h3></p>
+
+https://github.com/gi-ga-dev/Capstone-Project--Digital-Marketplace-FE
+
 <p><h3><b>Deploy Link:</b></h3></p>
 
 https://gecko2code.vercel.app/
